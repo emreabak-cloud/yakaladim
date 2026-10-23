@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+Disallow: /_kaynak/
+
+Sitemap: https://www.yakaladim.com/sitemap.xml

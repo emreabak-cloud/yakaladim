@@ -1,0 +1,88 @@
+/* Genel Şerit Ayarları */
+.tp-hotel-scroll-wrapper { width: 100%; overflow: hidden; padding: 15px 0; display: flex; justify-content: center; }
+.tp-hotel-scroll-container { display: flex; gap: 20px; overflow-x: auto; padding: 10px 20px; -webkit-overflow-scrolling: touch; scrollbar-width: none; }
+.tp-hotel-scroll-container::-webkit-scrollbar { display: none; }
+
+/* Link Kapsayıcısı (Yazıların maviye dönmesini ve alt çizgileri engeller) */
+.tp-hotel-card-link {
+    text-decoration: none !important;
+    color: inherit !important;
+    display: block;
+    flex: 0 0 260px;
+}
+
+/* Filtreleme Gizleme Sınıfı */
+.tp-hotel-card-link.is-hidden {
+    display: none !important;
+}
+
+/* Koyu Turuncu İnce Çerçeveli Otel Kartı */
+.tp-hotel-card {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    background: #ffffff;
+    border: 1px solid #ff4a22; /* Koyu Turuncu İnce Çerçeve */
+    border-radius: 12px;
+    overflow: hidden;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 6px rgba(255, 74, 34, 0.03);
+}
+
+/* Kartın Üzerine Gelindiğinde (Hover Efekti) */
+.tp-hotel-card-link:hover .tp-hotel-card {
+    box-shadow: 0 8px 24px rgba(255, 74, 34, 0.12);
+    transform: translateY(-3px);
+}
+
+/* Resim Kutusu */
+.tp-hotel-img-box { width: 100%; height: 160px; overflow: hidden; }
+.tp-hotel-img-box img { width: 100%; height: 100%; object-fit: cover; }
+
+/* Bilgi Alanı */
+.tp-hotel-info { padding: 14px 12px; }
+.tp-hotel-rating { color: #ffb100; font-size: 13px; margin-bottom: 5px; }
+.tp-hotel-name { font-size: 16px; font-weight: 600; color: #1a1a1a; line-height: 1.3; margin: 0 0 4px 0; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; height: 42px; }
+.tp-hotel-loc { font-size: 13px; color: #718096; margin: 0 0 10px 0; }
+.tp-hotel-price { display: flex; align-items: baseline; gap: 4px; }
+.tp-hotel-price .from-text { font-size: 12px; color: #718096; }
+.tp-hotel-price .price-value { font-size: 19px; font-weight: 700; color: #1a1a1a; }
+/* Genel Şerit Ayarları */
+.tp-hotel-scroll-wrapper { width: 100%; overflow: hidden; padding: 15px 0; display: flex; justify-content: center; }
+.tp-hotel-scroll-container { display: flex; gap: 20px; overflow-x: auto; padding: 10px 20px; -webkit-overflow-scrolling: touch; scrollbar-width: none; }
+.tp-hotel-scroll-container::-webkit-scrollbar { display: none; }
+
+/* Saf Kart Yapısı (Koyu Turuncu İnce Çerçeveli) */
+.tp-hotel-card {
+    flex: 0 0 260px;
+    display: flex;
+    flex-direction: column;
+    background: #ffffff !important;
+    border: 1.5px solid #ff4a22 !important; /* Koyu Turuncu Çerçeve Güçlendirildi */
+    border-radius: 12px !important;
+    overflow: hidden;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 6px rgba(255, 74, 34, 0.03);
+}
+
+/* Kartın Üzerine Gelindiğinde Hafif Derinlik */
+.tp-hotel-card:hover {
+    box-shadow: 0 8px 24px rgba(255, 74, 34, 0.12);
+    transform: translateY(-3px);
+}
+
+/* Filtreleme Gizleme Sınıfı */
+.tp-hotel-card.is-hidden {
+    display: none !important;
+}
+
+/* Görsel ve Metin İç Detay Tasarımları */
+.tp-hotel-img-box { width: 100%; height: 160px; overflow: hidden; }
+.tp-hotel-img-box img { width: 100%; height: 100%; object-fit: cover; }
+.tp-hotel-info { padding: 14px 12px; }
+.tp-hotel-rating { color: #ffb100; font-size: 13px; margin-bottom: 5px; }
+.tp-hotel-name { font-size: 16px; font-weight: 600; color: #1a1a1a; line-height: 1.3; margin: 0 0 4px 0; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; height: 42px; }
+.tp-hotel-loc { font-size: 13px; color: #718096; margin: 0 0 10px 0; }
+.tp-hotel-price { display: flex; align-items: baseline; gap: 4px; }
+.tp-hotel-price .from-text { font-size: 12px; color: #718096; }
+.tp-hotel-price .price-value { font-size: 19px; font-weight: 700; color: #1a1a1a; }
