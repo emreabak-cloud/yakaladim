@@ -205,6 +205,7 @@ def footer(js=()):
                            <li><a href="iletisim.html">İletişim</a></li>
                            <li><a href="gizlilik.html">KVKK ve Gizlilik</a></li>
                            <li><a href="kullanim-kosullari.html">Kullanım Koşulları</a></li>
+                           <li><a href="satis-sozlesmesi.html">Satış Sözleşmesi ve İade</a></li>
                         </ul></div>
                      </div>
                   </div>

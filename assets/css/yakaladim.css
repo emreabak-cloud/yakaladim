@@ -507,3 +507,37 @@ div.yk-detail-img.yk-img-fallback { font-size: 90px; }
 .yk-voucher-ust p { color: #fff !important; }
 code, .yk-kod-etiket { color: var(--yk-ink); }
 .yk-kod-etiket { background: #f1f5f9; padding: 2px 8px; border-radius: 6px; font-size: 15px; letter-spacing: 1px; }
+
+/* ---------- Kupon bedeli ve ödeme ---------- */
+.yk-bedel-kutu { border: 1px solid var(--yk-line); border-radius: 12px; padding: 10px 14px; margin-bottom: 12px; background: #f8fafc; }
+.yk-bedel-kutu > div { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; padding: 3px 0; font-size: 14px; }
+.yk-bedel-kutu span { color: #475569; }
+.yk-bedel-kutu small { color: var(--yk-muted); }
+.yk-bedel-kutu strong { font-size: 16px; color: var(--yk-ink); font-variant-numeric: tabular-nums; }
+.yk-bedel-tasarruf { border-top: 1px dashed var(--yk-line); margin-top: 4px; padding-top: 6px !important; }
+.yk-bedel-tasarruf strong { color: var(--yk-green); }
+.yk-sozlesme { font-size: 13px; margin-bottom: 12px; align-items: flex-start; }
+.yk-sozlesme input { margin-top: 2px; flex-shrink: 0; }
+.yk-odeme-ozet { border: 1px solid var(--yk-line); border-radius: 18px; padding: 24px; background: #fff; }
+.yk-odeme-ozet h3 { font-size: 21px; font-weight: 800; margin: 4px 0; }
+.yk-odeme-satirlar { display: grid; grid-template-columns: 1fr auto; gap: 8px 16px; margin: 0 0 16px; font-size: 15px; }
+.yk-odeme-satirlar dt { font-weight: 500; color: #475569; }
+.yk-odeme-satirlar dd { margin: 0; text-align: right; font-weight: 700; font-variant-numeric: tabular-nums; }
+.yk-odeme-satirlar .yk-odeme-toplam { border-top: 1px solid var(--yk-line); padding-top: 10px; font-size: 17px; color: var(--yk-ink); font-weight: 800; }
+dd.yk-odeme-toplam { color: var(--yk-orange); }
+.yk-odeme-sure-kutu { background: var(--yk-bg-soft); color: #9a3412; border-radius: 20px; padding: 5px 12px; font-size: 13px; }
+.yk-odeme-sure-kutu strong { font-variant-numeric: tabular-nums; }
+.yk-odeme-iframe { width: 100%; height: 640px; border: 0; border-radius: 12px; background: #fff; }
+.yk-demo-odeme { border: 1px dashed #cbd5e1; border-radius: 14px; padding: 20px; background: #f8fafc; }
+.yk-demo-kart { background: linear-gradient(135deg, #1e293b, #334155); color: #fff; border-radius: 14px; padding: 18px 20px; max-width: 320px; margin-bottom: 14px; }
+.yk-demo-kart span { font-size: 11px; letter-spacing: 2px; opacity: .7; display: block; }
+.yk-demo-kart strong { display: block; font-size: 19px; letter-spacing: 2px; margin: 10px 0 4px; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; }
+.yk-demo-kart small { opacity: .7; }
+.yk-odeme-mesaj i { font-size: 40px; }
+.yk-durum-odeme_bekliyor, .yk-durum-odeme-bekliyor { background: #fef3c7; color: #a16207; }
+.yk-durum-odeme-odendi { background: #dcfce7; color: #15803d; }
+.yk-durum-odeme-iade, .yk-durum-odeme-basarisiz { background: #fee2e2; color: #b91c1c; }
+.yk-durum-odeme_zaman_asimi { background: #f1f5f9; color: #475569; }
+.yk-ornek-bedel { background: var(--yk-bg-soft); border-radius: 12px; padding: 12px 14px; font-size: 14px; color: #475569; }
+.yk-kupon-satir[data-durum="odeme_bekliyor"] { border-left-color: #f59e0b; }
+@media (max-width: 575px) { .yk-odeme-iframe { height: 720px; } }

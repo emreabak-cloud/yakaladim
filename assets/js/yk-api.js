@@ -68,12 +68,14 @@
       kisiBasiLimit: sayi(r.kisi_basi_limit) || 5,
       rezervasyonGerekli: !!r.rezervasyon_gerekli,
       kuponGecerlilikGun: sayi(r.kupon_gecerlilik_gun) || 30,
-      odemeTipi: r.odeme_tipi || 'mekanda', link: r.link || '', oneCikan: !!r.one_cikan
+      odemeTipi: r.odeme_tipi || 'mekanda', link: r.link || '', oneCikan: !!r.one_cikan,
+      kuponBedeli: sayi(r.kupon_bedeli) || 0
     };
   }
 
   YK.durumAdi = function (d) {
-    return { aktif: 'Kullanılabilir', kullanildi: 'Kullanıldı', iptal: 'İptal edildi', suresi_doldu: 'Süresi doldu' }[d] || d;
+    return { aktif: 'Kullanılabilir', kullanildi: 'Kullanıldı', iptal: 'İptal edildi', suresi_doldu: 'Süresi doldu',
+      odeme_bekliyor: 'Ödeme bekleniyor', odeme_zaman_asimi: 'Ödeme süresi doldu' }[d] || d;
   };
   YK.rolAdi = function (r) {
     return { musteri: 'Müşteri', isletme: 'İşletme', admin: 'Yönetici' }[r] || r;
@@ -239,6 +241,9 @@
         });
       },
       profilYukle: profilYukle,
+      odemeBaslat: function (siparisNo) {
+        return istek('/functions/v1/odeme-baslat', { method: 'POST', govde: { siparis_no: siparisNo } });
+      },
       kampanyalar: function () {
         return istek('/rest/v1/kampanya_liste?select=*&order=one_cikan.desc,bitis.asc').then(function (r) {
           return (r || []).map(kampanyaUI);
@@ -252,7 +257,7 @@
      DEMO ARKA UCU (tarayıcı içi). 01_sema.sql'deki kuralları taklit eder.
      ================================================================== */
   function demoArkaUc() {
-    var ANAHTAR = 'yk_demo_v2';
+    var ANAHTAR = 'yk_demo_v3';
     var db = null;
 
     function uid() {
@@ -285,6 +290,7 @@
           stok: k.stok === undefined ? null : k.stok, kisi_basi_limit: k.kisiBasiLimit || 5,
           rezervasyon_gerekli: !!k.rezervasyonGerekli, kupon_gecerlilik_gun: k.kuponGecerlilikGun || 30,
           odeme_tipi: k.odemeTipi || 'mekanda', link: k.link || '', one_cikan: !!k.oneCikan,
+          kupon_bedeli: k.kuponBedeli === undefined ? null : k.kuponBedeli,
           durum: k.durum || 'yayinda', kaynak: k.kaynak || 'manuel', kaynak_url: k.kaynakUrl || '',
           olusturma: new Date().toISOString(), guncelleme: new Date().toISOString()
         });
@@ -292,7 +298,9 @@
       var ilk = kampanyalar[0] ? kampanyalar[0].isletme_id : null;
       var simdi = new Date().toISOString();
       return {
-        surum: 2,
+        surum: 3,
+        // Demo'da ödeme açık: kupon bedeli ve test ödeme ekranı denenebilir
+        ayarlar: { odeme_aktif: true, bedel_oran: 0.01, bedel_min: 5, bedel_max: 50, odeme_suresi_dk: 20 },
         isletmeler: Object.keys(isletmeler).map(function (a) { return isletmeler[a]; }),
         kampanyalar: kampanyalar,
         kullanicilar: [
@@ -312,7 +320,7 @@
     function yukle() {
       if (db) return db;
       var kayitli = depoOku(ANAHTAR);
-      db = (kayitli && kayitli.surum === 2) ? kayitli : tohum();
+      db = (kayitli && kayitli.surum === 3) ? kayitli : tohum();
       // Kaynak dosyaya yeni eklenen kampanyaları demo veritabanına da ekle
       var taze = tohum(), varOlan = {};
       db.kampanyalar.forEach(function (k) { varOlan[k.id] = true; });
@@ -336,17 +344,29 @@
     function isletmem() { var p = profil(benId()); return p && (p.rol === 'isletme' || p.rol === 'admin') ? p.isletme_id : null; }
     function kampanya(id) { return yukle().kampanyalar.filter(function (k) { return k.id === id; })[0] || null; }
     function isletme(id) { return yukle().isletmeler.filter(function (i) { return i.id === id; })[0] || null; }
+    function odemeSuresiMs() { return (yukle().ayarlar.odeme_suresi_dk || 20) * 60000; }
+    function stokTutuyor(c) {
+      return c.durum === 'aktif' || c.durum === 'kullanildi' ||
+        (c.durum === 'odeme_bekliyor' && Date.now() - new Date(c.olusturma) < odemeSuresiMs());
+    }
     function satilan(kid) {
-      return yukle().kuponlar.reduce(function (s, c) {
-        return s + (c.kampanya_id === kid && (c.durum === 'aktif' || c.durum === 'kullanildi') ? c.adet : 0);
-      }, 0);
+      return yukle().kuponlar.reduce(function (s, c) { return s + (c.kampanya_id === kid && stokTutuyor(c) ? c.adet : 0); }, 0);
+    }
+    function bedelHesapla(k) {
+      var a = yukle().ayarlar;
+      if (!a.odeme_aktif) return 0;
+      if (k.kupon_bedeli !== null && k.kupon_bedeli !== undefined && k.kupon_bedeli !== '') return Number(k.kupon_bedeli);
+      return Math.min(a.bedel_max, Math.max(a.bedel_min, Math.round(k.yeni_fiyat * a.bedel_oran)));
     }
     // Kampanyanın işletmesi aktif ve yayın izni onaylanmış mı? (01_sema.sql ile aynı kural)
     function isletmeYayinda(k) {
       var i = isletme(k.isletme_id);
       return !!(i && i.aktif !== false && i.izin_durumu === 'onaylandi');
     }
-    function gorunenDurum(c) { return c.durum === 'aktif' && new Date(c.son_kullanma) < new Date() ? 'suresi_doldu' : c.durum; }
+    function gorunenDurum(c) {
+      if (c.durum === 'odeme_bekliyor' && Date.now() - new Date(c.olusturma) >= odemeSuresiMs()) return 'odeme_zaman_asimi';
+      return c.durum === 'aktif' && new Date(c.son_kullanma) < new Date() ? 'suresi_doldu' : c.durum;
+    }
     function kodUret() {
       var a = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789', b = new Uint8Array(8), s = '';
       (window.crypto || window.msCrypto).getRandomValues(b);
@@ -374,6 +394,9 @@
         rezervasyon_tarihi: c.rezervasyon_tarihi, rezervasyon_saati: c.rezervasyon_saati, kisi_sayisi: c.kisi_sayisi,
         musteri_notu: c.musteri_notu, son_kullanma: c.son_kullanma, olusturma: c.olusturma,
         kullanim_zamani: c.kullanim_zamani, iptal_zamani: c.iptal_zamani,
+        kupon_bedeli: c.kupon_bedeli || 0, odeme_durumu: c.odeme_durumu || 'yok', siparis_no: c.siparis_no || null,
+        odeme_zamani: c.odeme_zamani || null, iade_zamani: c.iade_zamani || null,
+        odeme_son: c.durum === 'odeme_bekliyor' ? new Date(new Date(c.olusturma).getTime() + odemeSuresiMs()).toISOString() : null,
         kampanya: {
           id: k.id, baslik: k.baslik, kategori: k.kategori, sehir: k.sehir, semt: k.semt, gorsel: k.gorsel,
           eski_fiyat: k.eski_fiyat, yeni_fiyat: k.yeni_fiyat, kosullar: k.kosullar, odeme_tipi: k.odeme_tipi,
@@ -390,7 +413,7 @@
     }
     function isletmeKuponBul(kod) {
       isletmeGerekli();
-      var c = yukle().kuponlar.filter(function (x) { return x.kod === kodNormal(kod); })[0];
+      var c = yukle().kuponlar.filter(function (x) { return x.kod && x.kod === kodNormal(kod); })[0];
       if (!c) throw Hata('Kupon bulunamadı.');
       var k = kampanya(c.kampanya_id);
       if (!yoneticiMi() && (!k || k.isletme_id !== isletmem())) throw Hata('Kupon bulunamadı.');
@@ -421,7 +444,7 @@
         if (k.odeme_tipi === 'online') throw Hata('Bu kampanya online ödeme gerektiriyor; ödeme altyapısı yakında aktif olacak.');
         if (!(adet >= 1 && adet <= k.kisi_basi_limit)) throw Hata('Adet 1 ile ' + k.kisi_basi_limit + ' arasında olmalıdır.');
         var benim = yukle().kuponlar.reduce(function (s, c) {
-          return s + (c.kampanya_id === k.id && c.kullanici_id === benId() && (c.durum === 'aktif' || c.durum === 'kullanildi') ? c.adet : 0);
+          return s + (c.kampanya_id === k.id && c.kullanici_id === benId() && stokTutuyor(c) ? c.adet : 0);
         }, 0);
         if (benim + adet > k.kisi_basi_limit) {
           throw Hata('Bu kampanyadan kişi başı en fazla ' + k.kisi_basi_limit + ' kupon alınabilir (şu ana kadar ' + benim + ').');
@@ -445,9 +468,12 @@
         }
         var son = Math.min(gunSonu(k.bitis).getTime(), Date.now() + k.kupon_gecerlilik_gun * 86400000);
         if (rt) son = Math.min(son, gunSonu(rt).getTime());
+        var bedel = bedelHesapla(k) * adet;
         var c = {
-          id: uid(), kod: kodUret(), kampanya_id: k.id, kullanici_id: benId(), adet: adet,
-          birim_fiyat: k.yeni_fiyat, toplam: k.yeni_fiyat * adet, durum: 'aktif',
+          id: uid(), kod: bedel > 0 ? null : kodUret(), kampanya_id: k.id, kullanici_id: benId(), adet: adet,
+          birim_fiyat: k.yeni_fiyat, toplam: k.yeni_fiyat * adet, durum: bedel > 0 ? 'odeme_bekliyor' : 'aktif',
+          kupon_bedeli: bedel, odeme_durumu: bedel > 0 ? 'bekliyor' : 'yok',
+          siparis_no: bedel > 0 ? 'YK' + uid().replace(/[^a-z0-9]/gi, '').toUpperCase().slice(0, 24) : null,
           rezervasyon_tarihi: rt, rezervasyon_saati: rs, kisi_sayisi: ks,
           musteri_notu: (a.p_not || '').trim().slice(0, 500) || null,
           son_kullanma: new Date(son).toISOString(), olusturma: new Date().toISOString(),
@@ -457,7 +483,10 @@
         return kuponJson(c);
       },
       kuponlarim: function () {
-        return yukle().kuponlar.filter(function (c) { return c.kullanici_id === benId(); })
+        return yukle().kuponlar.filter(function (c) {
+          return c.kullanici_id === benId() && gorunenDurum(c) !== 'odeme_zaman_asimi' &&
+            !(c.durum === 'iptal' && c.odeme_durumu === 'basarisiz');
+        })
           .sort(function (a, b) { return b.olusturma < a.olusturma ? -1 : 1; }).map(kuponJson);
       },
       kupon_getir: function (a) {
@@ -468,9 +497,28 @@
       kupon_iptal: function (a) {
         var c = yukle().kuponlar.filter(function (x) { return x.id === a.p_kupon_id && x.kullanici_id === benId(); })[0];
         if (!c) throw Hata('Kupon bulunamadı.');
-        if (c.durum !== 'aktif') throw Hata('Yalnızca kullanılmamış kuponlar iptal edilebilir.');
+        if (c.durum !== 'aktif' && c.durum !== 'odeme_bekliyor') throw Hata('Yalnızca kullanılmamış kuponlar iptal edilebilir.');
+        if (c.odeme_durumu === 'bekliyor') c.odeme_durumu = 'basarisiz';
         c.durum = 'iptal'; c.iptal_zamani = new Date().toISOString(); kaydet();
         return kuponJson(c);
+      },
+      kupon_siparis: function (a) {
+        var c = yukle().kuponlar.filter(function (x) { return x.siparis_no === a.p_siparis_no && x.kullanici_id === benId(); })[0];
+        if (!c) throw Hata('Sipariş bulunamadı.');
+        return kuponJson(c);
+      },
+      // Yalnızca demo: gerçek modda bu işlemi ödeme sağlayıcısının bildirimi sunucuda yapar
+      demo_odeme: function (a) {
+        var c = yukle().kuponlar.filter(function (x) { return x.siparis_no === a.p_siparis_no && x.kullanici_id === benId(); })[0];
+        if (!c) throw Hata('Sipariş bulunamadı.');
+        if (c.odeme_durumu === 'odendi') return kuponJson(c);
+        if (a.p_basarili) {
+          c.kod = kodUret(); c.durum = 'aktif'; c.odeme_durumu = 'odendi'; c.odeme_zamani = new Date().toISOString();
+          c.odeme_saglayici = 'demo'; c.iptal_zamani = null;
+        } else if (c.durum === 'odeme_bekliyor') {
+          c.durum = 'iptal'; c.odeme_durumu = 'basarisiz'; c.iptal_zamani = new Date().toISOString();
+        }
+        kaydet(); return kuponJson(c);
       },
       basvuru_gonder: function (a) {
         if (['genel', 'isletme', 'bulten'].indexOf(a.p_tip) === -1) throw Hata('Geçersiz form.');
@@ -493,7 +541,7 @@
         isletmeGerekli();
         var isl = isletmem(), hepsi = yoneticiMi() && !isl;
         var liste = yukle().kuponlar.filter(function (c) {
-          var k = kampanya(c.kampanya_id); return hepsi || (k && k.isletme_id === isl);
+          var k = kampanya(c.kampanya_id); return c.kod && (hepsi || (k && k.isletme_id === isl));
         }).sort(function (a, b) { return b.olusturma < a.olusturma ? -1 : 1; });
         var simdi = new Date(), b = bugun();
         return {
@@ -517,7 +565,11 @@
           uye: d.profiller.length, kupon_toplam: d.kuponlar.length,
           kupon_kullanildi: d.kuponlar.filter(function (c) { return c.durum === 'kullanildi'; }).length,
           ciro_kullanilan: d.kuponlar.filter(function (c) { return c.durum === 'kullanildi'; }).reduce(function (s, c) { return s + c.toplam; }, 0),
-          basvuru_yeni: d.basvurular.filter(function (x) { return x.durum === 'yeni'; }).length
+          basvuru_yeni: d.basvurular.filter(function (x) { return x.durum === 'yeni'; }).length,
+          kupon_geliri: d.kuponlar.filter(function (c) { return c.odeme_durumu === 'odendi'; }).reduce(function (s, c) { return s + c.kupon_bedeli; }, 0),
+          iade_toplam: d.kuponlar.filter(function (c) { return c.odeme_durumu === 'iade'; }).reduce(function (s, c) { return s + c.kupon_bedeli; }, 0),
+          odeme_bekleyen: d.kuponlar.filter(function (c) { return c.durum === 'odeme_bekliyor' && stokTutuyor(c); }).length,
+          odeme_aktif: d.ayarlar.odeme_aktif
         };
       },
       yonetim_kampanyalar: function () {
@@ -525,6 +577,9 @@
         return yukle().kampanyalar.map(function (k) {
           var i = isletme(k.isletme_id) || {}, o = JSON.parse(JSON.stringify(k));
           o.isletme = i.ad; o.izin_durumu = i.izin_durumu; o.satilan = satilan(k.id);
+          o.hesaplanan_bedel = bedelHesapla(k);
+          o.kupon_geliri = yukle().kuponlar.filter(function (c) { return c.kampanya_id === k.id && c.odeme_durumu === 'odendi'; })
+            .reduce(function (s, c) { return s + c.kupon_bedeli; }, 0);
           o.kullanilan = yukle().kuponlar.filter(function (c) { return c.kampanya_id === k.id && c.durum === 'kullanildi'; }).length;
           return o;
         }).sort(function (a, b) { return b.guncelleme < a.guncelleme ? -1 : 1; });
@@ -548,6 +603,7 @@
           stok: sayi(p.stok), kisi_basi_limit: sayi(p.kisi_basi_limit) || 5, rezervasyon_gerekli: !!p.rezervasyon_gerekli,
           kupon_gecerlilik_gun: sayi(p.kupon_gecerlilik_gun) || 30, odeme_tipi: p.odeme_tipi || 'mekanda',
           link: p.link || '', one_cikan: !!p.one_cikan, durum: p.durum || 'taslak',
+          kupon_bedeli: p.kupon_bedeli === '' || p.kupon_bedeli === undefined || p.kupon_bedeli === null ? null : Number(p.kupon_bedeli),
           kaynak: p.kaynak || (k && k.kaynak) || 'manuel', kaynak_url: p.kaynak_url || (k && k.kaynak_url) || '',
           olusturma: k ? k.olusturma : simdi, guncelleme: simdi
         };
@@ -603,6 +659,24 @@
         p.rol = a.p_rol; p.isletme_id = a.p_rol === 'musteri' ? null : (a.p_isletme || null); kaydet();
         return { ok: true };
       },
+      yonetim_ayarlar: function () { yoneticiGerekli(); return JSON.parse(JSON.stringify(yukle().ayarlar)); },
+      yonetim_ayar_kaydet: function (a) {
+        yoneticiGerekli(); var x = yukle().ayarlar, p = a.p || {};
+        if (p.odeme_aktif !== undefined) x.odeme_aktif = !!p.odeme_aktif;
+        ['bedel_oran', 'bedel_min', 'bedel_max', 'odeme_suresi_dk'].forEach(function (f) {
+          if (p[f] !== undefined && p[f] !== '') x[f] = Number(p[f]);
+        });
+        kaydet(); return JSON.parse(JSON.stringify(x));
+      },
+      yonetim_kupon_iade: function (a) {
+        yoneticiGerekli();
+        var c = yukle().kuponlar.filter(function (x) { return x.id === a.p_kupon_id; })[0];
+        if (!c) throw Hata('Kupon bulunamadı.');
+        if (c.odeme_durumu !== 'odendi') throw Hata('Yalnızca ödenmiş kupon bedeli iade edilebilir.');
+        c.odeme_durumu = 'iade'; c.iade_zamani = new Date().toISOString(); c.iade_notu = (a.p_not || '').slice(0, 500);
+        if (c.durum === 'aktif') { c.durum = 'iptal'; c.iptal_zamani = new Date().toISOString(); }
+        kaydet(); return kuponJson(c);
+      },
       yonetim_basvurular: function () {
         yoneticiGerekli();
         return yukle().basvurular.slice().sort(function (a, b) { return b.olusturma < a.olusturma ? -1 : 1; });
@@ -653,10 +727,12 @@
             var r = JSON.parse(JSON.stringify(k));
             r.isletme = i.ad; r.isletme_telefon = i.telefon; r.adres = k.adres || i.adres;
             r.kalan = k.stok === null || k.stok === undefined ? null : Math.max(k.stok - satilan(k.id), 0);
+            r.kupon_bedeli = bedelHesapla(k);
             return r;
           });
         return Promise.resolve(liste.map(kampanyaUI));
       },
+      odemeBaslat: function () { return Promise.resolve({ tip: 'demo' }); },
       rpc: function (ad, arg) {
         try {
           if (!R[ad]) throw Hata('Bilinmeyen işlem: ' + ad);
@@ -706,7 +782,17 @@
     },
     listem: function () { return AU.rpc('kuponlarim'); },
     getir: function (kod) { return AU.rpc('kupon_getir', { p_kod: kod }); },
+    siparis: function (no) { return AU.rpc('kupon_siparis', { p_siparis_no: no }); },
     iptal: function (id) { return AU.rpc('kupon_iptal', { p_kupon_id: id }).then(function (r) { kampanyaOnbellek = null; return r; }); }
+  };
+
+  YK.odeme = {
+    baslat: function (siparisNo) { return AU.odemeBaslat(siparisNo); },
+    // Yalnızca demo modunda: test ödemesini tamamla / başarısız say
+    demo: function (siparisNo, basarili) {
+      if (YK.mod !== 'demo') return Promise.reject(Hata('Test ödemesi yalnızca demo modunda kullanılabilir.'));
+      return AU.rpc('demo_odeme', { p_siparis_no: siparisNo, p_basarili: !!basarili });
+    }
   };
 
   YK.profil = {
@@ -735,6 +821,9 @@
       return AU.rpc('yonetim_kullanici_rol', { p_kullanici: id, p_rol: rol, p_isletme: isletmeId || null });
     },
     basvurular: function () { return AU.rpc('yonetim_basvurular'); },
+    ayarlar: function () { return AU.rpc('yonetim_ayarlar'); },
+    ayarKaydet: function (p) { return AU.rpc('yonetim_ayar_kaydet', { p: p }).then(function (r) { kampanyaOnbellek = null; return r; }); },
+    kuponIade: function (id, not) { return AU.rpc('yonetim_kupon_iade', { p_kupon_id: id, p_not: not || '' }); },
     basvuruDurum: function (id, durum) { return AU.rpc('yonetim_basvuru_durum', { p_id: id, p_durum: durum }); }
   };
 

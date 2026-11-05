@@ -126,6 +126,18 @@ def kupon(head, header, footer):
             + header("") + body + footer(js=("yk-qr.js", "yk-uyelik.js")))
 
 
+def odeme(head, header, footer):
+    body = _hero("Kupon Bedeli Ödemesi", "Kupon bedelini güvenle öde, kodun hemen hesabına gelsin.", "Ödeme") + """
+      <section class="pt-40 pb-80">
+         <div class="container" id="yk-odeme">
+            <div class="yk-loading"><span class="yk-spin"></span> Sipariş yükleniyor…</div>
+         </div>
+      </section>
+"""
+    return (head("Ödeme | Yakaladım", "Yakaladım kupon bedeli ödemesi.", "odeme.html", indexle=False)
+            + header("") + body + footer(js=("yk-odeme.js",)))
+
+
 def isletme_paneli(head, header, footer):
     body = _hero("İşletme Paneli", "Kupon kodunu doğrula, kullanıldı olarak işaretle, rezervasyonları takip et.", "İşletme Paneli") + """
       <section class="pt-40 pb-80">
@@ -148,6 +160,48 @@ def yonetim(head, header, footer):
 """
     return (head("Yönetim | Yakaladım", "Yakaladım yönetim paneli.", "yonetim.html", indexle=False)
             + header("") + body + footer(js=("yk-yonetim.js",)))
+
+
+def satis_sozlesmesi(head, header, footer):
+    body = _hero("Ön Bilgilendirme ve Mesafeli Satış Sözleşmesi", "Kupon bedeli satışına ilişkin bilgiler ve iade koşulları.", "Satış Sözleşmesi") + f"""
+      <section class="pt-50 pb-80">
+         <div class="container yk-yasal" style="max-width:860px">{YASAL_UYARI}
+            <h2>1. Taraflar</h2>
+            <p><strong>Satıcı:</strong> [Şirket unvanı], [adres], [vergi dairesi / no], [MERSİS no], info@yakaladim.com, [telefon].<br>
+               <strong>Alıcı:</strong> Yakaladım üyelik bilgilerinde adı, e-posta adresi ve telefonu yer alan üye.</p>
+            <h2>2. Konu</h2>
+            <p>Bu sözleşmenin konusu, Alıcı'nın yakaladim.com üzerinden satın aldığı <strong>kupon</strong>dur. Kupon, kampanya sayfasında
+               belirtilen işletmede, belirtilen indirimli fiyattan yararlanma hakkı veren, kişiye özel ve tek kullanımlık bir koddur.
+               Satıcı'nın sattığı yalnızca kupondur; kampanyadaki ürün veya hizmet, ilgili <strong>işletme</strong> tarafından sunulur,
+               fiyatı işletmeye ödenir ve faturası işletme tarafından düzenlenir.</p>
+            <h2>3. Kupon bedeli ve ödeme</h2>
+            <ul>
+               <li>Kupon bedeli, kampanya sayfasında ve ödeme ekranında KDV dahil olarak gösterilir.</li>
+               <li>Ödeme, lisanslı ödeme kuruluşu [PayTR Ödeme ve Elektronik Para Kuruluşu A.Ş.] altyapısıyla kredi/banka kartı ile alınır; kart bilgileri Satıcı'ya iletilmez.</li>
+               <li>Ödeme onaylandığında kupon kodu Alıcı'nın hesabında oluşturulur ve e-arşiv fatura Alıcı'nın e-posta adresine gönderilir.</li>
+            </ul>
+            <h2>4. Kuponun kullanımı</h2>
+            <p>Kupon, kampanya sayfasında yazan koşullar ve son kullanma tarihi içinde, ilgili işletmede kupon kodu veya QR kodu
+               gösterilerek kullanılır. Rezervasyon gerektiren kampanyalarda seçilen tarih ve saat geçerlidir.</p>
+            <h2>5. Cayma hakkı</h2>
+            <p>Mesafeli Sözleşmeler Yönetmeliği'nin 15. maddesi uyarınca, belirli bir tarihte veya dönemde yapılması gereken
+               konaklama, yeme-içme ve eğlence/dinlenme hizmetlerine ilişkin sözleşmelerde ve elektronik ortamda anında ifa edilen
+               hizmetlerde cayma hakkı kullanılamayabilir. [Kupon bedeli için cayma hakkının uygulanıp uygulanmayacağı hukuk danışmanınızla netleştirilmelidir.]</p>
+            <h2>6. İade ve iptal</h2>
+            <ul>
+               <li>Kullanılmamış kupon, Hesabım sayfasından iptal edilebilir; ancak <strong>müşteri kaynaklı iptallerde ve kullanılmayan kuponlarda kupon bedeli iade edilmez.</strong></li>
+               <li>İşletmenin kampanyayı uygulamaması, kapanması veya rezervasyonu karşılayamaması gibi <strong>işletme kaynaklı durumlarda kupon bedeli iade edilir.</strong> İade, ödemede kullanılan karta yapılır; bankaya bağlı olarak hesaba geçmesi birkaç iş günü sürebilir.</li>
+               <li>Ödeme süresi içinde tamamlanmayan veya başarısız olan siparişlerde karttan çekim yapılmaz.</li>
+            </ul>
+            <h2>7. Şikâyet ve uyuşmazlık</h2>
+            <p>Şikâyetlerinizi info@yakaladim.com adresine iletebilirsiniz. Uyuşmazlıklarda, Ticaret Bakanlığınca ilan edilen parasal
+               sınırlar dâhilinde Alıcı'nın yerleşim yerindeki Tüketici Hakem Heyeti veya Tüketici Mahkemesi yetkilidir.</p>
+         </div>
+      </section>
+"""
+    return (head("Mesafeli Satış Sözleşmesi | Yakaladım", "Yakaladım kupon satışı ön bilgilendirme formu, mesafeli satış sözleşmesi ve iade koşulları.",
+                 "satis-sozlesmesi.html")
+            + header("") + body + footer())
 
 
 YASAL_UYARI = """
@@ -217,7 +271,8 @@ def kosullar(head, header, footer):
             </ul>
             <h2>3. Kuponlar</h2>
             <ul>
-               <li>Kupon almak ücretsizdir; kampanya bedeli, kupon gösterilerek doğrudan işletmeye ödenir.</li>
+               <li>Kupon alınırken, kampanya sayfasında gösterilen <strong>kupon bedeli</strong> online olarak Yakaladım'a ödenir (bazı kampanyalarda kupon ücretsizdir). Ürün veya hizmetin indirimli fiyatı, kupon gösterilerek doğrudan işletmeye ödenir.</li>
+               <li>Kupon bedeli, kuponun kullanılmaması veya müşteri tarafından iptal edilmesi hâlinde iade edilmez. İşletmenin kampanyayı uygulamaması, kapanması gibi işletme kaynaklı durumlarda kupon bedeli iade edilir.</li>
                <li>Her kupon kodu tek kullanımlıktır, devredilemez ve son kullanma tarihine kadar geçerlidir.</li>
                <li>Kişi başı kupon sınırı, stok ve kampanya koşulları her kampanyanın sayfasında belirtilir.</li>
                <li>Kullanılmamış kupon, hesabım sayfasından iptal edilebilir.</li>
@@ -250,4 +305,6 @@ def sayfalar(head, header, footer):
         "yonetim.html": bagla(yonetim),
         "gizlilik.html": bagla(gizlilik),
         "kullanim-kosullari.html": bagla(kosullar),
+        "odeme.html": bagla(odeme),
+        "satis-sozlesmesi.html": bagla(satis_sozlesmesi),
     }

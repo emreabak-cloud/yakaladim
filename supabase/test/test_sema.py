@@ -23,6 +23,8 @@ def q(sql, kim=None):
     on = ""
     if kim == "anon":
         on = "set role anon; "
+    elif kim == "servis":
+        on = "set role service_role; "
     elif kim:
         on = ("set role authenticated; select set_config('request.jwt.claims', "
               f"'{json.dumps({'sub': kim, 'role': 'authenticated'})}', false) \\g /dev/null\n")
@@ -228,6 +230,79 @@ for _ in range(10):
 hata_bekle("saatte 10'dan fazla kupon alınamaz", "select public.kupon_al('hiz', 1)", ADMIN, "Kısa sürede")
 isimsiz = j(f"select public.kupon_sorgula('{k2['kod']}')", ISL_A)["musteri"]["ad_soyad"]
 bekle("adı olmayan müşterinin e-postası işletmeye sızmaz", isimsiz == "Yakaladım üyesi", isimsiz)
+
+# --------------------------------------------------------------- KUPON BEDELİ VE ÖDEME
+print("\nKupon bedeli ve online ödeme")
+bedel = lambda kid: j(f"select kupon_bedeli from public.kampanya_liste where id='{kid}'", "anon")
+bekle("ödeme kapalıyken kupon bedeli 0", float(bedel("otel")) == 0)
+hata_bekle("müşteri ayarları değiştiremez", "select public.yonetim_ayar_kaydet('{\"odeme_aktif\":true}')", M1, "yönetici yetkisi")
+hata_bekle("ayarlar tablosu istemciye kapalı", "select * from public.ayarlar", M1, "permission denied")
+j("select public.yonetim_ayar_kaydet('{\"odeme_aktif\":true}')", ADMIN)
+q("""insert into public.kampanyalar (id, isletme_id, baslik, kategori, sehir, eski_fiyat, yeni_fiyat, bitis, stok, kisi_basi_limit)
+     select 'ucuz', isletme_id, 'Ucuz kahvaltı', 'kahvalti', 'istanbul', 400, 300, current_date + 9, null, 5 from public.kampanyalar where id='burger';
+   insert into public.kampanyalar (id, isletme_id, baslik, kategori, sehir, eski_fiyat, yeni_fiyat, bitis, stok, kisi_basi_limit)
+     select 'pahali', isletme_id, 'Lüks otel', 'otel', 'istanbul', 20000, 9000, current_date + 9, 2, 2 from public.kampanyalar where id='burger';
+   insert into public.kampanyalar (id, isletme_id, baslik, kategori, sehir, eski_fiyat, yeni_fiyat, bitis, kupon_bedeli)
+     select 'bedava', isletme_id, 'Tanıtım', 'kafe', 'istanbul', 200, 100, current_date + 9, 0 from public.kampanyalar where id='burger';
+   insert into public.kampanyalar (id, isletme_id, baslik, kategori, sehir, eski_fiyat, yeni_fiyat, bitis, kupon_bedeli)
+     select 'sabit', isletme_id, 'Sabit bedel', 'kafe', 'istanbul', 2000, 1000, current_date + 9, 25 from public.kampanyalar where id='burger';
+   insert into public.kampanyalar (id, isletme_id, baslik, kategori, sehir, eski_fiyat, yeni_fiyat, bitis)
+     select 'orta', isletme_id, 'Orta', 'kafe', 'istanbul', 1500, 1000, current_date + 9 from public.kampanyalar where id='burger';""")
+bekle("%1 kuralı: 1000 TL → 10 TL", float(bedel("orta")) == 10, bedel("orta"))
+bekle("en az 5 TL: 300 TL → 5 TL", float(bedel("ucuz")) == 5, bedel("ucuz"))
+bekle("en fazla 50 TL: 9000 TL → 50 TL", float(bedel("pahali")) == 50, bedel("pahali"))
+bekle("kampanya bazında 0 = ücretsiz", float(bedel("bedava")) == 0)
+bekle("kampanya bazında sabit bedel", float(bedel("sabit")) == 25)
+
+M3 = str(uuid.uuid4())
+q(f"insert into auth.users (id, email, raw_user_meta_data) values ('{M3}', 'm3@test.tr', '{{\"ad_soyad\":\"Can Öz\"}}')")
+pk = j("select public.kupon_al('pahali', 2)", M3)
+bekle("ücretli kupon 'ödeme bekliyor' durumunda ve kodsuz oluşur", pk["durum"] == "odeme_bekliyor" and pk["kod"] is None and pk["siparis_no"].startswith("YK"), pk)
+bekle("kupon bedeli adet ile çarpılır (2 × 50)", float(pk["kupon_bedeli"]) == 100)
+bekle("ödeme bekleyen kupon stoğu rezerve eder", j("select kalan from public.kampanya_liste where id='pahali'", "anon") == 0)
+hata_bekle("rezervdeyken başkası alamaz", "select public.kupon_al('pahali', 1)", M1, "tükendi")
+hata_bekle("müşteri ödemeyi kendisi onaylayamaz", f"select public.odeme_onayla('{pk['siparis_no']}', 100, 'sahte')", M3, "permission denied")
+hata_bekle("ziyaretçi ödemeyi onaylayamaz", f"select public.odeme_onayla('{pk['siparis_no']}', 100, 'sahte')", "anon", "permission denied")
+hz = j(f"select public.odeme_hazirla('{pk['siparis_no']}', '{M3}')", "servis")
+bekle("sunucu ödeme bilgisini hazırlar (tutar, e-posta, ad)", float(hz["tutar"]) == 100 and hz["eposta"] == "m3@test.tr" and hz["ad_soyad"] == "Can Öz", hz)
+hata_bekle("başkasının siparişi için ödeme hazırlanamaz", f"select public.odeme_hazirla('{pk['siparis_no']}', '{M1}')", "servis", "bulunamadı")
+bekle("müşteri siparişini görebilir", j(f"select public.kupon_siparis('{pk['siparis_no']}')", M3)["durum"] == "odeme_bekliyor")
+hata_bekle("başkası siparişi göremez", f"select public.kupon_siparis('{pk['siparis_no']}')", M1, "bulunamadı")
+hata_bekle("eksik tutarla onay reddedilir", f"select public.odeme_onayla('{pk['siparis_no']}', 50, 'paytr')", "servis", "az")
+ok1 = j(f"select public.odeme_onayla('{pk['siparis_no']}', 100, 'paytr', 'ref-1')", "servis")
+bekle("ödeme onaylanınca kupon aktif olur ve kod üretilir", ok1["durum"] == "aktif" and ok1["kod"] and ok1["odeme_durumu"] == "odendi", ok1)
+ok2 = j(f"select public.odeme_onayla('{pk['siparis_no']}', 100, 'paytr', 'ref-1')", "servis")
+bekle("aynı bildirim tekrar gelirse kod değişmez", ok2["kod"] == ok1["kod"])
+bekle("işletme ödenmiş kuponu sorgulayabilir", j(f"select public.kupon_sorgula('{ok1['kod']}')", ISL_A)["durum"] == "aktif")
+
+ok3 = j("select public.kupon_al('orta', 1)", M3)
+bekle("işletme listesinde ödenmemiş kupon görünmez",
+      all(c["kod"] for c in j("select public.isletme_kuponlari()", ISL_A)["kuponlar"]))
+j(f"select public.odeme_basarisiz('{ok3['siparis_no']}', 'paytr')", "servis")
+bekle("başarısız ödeme kuponu iptal eder ve listeden düşer",
+      all(c["id"] != ok3["id"] for c in j("select public.kuponlarim()", M3)))
+
+zm = j("select public.kupon_al('orta', 1)", M3)
+q(f"update public.kuponlar set olusturma = now() - interval '25 minutes' where id='{zm['id']}'")
+bekle("ödeme süresi geçince 'zaman aşımı' görünür", j(f"select public.kupon_siparis('{zm['siparis_no']}')", M3)["durum"] == "odeme_zaman_asimi")
+hata_bekle("süresi geçen sipariş için ödeme başlatılamaz", f"select public.odeme_hazirla('{zm['siparis_no']}', '{M3}')", "servis", "süresi doldu")
+gec = j(f"select public.odeme_onayla('{zm['siparis_no']}', 10, 'paytr')", "servis")
+bekle("süre dolduktan sonra gelen ödeme yine de kuponu aktif eder (para alınmıştır)", gec["durum"] == "aktif" and gec["kod"])
+
+ip = j("select public.kupon_al('orta', 1)", M3)
+ipt = j(f"select public.kupon_iptal('{ip['id']}')", M3)
+bekle("müşteri ödeme bekleyen kuponu iptal edebilir", ipt["durum"] == "iptal")
+
+hata_bekle("ödenmemiş kupona iade yapılamaz", f"select public.yonetim_kupon_iade('{ip['id']}', 'x')", ADMIN, "Yalnızca ödenmiş")
+hata_bekle("işletme iade yapamaz", f"select public.yonetim_kupon_iade('{ok1['id']}', 'x')", ISL_A, "yönetici yetkisi")
+iade = j(f"select public.yonetim_kupon_iade('{ok1['id']}', 'İşletme kapandı')", ADMIN)
+bekle("yönetici iade kaydeder; aktif kupon iptal olur", iade["odeme_durumu"] == "iade" and iade["durum"] == "iptal")
+hata_bekle("iade edilen kupon işletmede kullanılamaz", f"select public.kupon_kullan('{ok1['kod']}')", ISL_A, "iptal")
+oz = j("select public.yonetim_ozet()", ADMIN)
+bekle("özet: kupon geliri ve iade ayrı", float(oz["kupon_geliri"]) == 10 and float(oz["iade_toplam"]) == 100, oz)
+bekle("ücretsiz kampanyada kupon anında aktif", j("select public.kupon_al('bedava', 1)", M3)["durum"] == "aktif")
+j("select public.yonetim_ayar_kaydet('{\"odeme_aktif\":false}')", ADMIN)
+bekle("ödeme kapatılınca bedel tekrar 0", float(bedel("orta")) == 0)
 
 # --------------------------------------------------------------- YARDIMCILAR
 print("\nYardımcılar")

@@ -358,6 +358,7 @@
     var adetSec = '';
     for (var i = 1; i <= maxAdet; i++) adetSec += '<option value="' + i + '">' + i + '</option>';
     var bugun = YK.bugun();
+    var bedel = k.kuponBedeli || 0;
 
     var form = tukendi
       ? '<div class="yk-empty" style="padding:18px;margin-bottom:12px"><i class="fa-solid fa-box-open"></i>Bu kampanyanın kuponları tükendi.</div>'
@@ -374,12 +375,17 @@
             : '') +
           '<div class="row g-2 mb-10">' +
             '<div class="col-5"><label for="yk-adet">Kupon adedi</label><select id="yk-adet" name="adet" class="yk-select">' + adetSec + '</select></div>' +
-            '<div class="col-7"><label>Mekanda ödenecek</label><div class="yk-toplam" id="yk-toplam">' + tl(k.yeniFiyat) + '</div></div>' +
+            (bedel ? '' : '<div class="col-7"><label>Mekanda ödenecek</label><div class="yk-toplam" id="yk-toplam">' + tl(k.yeniFiyat) + '</div></div>') +
           '</div>' +
+          (bedel ? '<div class="yk-bedel-kutu"><div><span>Kupon bedeli <small>(şimdi, online)</small></span><strong id="yk-bedel">' + tl(bedel) + '</strong></div>' +
+            '<div><span>Mekanda ödenecek</span><strong id="yk-mekan">' + tl(k.yeniFiyat) + '</strong></div>' +
+            (off ? '<div class="yk-bedel-tasarruf"><span>Net kazancın</span><strong id="yk-net">' + tl(k.eskiFiyat - k.yeniFiyat - bedel) + '</strong></div>' : '') +
+          '</div>' +
+          '<label class="yk-check yk-sozlesme"><input type="checkbox" name="sozlesme" id="yk-sozlesme"> <span><a href="satis-sozlesmesi.html" target="_blank">Ön bilgilendirme formu ve mesafeli satış sözleşmesini</a> okudum, kabul ediyorum.</span></label>' : '') +
           (k.rezervasyonGerekli ? '<label for="yk-not">İşletmeye not (isteğe bağlı)</label><textarea id="yk-not" name="not" rows="2" maxlength="500" class="yk-textarea mb-10" placeholder="Örn. cam kenarı masa"></textarea>' : '') +
           '<div class="yk-form-hata" id="yk-kupon-hata" role="alert"></div>' +
           '<button type="submit" class="yk-btn" id="yk-kupon-al"><i class="fa-solid fa-ticket"></i> ' +
-            (YK.kullanici ? 'Kuponu Al' : 'Giriş Yap ve Kuponu Al') + '</button>' +
+            (!YK.kullanici ? 'Giriş Yap ve Kuponu Al' : bedel ? 'Kuponu Al · ' + tl(bedel) + ' Öde' : 'Ücretsiz Kuponu Al') + '</button>' +
         '</form>';
 
     return '' +
@@ -391,7 +397,7 @@
         (k.kalan !== null && k.kalan !== undefined && !tukendi ? '<div class="yk-stok"><i class="fa-solid fa-fire"></i> Son <strong>' + k.kalan + '</strong> kupon</div>' : '') +
         form +
         '<ul class="yk-adimlar">' +
-          '<li><i class="fa-solid fa-1"></i> Kuponu ücretsiz al, kodun hesabına kaydedilsin.</li>' +
+          '<li><i class="fa-solid fa-1"></i> ' + (bedel ? 'Kupon bedelini (' + tl(bedel) + ') online öde; kodun hesabına gelsin.' : 'Kuponu ücretsiz al; kodun hesabına kaydedilsin.') + '</li>' +
           '<li><i class="fa-solid fa-2"></i> ' + (k.sehir === 'online' ? 'Siparişte kodu işletmeye ilet.' : 'Mekanda kodu veya QR’ı göster.') + '</li>' +
           '<li><i class="fa-solid fa-3"></i> İndirimli fiyatı doğrudan işletmeye öde.</li>' +
         '</ul>' +
@@ -403,7 +409,15 @@
     if (!f) return;
     var adet = f.querySelector('[name=adet]'), toplam = document.getElementById('yk-toplam');
     var hataEl = document.getElementById('yk-kupon-hata'), btn = document.getElementById('yk-kupon-al');
-    adet.addEventListener('change', function () { toplam.textContent = tl(k.yeniFiyat * Number(adet.value)); });
+    adet.addEventListener('change', function () {
+      var n = Number(adet.value), b = (k.kuponBedeli || 0) * n;
+      if (toplam) toplam.textContent = tl(k.yeniFiyat * n);
+      var be = document.getElementById('yk-bedel'), me = document.getElementById('yk-mekan'), ne = document.getElementById('yk-net');
+      if (be) be.textContent = tl(b);
+      if (me) me.textContent = tl(k.yeniFiyat * n);
+      if (ne) ne.textContent = tl((k.eskiFiyat - k.yeniFiyat) * n - b);
+      if (YK.kullanici && k.kuponBedeli) btn.innerHTML = '<i class="fa-solid fa-ticket"></i> Kuponu Al · ' + tl(b) + ' Öde';
+    });
 
     f.addEventListener('submit', function (e) {
       e.preventDefault();
@@ -420,9 +434,12 @@
         veri.not = f.querySelector('[name=not]').value;
         if (!veri.tarih) { hataEl.textContent = 'Lütfen rezervasyon tarihini seçin.'; f.querySelector('[name=tarih]').focus(); return; }
       }
+      var soz = document.getElementById('yk-sozlesme');
+      if (soz && !soz.checked) { hataEl.textContent = 'Devam etmek için ön bilgilendirme formunu ve satış sözleşmesini onaylayın.'; soz.focus(); return; }
       btn.disabled = true;
-      btn.innerHTML = '<span class="yk-spin"></span> Kupon oluşturuluyor…';
+      btn.innerHTML = '<span class="yk-spin"></span> ' + (k.kuponBedeli ? 'Ödemeye geçiliyor…' : 'Kupon oluşturuluyor…');
       YK.kupon.al(veri).then(function (c) {
+        if (c.durum === 'odeme_bekliyor') { window.location.href = 'odeme.html?siparis=' + encodeURIComponent(c.siparis_no); return; }
         window.location.href = 'kupon.html?kod=' + encodeURIComponent(c.kod) + '&yeni=1';
       }, function (err) {
         hataEl.textContent = err.message;
@@ -478,7 +495,7 @@
             (k.kosullar || []).map(function (c) { return '<li><i class="fa-solid fa-check"></i><span>' + esc(c) + '</span></li>'; }).join('') +
             '<li><i class="fa-solid fa-check"></i><span>Kişi başı en fazla ' + (k.kisiBasiLimit || 5) + ' kupon alınabilir.</span></li>' +
             '<li><i class="fa-solid fa-check"></i><span>Kupon, alındıktan sonra ' + (k.kuponGecerlilikGun || 30) + ' gün içinde ve en geç ' + tarih(k.bitis) + ' tarihine kadar kullanılmalıdır.</span></li>' +
-            '<li><i class="fa-solid fa-check"></i><span>Ödeme, kupon gösterilerek doğrudan işletmeye yapılır.</span></li>' +
+            '<li><i class="fa-solid fa-check"></i><span>' + (k.kuponBedeli ? 'Kupon bedeli (' + tl(k.kuponBedeli) + ' / adet) online ödenir; indirimli fiyat kupon gösterilerek doğrudan işletmeye ödenir. Kullanılmayan kuponun bedeli iade edilmez.' : 'Ödeme, kupon gösterilerek doğrudan işletmeye yapılır.') + '</span></li>' +
           '</ul></div>' +
           ((k.adres || k.telefon) ? '<div class="yk-detail-section"><h4>İşletme Bilgileri</h4>' +
             (k.adres ? '<p><i class="fa-solid fa-location-dot" style="color:#ff4a22"></i> ' + esc(k.adres) +

@@ -28,9 +28,11 @@ ERISIM = {}        # access token -> kullanıcı id
 YENILEME = {}      # refresh token -> kullanıcı id
 
 
-def sql(sorgu, kullanici=None, anon=False):
+def sql(sorgu, kullanici=None, anon=False, servis=False):
     on = ""
-    if kullanici:
+    if servis:
+        on = "set role service_role;\n"
+    elif kullanici:
         on = ("set role authenticated; select set_config('request.jwt.claims', '"
               + json.dumps({"sub": kullanici, "role": "authenticated"}) + "', false) \\g /dev/null\n")
     elif anon:
@@ -121,6 +123,22 @@ class Isleyici(SimpleHTTPRequestHandler):
             return self.yanit(200, {"id": uid})
         if u.path.startswith("/rest/v1/"):
             return self.rest_get(u)
+        if u.path == "/__test_odeme.html":
+            # PayTR iframe'inin yerine geçen sahte ödeme ekranı
+            q = parse_qs(u.query)
+            sip = q.get("siparis", [""])[0]
+            html = f"""<!doctype html><meta charset="utf-8"><title>Test ödeme</title>
+<body style="font-family:sans-serif;padding:20px"><h3>TEST ÖDEME EKRANI</h3><p>Sipariş: {sip} · Tutar: {q.get('tutar',[''])[0]} TL</p>
+<button id="test-ode" onclick="gonder('success')">Öde</button> <button id="test-red" onclick="gonder('failed')">Reddet</button>
+<script>function gonder(d){{fetch('/__test_bildirim',{{method:'POST',body:JSON.stringify({{siparis:'{sip}',status:d}})}})
+.then(()=>{{location.href='/odeme.html?siparis={sip}&sonuc='+(d==='success'?'basarili':'basarisiz');}});}}</script></body>"""
+            veri = html.encode()
+            self.send_response(200)
+            self.send_header("Content-Type", "text/html; charset=utf-8")
+            self.send_header("Content-Length", str(len(veri)))
+            self.end_headers()
+            self.wfile.write(veri)
+            return
         return super().do_GET()
 
     def rest_get(self, u):
@@ -164,9 +182,9 @@ class Isleyici(SimpleHTTPRequestHandler):
     def do_POST(self):
         u = urlparse(self.path)
         q = parse_qs(u.query)
-        if self.headers.get("apikey") != ANON_KEY:
-            return self.yanit(401, {"message": "Invalid API key"})
         b = self.govde()
+        if self.headers.get("apikey") != ANON_KEY and u.path != "/__test_bildirim":
+            return self.yanit(401, {"message": "Invalid API key"})
         if u.path == "/auth/v1/signup":
             e = b.get("email", "").lower()
             if e in SIFRELER:
@@ -194,6 +212,24 @@ class Isleyici(SimpleHTTPRequestHandler):
             return
         if u.path == "/auth/v1/recover":
             return self.yanit(200, {})
+        if u.path == "/functions/v1/odeme-baslat":
+            uid = self.kim()
+            if not uid or uid.startswith("gecersiz"):
+                return self.yanit(401, {"message": "Ödeme için giriş yapmalısınız."})
+            try:
+                s_ = json.loads(sql(f"select public.odeme_hazirla({lit(b.get('siparis_no'))}, '{uid}')", servis=True))
+            except (ValueError, PermissionError) as e:
+                return self.yanit(400, {"message": str(e)})
+            return self.yanit(200, {"tip": "iframe", "url": f"/__test_odeme.html?siparis={s_['siparis_no']}&tutar={s_['tutar']}"})
+        if u.path == "/__test_bildirim":
+            # PayTR'nin sunucuya bildirimi (odeme-bildirim fonksiyonunun yaptığı veritabanı çağrısı)
+            sip = lit(b.get("siparis"))
+            if b.get("status") == "success":
+                tutar = sql(f"select kupon_bedeli from public.kuponlar where siparis_no = {sip}")
+                sql(f"select public.odeme_onayla({sip}, {tutar}, 'test')", servis=True)
+            else:
+                sql(f"select public.odeme_basarisiz({sip}, 'test')", servis=True)
+            return self.yanit(200, {"ok": True})
         if u.path.startswith("/rest/v1/rpc/"):
             ad = u.path.split("/rpc/")[1]
             if not re.fullmatch(r"[a-z_]+", ad):

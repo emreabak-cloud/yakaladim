@@ -66,11 +66,18 @@
         kutu(o.kupon_kullanildi, 'Kullanılan kupon', 'fa-check-double', 'kuponlar') +
         kutu(tl(o.ciro_kullanilan), 'Kuponla yapılan satış', 'fa-turkish-lira-sign', 'kuponlar') +
         kutu(o.basvuru_yeni, 'Yeni başvuru / mesaj', 'fa-envelope-open-text', 'basvurular') +
+        kutu(tl(o.kupon_geliri || 0), 'Kupon geliri (online)', 'fa-sack-dollar', 'kuponlar') +
+        kutu(o.odeme_bekleyen || 0, 'Ödemesi süren kupon', 'fa-credit-card', 'kuponlar') +
       '</div>' +
+      (!o.odeme_aktif ? '<div class="yk-uyari mt-20"><i class="fa-solid fa-circle-info"></i> <strong>Kupon bedeli kapalı:</strong> şu an tüm kuponlar ücretsiz. ' +
+        'Ödeme sağlayıcısı bağlandıktan sonra <a href="#" data-git-link="ayarlar">Ayarlar</a> sekmesinden açabilirsiniz.</div>' : '') +
       (o.izin_bekleyen ? '<div class="yk-uyari mt-20"><i class="fa-solid fa-circle-info"></i> <strong>' + o.izin_bekleyen +
         ' işletmeden yayın izni bekleniyor.</strong> Bu işletmelerin kampanyaları, izin "Onaylandı" yapılana kadar sitede görünmez ve kupon alınamaz.</div>' : '');
       el.querySelectorAll('[data-git]').forEach(function (b) {
         b.addEventListener('click', function () { if (b.getAttribute('data-git')) sekmeAc(b.getAttribute('data-git')); });
+      });
+      el.querySelectorAll('[data-git-link]').forEach(function (a) {
+        a.addEventListener('click', function (e) { e.preventDefault(); sekmeAc(a.getAttribute('data-git-link')); });
       });
     }, function (e) { U.hataKutusu(el, e, function () { ozet(el); }); });
   }
@@ -92,9 +99,12 @@
           return '<tr><td><strong>' + esc(k.baslik) + '</strong><br><span class="yk-muted" style="font-size:12px">' + esc(k.id) + ' · ' + esc(U.kategoriAdi(k.kategori)) +
               (k.kaynak && k.kaynak !== 'manuel' ? ' · kaynak: ' + esc(k.kaynak) : '') + '</span></td>' +
             '<td>' + esc(k.isletme || '—') + '<br>' + (k.izin_durumu ? rozet('izin-' + k.izin_durumu, IZIN[k.izin_durumu]) : '') + '</td>' +
-            '<td>' + tl(k.yeni_fiyat) + (k.eski_fiyat ? '<br><s class="yk-muted">' + tl(k.eski_fiyat) + '</s>' : '') + '</td>' +
+            '<td>' + tl(k.yeni_fiyat) + (k.eski_fiyat ? '<br><s class="yk-muted">' + tl(k.eski_fiyat) + '</s>' : '') +
+              '<br><span class="yk-muted" style="font-size:12px">Kupon: ' + (Number(k.hesaplanan_bedel) ? tl(k.hesaplanan_bedel) : 'ücretsiz') +
+              (k.kupon_bedeli !== null && k.kupon_bedeli !== undefined ? ' (özel)' : '') + '</span></td>' +
             '<td>' + U.tarih(k.bitis, { day: 'numeric', month: 'short', year: 'numeric' }) + (bitti ? '<br>' + rozet('suresi_doldu', 'Bitti') : '') + '</td>' +
-            '<td>' + (k.satilan || 0) + (k.stok !== null && k.stok !== undefined ? ' / ' + k.stok : '') + '<br><span class="yk-muted" style="font-size:12px">' + (k.kullanilan || 0) + ' kullanıldı</span></td>' +
+            '<td>' + (k.satilan || 0) + (k.stok !== null && k.stok !== undefined ? ' / ' + k.stok : '') + '<br><span class="yk-muted" style="font-size:12px">' + (k.kullanilan || 0) + ' kullanıldı' +
+              (Number(k.kupon_geliri) ? ' · ' + tl(k.kupon_geliri) + ' gelir' : '') + '</span></td>' +
             '<td>' + rozet(k.durum, DURUM[k.durum]) + '</td>' +
             '<td class="text-end" style="white-space:nowrap">' +
               (k.durum !== 'yayinda' ? '<button type="button" class="yk-mini-btn" data-durum="yayinda" data-id="' + esc(k.id) + '">Yayına al</button>' :
@@ -159,7 +169,8 @@
           '<div class="col-md-3"><label>Toplam kupon (boş = sınırsız)</label><input class="yk-input" type="number" min="0" name="stok" value="' + g('stok') + '"></div>' +
           '<div class="col-md-3"><label>Kişi başı en fazla</label><input class="yk-input" type="number" min="1" max="50" name="kisi_basi_limit" value="' + g('kisi_basi_limit') + '"></div>' +
           '<div class="col-md-3"><label>Kupon geçerliliği (gün)</label><input class="yk-input" type="number" min="1" max="365" name="kupon_gecerlilik_gun" value="' + g('kupon_gecerlilik_gun') + '"></div>' +
-          '<div class="col-md-3"><label>Ödeme</label><select class="yk-select" name="odeme_tipi">' + secenekler({ mekanda: 'Mekanda', online: 'Online (yakında)' }, k.odeme_tipi) + '</select></div>' +
+          '<div class="col-md-3"><label>Kupon bedeli (TL / adet)</label><input class="yk-input" type="number" step="0.01" min="0" name="kupon_bedeli" value="' + g('kupon_bedeli') +
+            '" placeholder="Boş = genel kural"><small class="yk-muted">0 yazarsanız kupon ücretsiz olur.</small></div>' +
           '<div class="col-12 d-flex gap-4 flex-wrap">' +
             '<label class="yk-check"><input type="checkbox" name="rezervasyon_gerekli"' + (k.rezervasyon_gerekli ? ' checked' : '') + '> Rezervasyon gerekli (tarih/saat/kişi sorulur)</label>' +
             '<label class="yk-check"><input type="checkbox" name="one_cikan"' + (k.one_cikan ? ' checked' : '') + '> Ana sayfada öne çıkar</label></div>' +
@@ -183,6 +194,7 @@
       f.addEventListener('submit', function (e) {
         e.preventDefault();
         var v = formVeri(f), hata = f.querySelector('#yk-kf-hata');
+        v.odeme_tipi = 'mekanda';
         v.kosullar = String(v.kosullar || '').split('\n').map(function (s) { return s.trim(); }).filter(Boolean);
         if (!v.isletme_id) { hata.textContent = 'Lütfen bir işletme seçin.'; return; }
         if (!v.baslik || !v.id || !v.yeni_fiyat || !v.bitis) { hata.textContent = 'Yıldızlı alanlar zorunludur.'; return; }
@@ -276,14 +288,33 @@
     YK.yonetim.kuponlar().then(function (l) {
       l = l || [];
       el.innerHTML = l.length ? '<div class="yk-tablo-sar"><table class="yk-tablo"><thead><tr>' +
-        '<th>Kod</th><th>Kampanya</th><th>Müşteri</th><th>Adet / tutar</th><th>Rezervasyon</th><th>Alınma</th><th>Durum</th></tr></thead><tbody>' +
+        '<th>Kod</th><th>Kampanya</th><th>Müşteri</th><th>Adet / tutar</th><th>Kupon bedeli</th><th>Rezervasyon</th><th>Alınma</th><th>Durum</th></tr></thead><tbody>' +
         l.map(function (c) {
-          return '<tr><td><code>' + esc(c.kod) + '</code></td><td>' + esc((c.kampanya || {}).baslik) + '<br><span class="yk-muted" style="font-size:12px">' + esc((c.kampanya || {}).isletme || '') + '</span></td>' +
+          var odeme = Number(c.kupon_bedeli) ? tl(c.kupon_bedeli) + '<br>' + rozet('odeme-' + c.odeme_durumu,
+              { odendi: 'Ödendi', bekliyor: 'Bekliyor', basarisiz: 'Başarısız', iade: 'İade edildi', yok: '-' }[c.odeme_durumu] || c.odeme_durumu) +
+              (c.odeme_durumu === 'odendi' ? ' <button type="button" class="yk-mini-btn" data-iade="' + esc(c.id) + '" data-kod="' + esc(c.kod) + '">İade</button>' : '')
+            : '<span class="yk-muted">Ücretsiz</span>';
+          return '<tr><td><code>' + esc(c.kod || '—') + '</code></td><td>' + esc((c.kampanya || {}).baslik) + '<br><span class="yk-muted" style="font-size:12px">' + esc((c.kampanya || {}).isletme || '') + '</span></td>' +
             '<td>' + esc((c.musteri || {}).ad_soyad || '') + '<br><span class="yk-muted" style="font-size:12px">' + esc(c.musteri_eposta || '') + '</span></td>' +
-            '<td>' + c.adet + ' · ' + tl(c.toplam) + '</td>' +
+            '<td>' + c.adet + ' · ' + tl(c.toplam) + '</td><td>' + odeme + '</td>' +
             '<td>' + (c.rezervasyon_tarihi ? U.tarih(c.rezervasyon_tarihi, { day: 'numeric', month: 'short' }) + ' ' + esc(c.rezervasyon_saati || '') : '—') + '</td>' +
             '<td>' + U.tarihSaat(c.olusturma) + '</td><td>' + rozet(c.durum, YK.durumAdi(c.durum)) + '</td></tr>';
         }).join('') + '</tbody></table></div>' : '<div class="yk-empty">Henüz kupon alınmadı.</div>';
+      el.querySelectorAll('[data-iade]').forEach(function (b) {
+        b.addEventListener('click', function () {
+          var pn = pencere('Kupon bedeli iadesi — ' + b.getAttribute('data-kod'),
+            '<form id="yk-iade-f"><p class="yk-muted">Bu işlem kuponu iptal eder ve bedeli "iade edildi" olarak işaretler. ' +
+            '<strong>Paranın kendisini ödeme kuruluşunun (PayTR) panelinden ayrıca iade etmelisiniz.</strong></p>' +
+            '<label>İade nedeni</label><textarea class="yk-textarea mb-15" rows="3" name="not" placeholder="Örn. işletme kampanyayı uygulamadı"></textarea>' +
+            '<div class="yk-form-hata" id="yk-iade-hata"></div><button type="submit" class="yk-btn">İadeyi kaydet</button></form>');
+          pn.el.querySelector('#yk-iade-f').addEventListener('submit', function (e) {
+            e.preventDefault();
+            YK.yonetim.kuponIade(b.getAttribute('data-iade'), pn.el.querySelector('[name=not]').value).then(function () {
+              pn.kapat(); U.bildir('İade kaydedildi.', 'basari'); kuponlar(el);
+            }, function (er) { pn.el.querySelector('#yk-iade-hata').textContent = er.message; });
+          });
+        });
+      });
     }, function (e) { U.hataKutusu(el, e, function () { kuponlar(el); }); });
   }
 
@@ -351,11 +382,52 @@
     }, function (e) { U.hataKutusu(el, e, function () { basvurular(el); }); });
   }
 
+  /* ---------- Ayarlar: kupon bedeli ---------- */
+  function ayarlar(el) {
+    U.yukleniyor(el);
+    YK.yonetim.ayarlar().then(function (a) {
+      el.innerHTML = '<form class="yk-form-card" id="yk-ayar-f" style="max-width:760px">' +
+        '<h4 class="mb-5">Kupon bedeli</h4>' +
+        '<p class="yk-muted">Müşteri kuponu alırken bu bedeli online öder; ürünün indirimli fiyatını mekanda öder. Kampanya bazında farklı bir bedel, kampanya düzenleme ekranından verilebilir.</p>' +
+        '<label class="yk-check mb-20"><input type="checkbox" name="odeme_aktif"' + (a.odeme_aktif ? ' checked' : '') + '>' +
+          '<span><strong>Kupon bedeli alınsın</strong> — kapalıyken tüm kuponlar ücretsizdir. Açmadan önce ödeme sağlayıcısı (PayTR) bağlantısının yapıldığından emin olun.</span></label>' +
+        '<div class="row g-3">' +
+          '<div class="col-sm-3"><label>Oran (%)</label><input class="yk-input" type="number" step="0.1" min="0" max="100" name="oran" value="' + (Number(a.bedel_oran) * 100) + '"></div>' +
+          '<div class="col-sm-3"><label>En az (TL)</label><input class="yk-input" type="number" step="1" min="0" name="bedel_min" value="' + Number(a.bedel_min) + '"></div>' +
+          '<div class="col-sm-3"><label>En fazla (TL)</label><input class="yk-input" type="number" step="1" min="0" name="bedel_max" value="' + Number(a.bedel_max) + '"></div>' +
+          '<div class="col-sm-3"><label>Ödeme süresi (dk)</label><input class="yk-input" type="number" step="1" min="5" max="120" name="odeme_suresi_dk" value="' + a.odeme_suresi_dk + '"></div>' +
+        '</div>' +
+        '<div class="yk-ornek-bedel mt-20" id="yk-ornek-bedel"></div>' +
+        '<button type="submit" class="yk-btn mt-20">Kaydet</button></form>';
+      var f = el.querySelector('#yk-ayar-f');
+      function ornek() {
+        var v = formVeri(f), o = Number(v.oran) / 100, mn = Number(v.bedel_min), mx = Number(v.bedel_max);
+        el.querySelector('#yk-ornek-bedel').innerHTML = '<strong>Örnek:</strong> ' + [300, 1000, 2500, 9000].map(function (fy) {
+          var b = v.odeme_aktif ? Math.min(mx, Math.max(mn, Math.round(fy * o))) : 0;
+          return tl(fy) + ' ürün → <strong>' + (b ? tl(b) : 'ücretsiz') + '</strong>';
+        }).join(' · ');
+      }
+      f.addEventListener('input', ornek);
+      ornek();
+      f.addEventListener('submit', function (e) {
+        e.preventDefault();
+        var v = formVeri(f), btn = f.querySelector('[type=submit]');
+        if (Number(v.bedel_min) > Number(v.bedel_max)) { U.bildir('En az bedel, en fazla bedelden büyük olamaz.', 'hata'); return; }
+        btn.disabled = true;
+        YK.yonetim.ayarKaydet({ odeme_aktif: v.odeme_aktif, bedel_oran: Number(v.oran) / 100, bedel_min: v.bedel_min,
+          bedel_max: v.bedel_max, odeme_suresi_dk: v.odeme_suresi_dk })
+          .then(function () { U.bildir('Ayarlar kaydedildi.', 'basari'); }, function (er) { U.bildir(er.message, 'hata'); })
+          .then(function () { btn.disabled = false; });
+      });
+    }, function (e) { U.hataKutusu(el, e, function () { ayarlar(el); }); });
+  }
+
   /* ---------- Sekmeler ---------- */
   var SEKMELER = {
     ozet: ['Özet', 'fa-gauge', ozet], kampanyalar: ['Kampanyalar', 'fa-bullhorn', kampanyalar],
     isletmeler: ['İşletmeler', 'fa-store', isletmeSekmesi], kuponlar: ['Kuponlar', 'fa-ticket', kuponlar],
-    uyeler: ['Üyeler', 'fa-users', uyeler], basvurular: ['Başvurular', 'fa-envelope-open-text', basvurular]
+    uyeler: ['Üyeler', 'fa-users', uyeler], basvurular: ['Başvurular', 'fa-envelope-open-text', basvurular],
+    ayarlar: ['Ayarlar', 'fa-sliders', ayarlar]
   };
   function sekmeAc(ad) {
     if (!SEKMELER[ad]) ad = 'ozet';

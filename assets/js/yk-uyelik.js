@@ -160,17 +160,23 @@
             (k.semt ? ' · ' + esc(k.semt) : '') + '</p>' +
           (c.rezervasyon_tarihi ? '<p class="mb-5"><i class="fa-regular fa-calendar-check" style="color:#ff4a22"></i> ' + rezervasyonMetni(c) + '</p>' : '') +
           '<p class="yk-muted mb-0" style="font-size:13px">' +
-            (c.durum === 'kullanildi' ? 'Kullanıldı: ' + U.tarihSaat(c.kullanim_zamani)
+            (c.durum === 'odeme_bekliyor' ? 'Ödeme için son: ' + U.tarihSaat(c.odeme_son)
+              : c.durum === 'kullanildi' ? 'Kullanıldı: ' + U.tarihSaat(c.kullanim_zamani)
               : c.durum === 'iptal' ? 'İptal: ' + U.tarihSaat(c.iptal_zamani)
               : 'Son kullanma: ' + U.tarihSaat(c.son_kullanma)) + '</p>' +
         '</div>' +
         '<div class="yk-kupon-satir-sag">' +
-          '<code class="yk-kod-kucuk">' + esc(c.kod) + '</code>' +
+          (c.kod ? '<code class="yk-kod-kucuk">' + esc(c.kod) + '</code>' : '<span class="yk-muted" style="font-size:13px">Kod, ödeme onaylanınca oluşur</span>') +
           '<div class="yk-muted" style="font-size:13px">' + c.adet + ' adet · <strong style="color:#1a1a1a">' + tl(c.toplam) + '</strong></div>' +
+          (c.kupon_bedeli > 0 ? '<div class="yk-muted" style="font-size:12px">Kupon bedeli ' + tl(c.kupon_bedeli) +
+            (c.odeme_durumu === 'odendi' ? ' · ödendi' : c.odeme_durumu === 'iade' ? ' · iade edildi' : '') + '</div>' : '') +
           '<div class="d-flex gap-2 flex-wrap justify-content-end">' +
-            '<a class="yk-btn" style="padding:9px 16px;font-size:14px" href="kupon.html?kod=' + encodeURIComponent(c.kod) + '"><i class="fa-solid fa-qrcode"></i> ' +
-              (c.durum === 'aktif' ? 'Kuponu Göster' : 'Detay') + '</a>' +
-            (c.durum === 'aktif' ? '<button type="button" class="yk-btn-outline" style="padding:8px 14px;font-size:14px" data-iptal="' + esc(c.id) + '">İptal</button>' : '') +
+            (c.durum === 'odeme_bekliyor'
+              ? '<a class="yk-btn" style="padding:9px 16px;font-size:14px" href="odeme.html?siparis=' + encodeURIComponent(c.siparis_no) + '"><i class="fa-regular fa-credit-card"></i> Ödemeye devam et</a>'
+              : c.kod ? '<a class="yk-btn" style="padding:9px 16px;font-size:14px" href="kupon.html?kod=' + encodeURIComponent(c.kod) + '"><i class="fa-solid fa-qrcode"></i> ' +
+                (c.durum === 'aktif' ? 'Kuponu Göster' : 'Detay') + '</a>' : '') +
+            (c.durum === 'aktif' || c.durum === 'odeme_bekliyor' ? '<button type="button" class="yk-btn-outline" style="padding:8px 14px;font-size:14px" data-iptal="' + esc(c.id) + '"' +
+              (c.odeme_durumu === 'odendi' ? ' data-ucretli="1"' : '') + '>İptal</button>' : '') +
           '</div>' +
         '</div>' +
       '</div>';
@@ -241,10 +247,11 @@
   function kuponlarSekmesi(el) {
     var filtre = 'aktif', liste = [];
     function ciz() {
-      var sayilar = { tumu: liste.length, aktif: 0, kullanildi: 0, suresi_doldu: 0, iptal: 0 };
+      var sayilar = { tumu: liste.length, aktif: 0, odeme_bekliyor: 0, kullanildi: 0, suresi_doldu: 0, iptal: 0 };
       liste.forEach(function (c) { sayilar[c.durum] = (sayilar[c.durum] || 0) + 1; });
       var gorunen = liste.filter(function (c) { return filtre === 'tumu' || c.durum === filtre; });
       var adlar = { aktif: 'Kullanılabilir', kullanildi: 'Kullanılan', suresi_doldu: 'Süresi dolan', iptal: 'İptal', tumu: 'Tümü' };
+      if (sayilar.odeme_bekliyor) adlar = Object.assign({ odeme_bekliyor: 'Ödeme bekleyen' }, adlar);
       el.innerHTML = '' +
         '<div class="yk-pill-row mb-20">' + Object.keys(adlar).map(function (a) {
           return '<button type="button" class="yk-pill' + (filtre === a ? ' active' : '') + '" data-filtre="' + a + '">' + adlar[a] + ' (' + (sayilar[a] || 0) + ')</button>';
@@ -259,7 +266,7 @@
       });
       el.querySelectorAll('[data-iptal]').forEach(function (b) {
         b.addEventListener('click', function () {
-          ikiAdimli(b, 'Emin misin? İptal et', function () {
+          ikiAdimli(b, b.getAttribute('data-ucretli') ? 'Bedel iade edilmez. İptal et?' : 'Emin misin? İptal et', function () {
             b.disabled = true;
             YK.kupon.iptal(b.getAttribute('data-iptal')).then(function () {
               U.bildir('Kupon iptal edildi.', 'basari'); yukle();
@@ -272,6 +279,8 @@
       U.yukleniyor(el, 'Kuponların yükleniyor…');
       YK.kupon.listem().then(function (l) {
         liste = l || [];
+        if (liste.some(function (c) { return c.durum === 'odeme_bekliyor'; }) && filtre === 'aktif' &&
+            !liste.some(function (c) { return c.durum === 'aktif'; })) filtre = 'odeme_bekliyor';
         if (filtre === 'aktif' && !liste.some(function (c) { return c.durum === 'aktif'; }) && liste.length) filtre = 'tumu';
         ciz();
       }, function (e) { U.hataKutusu(el, e, yukle); });
@@ -334,6 +343,7 @@
 
     YK.hazir.then(function () {
       if (!YK.kullanici) return girisGerekli('kupon.html?kod=' + encodeURIComponent(kod || ''));
+      if (!kod && p.get('siparis')) { window.location.href = 'odeme.html?siparis=' + encodeURIComponent(p.get('siparis')); return; }
       if (!kod) { window.location.href = 'hesabim.html'; return; }
       YK.kupon.getir(kod).then(ciz, function (e) {
         kok.innerHTML = '<div class="yk-empty"><i class="fa-solid fa-ticket"></i><h4>Kupon bulunamadı</h4><p>' + esc(e.message) +
@@ -365,7 +375,9 @@
             '</div>' +
             '<div class="yk-voucher-bilgi">' +
               '<div class="yk-voucher-tutar"><span>Mekanda ödenecek</span><strong>' + tl(c.toplam) + '</strong>' +
-                '<small>' + c.adet + ' × ' + tl(c.birim_fiyat) + (k.eski_fiyat ? ' <s>' + tl(k.eski_fiyat) + '</s>' : '') + '</small></div>' +
+                '<small>' + c.adet + ' × ' + tl(c.birim_fiyat) + (k.eski_fiyat ? ' <s>' + tl(k.eski_fiyat) + '</s>' : '') + '</small>' +
+                (c.kupon_bedeli > 0 ? '<small class="d-block mt-5"><i class="fa-solid fa-circle-check" style="color:#16a34a"></i> Kupon bedeli ' + tl(c.kupon_bedeli) +
+                  (c.odeme_durumu === 'iade' ? ' iade edildi' : ' online ödendi') + '</small>' : '') + '</div>' +
               (c.rezervasyon_tarihi ? '<div class="yk-voucher-satir"><i class="fa-regular fa-calendar-check"></i><div><strong>Rezervasyon</strong><br>' + rezervasyonMetni(c) +
                 (c.musteri_notu ? '<br><span class="yk-muted">Not: ' + esc(c.musteri_notu) + '</span>' : '') + '</div></div>' : '') +
               '<div class="yk-voucher-satir"><i class="fa-regular fa-clock"></i><div><strong>' +
@@ -394,7 +406,7 @@
 
       var ib = document.getElementById('yk-kupon-iptal');
       if (ib) ib.addEventListener('click', function () {
-        ikiAdimli(ib, 'Emin misin? İptal et', function () {
+        ikiAdimli(ib, c.odeme_durumu === 'odendi' ? 'Kupon bedeli iade edilmez. İptal et?' : 'Emin misin? İptal et', function () {
           ib.disabled = true;
           YK.kupon.iptal(c.id).then(function (y) { U.bildir('Kupon iptal edildi.', 'basari'); ciz(y); },
             function (e) { U.bildir(e.message, 'hata'); ib.disabled = false; });

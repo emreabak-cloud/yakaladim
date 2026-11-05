@@ -5,8 +5,9 @@
 --
 --  Modeli:
 --   * Müşteri üye olur, kampanyadan kupon alır (kod + QR).
---   * Ödemeyi mekanda, kuponu göstererek yapar (odeme_tipi = 'mekanda').
---     Online ön ödeme için alan hazır; ödeme sağlayıcısı bağlanınca açılır.
+--   * Kupon bedeli (ör. ürün fiyatının %1'i, en az 5 / en fazla 50 TL) online
+--     ödenir; ödeme onaylanınca kupon kodu üretilir. Ürünün indirimli fiyatı
+--     mekanda, kupon gösterilerek ödenir. Ödeme kapalıyken kuponlar ücretsizdir.
 --   * İşletme kullanıcısı İşletme Paneli'nde kodu sorgular ve "kullanıldı" yapar.
 --   * Yönetici (admin) kampanya, işletme, kullanıcı ve başvuruları yönetir.
 --
@@ -94,13 +95,14 @@ exception when duplicate_object then null; end $$;
 
 create table if not exists public.kuponlar (
   id                  uuid primary key default gen_random_uuid(),
-  kod                 text not null unique,
+  kod                 text unique,                       -- ödeme onaylanınca üretilir
   kampanya_id         text not null references public.kampanyalar(id) on delete restrict,
   kullanici_id        uuid not null references auth.users(id) on delete cascade,
   adet                integer not null default 1 check (adet between 1 and 50),
   birim_fiyat         numeric(10,2) not null,
   toplam              numeric(10,2) not null,
-  durum               text not null default 'aktif' check (durum in ('aktif', 'kullanildi', 'iptal')),
+  durum               text not null default 'aktif'
+                      check (durum in ('odeme_bekliyor', 'aktif', 'kullanildi', 'iptal')),
   rezervasyon_tarihi  date,
   rezervasyon_saati   time,
   kisi_sayisi         integer check (kisi_sayisi is null or kisi_sayisi between 1 and 50),
@@ -109,10 +111,55 @@ create table if not exists public.kuponlar (
   olusturma           timestamptz not null default now(),
   kullanim_zamani     timestamptz,
   kullanan            uuid references auth.users(id) on delete set null,
-  iptal_zamani        timestamptz
+  iptal_zamani        timestamptz,
+  -- Kupon bedeli ve online ödeme
+  kupon_bedeli        numeric(10,2) not null default 0,   -- tüm adetler için toplam
+  odeme_durumu        text not null default 'yok'
+                      check (odeme_durumu in ('yok', 'bekliyor', 'odendi', 'basarisiz', 'iade')),
+  siparis_no          text unique,
+  odeme_saglayici     text,
+  odeme_ref           text,
+  odeme_zamani        timestamptz,
+  iade_zamani         timestamptz,
+  iade_notu           text
 );
 create index if not exists kuponlar_kullanici_idx on public.kuponlar (kullanici_id, olusturma desc);
 create index if not exists kuponlar_kampanya_idx on public.kuponlar (kampanya_id, durum);
+
+-- Önceki sürümden yükseltme (tablo zaten varsa yeni sütun ve kuralları ekle)
+alter table public.kuponlar alter column kod drop not null;
+alter table public.kuponlar add column if not exists kupon_bedeli numeric(10,2) not null default 0;
+alter table public.kuponlar add column if not exists odeme_durumu text not null default 'yok';
+alter table public.kuponlar add column if not exists siparis_no text unique;
+alter table public.kuponlar add column if not exists odeme_saglayici text;
+alter table public.kuponlar add column if not exists odeme_ref text;
+alter table public.kuponlar add column if not exists odeme_zamani timestamptz;
+alter table public.kuponlar add column if not exists iade_zamani timestamptz;
+alter table public.kuponlar add column if not exists iade_notu text;
+alter table public.kuponlar drop constraint if exists kuponlar_durum_check;
+alter table public.kuponlar add constraint kuponlar_durum_check
+  check (durum in ('odeme_bekliyor', 'aktif', 'kullanildi', 'iptal'));
+alter table public.kuponlar drop constraint if exists kuponlar_odeme_durumu_check;
+alter table public.kuponlar add constraint kuponlar_odeme_durumu_check
+  check (odeme_durumu in ('yok', 'bekliyor', 'odendi', 'basarisiz', 'iade'));
+alter table public.kuponlar drop constraint if exists kullanilabilir_kuponun_kodu_var;
+alter table public.kuponlar add constraint kullanilabilir_kuponun_kodu_var
+  check (durum not in ('aktif', 'kullanildi') or kod is not null);
+-- Kampanya bazında kupon bedeli: boş = genel kural, 0 = ücretsiz, sayı = sabit bedel (TL / adet)
+alter table public.kampanyalar add column if not exists kupon_bedeli numeric(10,2)
+  check (kupon_bedeli is null or kupon_bedeli >= 0);
+
+-- Genel ayarlar (tek satır). Yönetim panelinden değiştirilir.
+create table if not exists public.ayarlar (
+  id              integer primary key default 1 check (id = 1),
+  odeme_aktif     boolean not null default false,          -- false iken tüm kuponlar ücretsiz
+  bedel_oran      numeric(6,4) not null default 0.01 check (bedel_oran between 0 and 1),
+  bedel_min       numeric(10,2) not null default 5 check (bedel_min >= 0),
+  bedel_max       numeric(10,2) not null default 50 check (bedel_max >= 0),
+  odeme_suresi_dk integer not null default 20 check (odeme_suresi_dk between 5 and 120),
+  guncelleme      timestamptz not null default now()
+);
+insert into public.ayarlar (id) values (1) on conflict (id) do nothing;
 
 create table if not exists public.basvurular (
   id          uuid primary key default gen_random_uuid(),
@@ -183,17 +230,45 @@ language sql immutable set search_path = '' as $$
   from (select regexp_replace(upper(coalesce(p, '')), '[^A-Z0-9]', '', 'g') as x) t
 $$;
 
--- Kampanyada satılmış (aktif + kullanılmış) kupon adedi
+-- Ödeme için ayrılan süre (ayarlar.odeme_suresi_dk)
+create or replace function public.odeme_suresi() returns interval
+language sql stable security definer set search_path = '' as $$
+  select make_interval(mins => coalesce((select odeme_suresi_dk from public.ayarlar where id = 1), 20))
+$$;
+
+-- Kupon stoktan ve kişi başı limitten düşer mi?
+create or replace function public.stok_tutuyor(c public.kuponlar) returns boolean
+language sql stable security definer set search_path = '' as $$
+  select c.durum in ('aktif', 'kullanildi')
+      or (c.durum = 'odeme_bekliyor' and c.olusturma > now() - public.odeme_suresi())
+$$;
+
+-- Kampanyada satılmış (aktif + kullanılmış) ve ödemesi beklenen kupon adedi
 create or replace function public.satilan_adet(p_kampanya text) returns integer
 language sql stable security definer set search_path = '' as $$
-  select coalesce(sum(adet), 0)::int from public.kuponlar
-  where kampanya_id = p_kampanya and durum in ('aktif', 'kullanildi')
+  -- Aktif + kullanılmış kuponlar ve ödeme süresi dolmamış "ödeme bekliyor" rezervleri
+  select coalesce(sum(c.adet), 0)::int from public.kuponlar c
+  where c.kampanya_id = p_kampanya and public.stok_tutuyor(c)
+$$;
+
+-- Kampanyanın adet başına kupon bedeli. Ödeme kapalıysa 0.
+create or replace function public.kupon_bedeli_hesapla(p_fiyat numeric, p_ozel numeric) returns numeric
+language sql stable security definer set search_path = '' as $$
+  select case
+    when not a.odeme_aktif then 0
+    when p_ozel is not null then p_ozel
+    else least(a.bedel_max, greatest(a.bedel_min, round(p_fiyat * a.bedel_oran)))
+  end
+  from public.ayarlar a where a.id = 1
 $$;
 
 -- Kuponun kullanıcıya görünen durumu
 create or replace function public.kupon_gorunen_durum(k public.kuponlar) returns text
-language sql stable set search_path = '' as $$
-  select case when k.durum = 'aktif' and k.son_kullanma < now() then 'suresi_doldu' else k.durum end
+language sql stable security definer set search_path = '' as $$
+  select case
+    when k.durum = 'odeme_bekliyor' and k.olusturma < now() - public.odeme_suresi() then 'odeme_zaman_asimi'
+    when k.durum = 'aktif' and k.son_kullanma < now() then 'suresi_doldu'
+    else k.durum end
 $$;
 
 -- guncelleme alanını otomatik doldur
@@ -247,13 +322,21 @@ select
   k.stok,
   case when k.stok is null then null
        else greatest(k.stok - (select coalesce(sum(c.adet), 0)::int from public.kuponlar c
-                               where c.kampanya_id = k.id and c.durum in ('aktif', 'kullanildi')), 0)
+                               where c.kampanya_id = k.id
+                                 and (c.durum in ('aktif', 'kullanildi')
+                                      or (c.durum = 'odeme_bekliyor'
+                                          and c.olusturma > now() - make_interval(mins => a.odeme_suresi_dk)))), 0)
   end as kalan,
   k.kisi_basi_limit, k.rezervasyon_gerekli, k.kupon_gecerlilik_gun,
-  k.odeme_tipi, k.link, k.one_cikan
+  k.odeme_tipi, k.link, k.one_cikan,
+  -- Adet başına kupon bedeli (fonksiyon yerine satır içi: görünüm ziyaretçi yetkisiyle fonksiyon çağıramaz)
+  case when not a.odeme_aktif then 0
+       when k.kupon_bedeli is not null then k.kupon_bedeli
+       else least(a.bedel_max, greatest(a.bedel_min, round(k.yeni_fiyat * a.bedel_oran))) end as kupon_bedeli
 from public.kampanyalar k
+cross join public.ayarlar a
 join public.isletmeler i on i.id = k.isletme_id
-where k.durum = 'yayinda'
+where a.id = 1 and k.durum = 'yayinda'
   and i.aktif and i.izin_durumu = 'onaylandi'
   and k.bitis >= public.bugun()
   and k.baslangic <= public.bugun();
@@ -275,8 +358,9 @@ drop policy if exists "profil: kendi veya yonetici" on public.profiller;
 drop policy if exists "kupon: sahibi, isletmesi veya yonetici" on public.kuponlar;
 drop policy if exists "basvuru: yonetici" on public.basvurular;
 
-revoke all on public.isletmeler, public.kampanyalar, public.profiller, public.kuponlar, public.basvurular
-  from anon, authenticated;
+alter table public.ayarlar enable row level security;
+revoke all on public.isletmeler, public.kampanyalar, public.profiller, public.kuponlar, public.basvurular,
+  public.ayarlar from anon, authenticated;
 revoke all on public.kampanya_liste from anon, authenticated;
 grant select on public.kampanya_liste to anon, authenticated;
 
@@ -295,6 +379,9 @@ language sql stable security definer set search_path = '' as $$
     'kisi_sayisi', c.kisi_sayisi, 'musteri_notu', c.musteri_notu,
     'son_kullanma', c.son_kullanma, 'olusturma', c.olusturma,
     'kullanim_zamani', c.kullanim_zamani, 'iptal_zamani', c.iptal_zamani,
+    'kupon_bedeli', c.kupon_bedeli, 'odeme_durumu', c.odeme_durumu, 'siparis_no', c.siparis_no,
+    'odeme_zamani', c.odeme_zamani, 'iade_zamani', c.iade_zamani,
+    'odeme_son', case when c.durum = 'odeme_bekliyor' then c.olusturma + public.odeme_suresi() end,
     'kampanya', jsonb_build_object(
       'id', k.id, 'baslik', k.baslik, 'kategori', k.kategori, 'sehir', k.sehir, 'semt', k.semt,
       'gorsel', k.gorsel, 'eski_fiyat', k.eski_fiyat, 'yeni_fiyat', k.yeni_fiyat,
@@ -327,6 +414,7 @@ declare
   v_id      uuid;
   v_son     timestamptz;
   v_deneme  int := 0;
+  v_bedel   numeric(10,2);
 begin
   if v_uid is null then
     raise exception 'Kupon almak için giriş yapmalısınız.' using errcode = '28000';
@@ -366,8 +454,8 @@ begin
     raise exception 'Adet 1 ile % arasında olmalıdır.', k.kisi_basi_limit;
   end if;
 
-  select coalesce(sum(adet), 0) into v_benim from public.kuponlar
-   where kampanya_id = k.id and kullanici_id = v_uid and durum in ('aktif', 'kullanildi');
+  select coalesce(sum(c.adet), 0) into v_benim from public.kuponlar c
+   where c.kampanya_id = k.id and c.kullanici_id = v_uid and public.stok_tutuyor(c);
   if v_benim + p_adet > k.kisi_basi_limit then
     raise exception 'Bu kampanyadan kişi başı en fazla % kupon alınabilir (şu ana kadar %).',
       k.kisi_basi_limit, v_benim;
@@ -409,6 +497,22 @@ begin
     v_son := least(v_son, public.gun_sonu(p_rezervasyon_tarihi));
   end if;
 
+  v_bedel := public.kupon_bedeli_hesapla(k.yeni_fiyat, k.kupon_bedeli) * p_adet;
+
+  if v_bedel > 0 then
+    -- Ücretli kupon: kod ödeme onaylanınca üretilir; o zamana kadar stok rezerve edilir
+    insert into public.kuponlar (kod, kampanya_id, kullanici_id, adet, birim_fiyat, toplam,
+                                 rezervasyon_tarihi, rezervasyon_saati, kisi_sayisi,
+                                 musteri_notu, son_kullanma, durum, kupon_bedeli, odeme_durumu, siparis_no)
+    values (null, k.id, v_uid, p_adet, k.yeni_fiyat, k.yeni_fiyat * p_adet,
+            p_rezervasyon_tarihi, p_rezervasyon_saati, p_kisi_sayisi,
+            nullif(left(trim(coalesce(p_not, '')), 500), ''), v_son,
+            'odeme_bekliyor', v_bedel, 'bekliyor',
+            'YK' || upper(replace(gen_random_uuid()::text, '-', '')))
+    returning id into v_id;
+    return public.kupon_json(v_id);
+  end if;
+
   loop
     v_kod := public.kupon_kodu_uret();
     begin
@@ -431,9 +535,23 @@ end $$;
 
 create or replace function public.kuponlarim() returns jsonb
 language sql stable security definer set search_path = '' as $$
+  -- Süresi geçmiş ödeme denemeleri ve başarısız ödemeler listelenmez
   select coalesce(jsonb_agg(public.kupon_json(c.id) order by c.olusturma desc), '[]'::jsonb)
-  from public.kuponlar c where c.kullanici_id = auth.uid()
+  from public.kuponlar c
+  where c.kullanici_id = auth.uid()
+    and not (c.durum = 'odeme_bekliyor' and c.olusturma < now() - public.odeme_suresi())
+    and not (c.durum = 'iptal' and c.odeme_durumu = 'basarisiz')
 $$;
+
+-- Ödeme sayfası için: siparişe ait kupon (yalnızca sahibine)
+create or replace function public.kupon_siparis(p_siparis_no text) returns jsonb
+language plpgsql stable security definer set search_path = '' as $$
+declare v_id uuid;
+begin
+  select id into v_id from public.kuponlar where siparis_no = p_siparis_no and kullanici_id = auth.uid();
+  if v_id is null then raise exception 'Sipariş bulunamadı.'; end if;
+  return public.kupon_json(v_id);
+end $$;
 
 create or replace function public.kupon_getir(p_kod text) returns jsonb
 language plpgsql stable security definer set search_path = '' as $$
@@ -452,8 +570,13 @@ begin
   select * into c from public.kuponlar
    where id = p_kupon_id and kullanici_id = auth.uid() for update;
   if not found then raise exception 'Kupon bulunamadı.'; end if;
-  if c.durum <> 'aktif' then raise exception 'Yalnızca kullanılmamış kuponlar iptal edilebilir.'; end if;
-  update public.kuponlar set durum = 'iptal', iptal_zamani = now() where id = c.id;
+  if c.durum not in ('aktif', 'odeme_bekliyor') then
+    raise exception 'Yalnızca kullanılmamış kuponlar iptal edilebilir.';
+  end if;
+  -- Ödenmiş kupon bedeli müşteri iptalinde iade edilmez (kullanım koşulları)
+  update public.kuponlar set durum = 'iptal', iptal_zamani = now(),
+    odeme_durumu = case when odeme_durumu = 'bekliyor' then 'basarisiz' else odeme_durumu end
+  where id = c.id;
   return public.kupon_json(c.id);
 end $$;
 
@@ -580,7 +703,7 @@ begin
     'kuponlar', coalesce((
       select jsonb_agg(public.isletme_kupon_json(c) order by c.olusturma desc)
       from (select c.* from public.kuponlar c join public.kampanyalar k on k.id = c.kampanya_id
-            where (v_admin and v_isletme is null) or k.isletme_id = v_isletme
+            where ((v_admin and v_isletme is null) or k.isletme_id = v_isletme) and c.kod is not null
             order by c.olusturma desc limit least(greatest(p_limit, 1), 1000)) c
     ), '[]'::jsonb)
   );
@@ -610,7 +733,12 @@ begin
     'kupon_toplam',     (select count(*) from public.kuponlar),
     'kupon_kullanildi', (select count(*) from public.kuponlar where durum = 'kullanildi'),
     'ciro_kullanilan',  (select coalesce(sum(toplam), 0) from public.kuponlar where durum = 'kullanildi'),
-    'basvuru_yeni',     (select count(*) from public.basvurular where durum = 'yeni')
+    'basvuru_yeni',     (select count(*) from public.basvurular where durum = 'yeni'),
+    'kupon_geliri',     (select coalesce(sum(kupon_bedeli), 0) from public.kuponlar where odeme_durumu = 'odendi'),
+    'iade_toplam',      (select coalesce(sum(kupon_bedeli), 0) from public.kuponlar where odeme_durumu = 'iade'),
+    'odeme_bekleyen',   (select count(*) from public.kuponlar
+                         where durum = 'odeme_bekliyor' and olusturma > now() - public.odeme_suresi()),
+    'odeme_aktif',      (select odeme_aktif from public.ayarlar where id = 1)
   );
 end $$;
 
@@ -621,6 +749,9 @@ begin
   return coalesce((
     select jsonb_agg(to_jsonb(k) || jsonb_build_object(
              'isletme', i.ad, 'izin_durumu', i.izin_durumu,
+             'hesaplanan_bedel', public.kupon_bedeli_hesapla(k.yeni_fiyat, k.kupon_bedeli),
+             'kupon_geliri', (select coalesce(sum(c.kupon_bedeli), 0) from public.kuponlar c
+                              where c.kampanya_id = k.id and c.odeme_durumu = 'odendi'),
              'satilan', public.satilan_adet(k.id),
              'kullanilan', (select count(*) from public.kuponlar c where c.kampanya_id = k.id and c.durum = 'kullanildi'))
            order by k.guncelleme desc)
@@ -637,7 +768,7 @@ begin
   insert into public.kampanyalar as k (
     id, isletme_id, baslik, kategori, sehir, semt, adres, kisa, aciklama, kosullar, gorsel,
     eski_fiyat, yeni_fiyat, baslangic, bitis, stok, kisi_basi_limit, rezervasyon_gerekli,
-    kupon_gecerlilik_gun, odeme_tipi, link, one_cikan, durum, kaynak, kaynak_url)
+    kupon_gecerlilik_gun, odeme_tipi, link, one_cikan, durum, kaynak, kaynak_url, kupon_bedeli)
   values (
     v_id,
     nullif(p ->> 'isletme_id', '')::uuid,
@@ -656,7 +787,8 @@ begin
     nullif(p ->> 'link', ''),
     coalesce((p ->> 'one_cikan')::boolean, false),
     coalesce(nullif(p ->> 'durum', ''), 'taslak'),
-    nullif(p ->> 'kaynak', ''), nullif(p ->> 'kaynak_url', ''))
+    nullif(p ->> 'kaynak', ''), nullif(p ->> 'kaynak_url', ''),
+    nullif(p ->> 'kupon_bedeli', '')::numeric)
   on conflict (id) do update set
     isletme_id = excluded.isletme_id, baslik = excluded.baslik, kategori = excluded.kategori,
     sehir = excluded.sehir, semt = excluded.semt, adres = excluded.adres, kisa = excluded.kisa,
@@ -666,6 +798,7 @@ begin
     kisi_basi_limit = excluded.kisi_basi_limit, rezervasyon_gerekli = excluded.rezervasyon_gerekli,
     kupon_gecerlilik_gun = excluded.kupon_gecerlilik_gun, odeme_tipi = excluded.odeme_tipi,
     link = excluded.link, one_cikan = excluded.one_cikan, durum = excluded.durum,
+    kupon_bedeli = excluded.kupon_bedeli,
     kaynak = coalesce(excluded.kaynak, k.kaynak), kaynak_url = coalesce(excluded.kaynak_url, k.kaynak_url);
   return (select to_jsonb(k) from public.kampanyalar k where id = v_id);
 end $$;
@@ -785,6 +918,115 @@ begin
 end $$;
 
 -- ---------------------------------------------------------------------
+-- 7b) ÖDEME (yalnızca sunucu tarafı: Supabase Edge Function, service_role)
+-- ---------------------------------------------------------------------
+
+-- Ödeme sayfası açılırken: siparişin tutarı ve müşteri bilgisi
+create or replace function public.odeme_hazirla(p_siparis_no text, p_kullanici uuid) returns jsonb
+language plpgsql stable security definer set search_path = '' as $$
+declare c public.kuponlar;
+begin
+  select * into c from public.kuponlar where siparis_no = p_siparis_no and kullanici_id = p_kullanici;
+  if not found then raise exception 'Sipariş bulunamadı.'; end if;
+  if c.durum <> 'odeme_bekliyor' then raise exception 'Bu sipariş için ödeme beklenmiyor.'; end if;
+  if c.olusturma < now() - public.odeme_suresi() then
+    raise exception 'Ödeme süresi doldu. Lütfen kuponu yeniden alın.';
+  end if;
+  return (select jsonb_build_object(
+    'siparis_no', c.siparis_no, 'tutar', c.kupon_bedeli, 'adet', c.adet,
+    'baslik', k.baslik, 'eposta', p.eposta, 'ad_soyad', coalesce(p.ad_soyad, 'Yakaladım üyesi'),
+    'telefon', coalesce(p.telefon, ''),
+    'kalan_dakika', greatest(1, ceil(extract(epoch from (c.olusturma + public.odeme_suresi() - now())) / 60))::int)
+    from public.kampanyalar k, public.profiller p
+    where k.id = c.kampanya_id and p.id = c.kullanici_id);
+end $$;
+
+-- Ödeme sağlayıcısının başarılı bildirimi. Tekrar gelirse aynı sonucu döner.
+create or replace function public.odeme_onayla(
+  p_siparis_no text, p_tutar numeric, p_saglayici text, p_ref text default null
+) returns jsonb
+language plpgsql security definer set search_path = '' as $$
+declare c public.kuponlar; v_kod text; v_deneme int := 0;
+begin
+  select * into c from public.kuponlar where siparis_no = p_siparis_no for update;
+  if not found then raise exception 'Sipariş bulunamadı: %', p_siparis_no; end if;
+  if c.odeme_durumu in ('odendi', 'iade') then return public.kupon_json(c.id); end if;
+  if p_tutar < c.kupon_bedeli then
+    raise exception 'Ödenen tutar (%) kupon bedelinden (%) az.', p_tutar, c.kupon_bedeli;
+  end if;
+  -- Süre dolduktan veya iptalden sonra gelen ödeme de kabul edilir: müşteri parayı ödemiştir.
+  loop
+    v_kod := public.kupon_kodu_uret();
+    begin
+      update public.kuponlar set kod = v_kod, durum = 'aktif', odeme_durumu = 'odendi',
+        odeme_saglayici = p_saglayici, odeme_ref = p_ref, odeme_zamani = now(), iptal_zamani = null
+      where id = c.id;
+      exit;
+    exception when unique_violation then
+      v_deneme := v_deneme + 1;
+      if v_deneme > 5 then raise; end if;
+    end;
+  end loop;
+  return public.kupon_json(c.id);
+end $$;
+
+-- Ödeme sağlayıcısının başarısız bildirimi
+create or replace function public.odeme_basarisiz(p_siparis_no text, p_saglayici text, p_ref text default null)
+returns jsonb
+language plpgsql security definer set search_path = '' as $$
+declare c public.kuponlar;
+begin
+  select * into c from public.kuponlar where siparis_no = p_siparis_no for update;
+  if not found then raise exception 'Sipariş bulunamadı: %', p_siparis_no; end if;
+  if c.durum = 'odeme_bekliyor' then
+    update public.kuponlar set durum = 'iptal', odeme_durumu = 'basarisiz', iptal_zamani = now(),
+      odeme_saglayici = p_saglayici, odeme_ref = p_ref
+    where id = c.id;
+  end if;
+  return public.kupon_json(c.id);
+end $$;
+
+-- Yönetici: ayarlar
+create or replace function public.yonetim_ayarlar() returns jsonb
+language plpgsql stable security definer set search_path = '' as $$
+begin
+  perform public.yonetici_kontrol();
+  return (select to_jsonb(a) from public.ayarlar a where id = 1);
+end $$;
+
+create or replace function public.yonetim_ayar_kaydet(p jsonb) returns jsonb
+language plpgsql security definer set search_path = '' as $$
+begin
+  perform public.yonetici_kontrol();
+  update public.ayarlar set
+    odeme_aktif     = coalesce((p ->> 'odeme_aktif')::boolean, odeme_aktif),
+    bedel_oran      = coalesce(nullif(p ->> 'bedel_oran', '')::numeric, bedel_oran),
+    bedel_min       = coalesce(nullif(p ->> 'bedel_min', '')::numeric, bedel_min),
+    bedel_max       = coalesce(nullif(p ->> 'bedel_max', '')::numeric, bedel_max),
+    odeme_suresi_dk = coalesce(nullif(p ->> 'odeme_suresi_dk', '')::int, odeme_suresi_dk),
+    guncelleme      = now()
+  where id = 1;
+  return public.yonetim_ayarlar();
+end $$;
+
+-- Yönetici: kupon bedeli iadesini kaydeder (para, ödeme sağlayıcısının panelinden iade edilir)
+create or replace function public.yonetim_kupon_iade(p_kupon_id uuid, p_not text) returns jsonb
+language plpgsql security definer set search_path = '' as $$
+declare c public.kuponlar;
+begin
+  perform public.yonetici_kontrol();
+  select * into c from public.kuponlar where id = p_kupon_id for update;
+  if not found then raise exception 'Kupon bulunamadı.'; end if;
+  if c.odeme_durumu <> 'odendi' then raise exception 'Yalnızca ödenmiş kupon bedeli iade edilebilir.'; end if;
+  update public.kuponlar set odeme_durumu = 'iade', iade_zamani = now(),
+    iade_notu = left(nullif(trim(p_not), ''), 500),
+    durum = case when durum = 'aktif' then 'iptal' else durum end,
+    iptal_zamani = case when durum = 'aktif' then now() else iptal_zamani end
+  where id = c.id;
+  return public.kupon_json(c.id);
+end $$;
+
+-- ---------------------------------------------------------------------
 -- 8) FONKSİYON YETKİLERİ
 --    Varsayılan olarak herkes çalıştırabilir; giriş gerektirenleri anon'dan al.
 -- ---------------------------------------------------------------------
@@ -797,7 +1039,9 @@ revoke execute on function
   public.yonetim_kampanya_kaydet(jsonb), public.yonetim_kampanya_durum(text, text),
   public.yonetim_isletmeler(), public.yonetim_isletme_kaydet(jsonb), public.yonetim_kuponlar(integer),
   public.yonetim_kullanicilar(text), public.yonetim_kullanici_rol(uuid, text, uuid),
-  public.yonetim_basvurular(), public.yonetim_basvuru_durum(uuid, text)
+  public.yonetim_basvurular(), public.yonetim_basvuru_durum(uuid, text),
+  public.kupon_siparis(text), public.yonetim_ayarlar(), public.yonetim_ayar_kaydet(jsonb),
+  public.yonetim_kupon_iade(uuid, text)
 from public, anon;
 
 grant execute on function
@@ -809,12 +1053,22 @@ grant execute on function
   public.yonetim_kampanya_kaydet(jsonb), public.yonetim_kampanya_durum(text, text),
   public.yonetim_isletmeler(), public.yonetim_isletme_kaydet(jsonb), public.yonetim_kuponlar(integer),
   public.yonetim_kullanicilar(text), public.yonetim_kullanici_rol(uuid, text, uuid),
-  public.yonetim_basvurular(), public.yonetim_basvuru_durum(uuid, text)
+  public.yonetim_basvurular(), public.yonetim_basvuru_durum(uuid, text),
+  public.kupon_siparis(text), public.yonetim_ayarlar(), public.yonetim_ayar_kaydet(jsonb),
+  public.yonetim_kupon_iade(uuid, text)
 to authenticated;
+
+-- Ödeme fonksiyonları yalnızca sunucu (service_role) tarafından çağrılabilir
+revoke execute on function public.odeme_hazirla(text, uuid), public.odeme_onayla(text, numeric, text, text),
+  public.odeme_basarisiz(text, text, text) from public, anon, authenticated;
+grant execute on function public.odeme_hazirla(text, uuid), public.odeme_onayla(text, numeric, text, text),
+  public.odeme_basarisiz(text, text, text) to service_role;
 
 grant execute on function public.basvuru_gonder(text, jsonb) to anon, authenticated;
 
 -- İç yardımcıların dışarıdan çağrılmasına gerek yok
+revoke execute on function public.odeme_suresi(), public.stok_tutuyor(public.kuponlar),
+  public.kupon_bedeli_hesapla(numeric, numeric) from public, anon, authenticated;
 revoke execute on function public.kupon_kodu_uret(), public.satilan_adet(text),
   public.yeni_uye_profili(), public.guncelleme_damgasi()
 from public, anon, authenticated;

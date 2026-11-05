@@ -52,6 +52,39 @@ def qr_coz(png_yolu):
 
 EPOSTA = f"test{int(time.time())}@ornek.com"
 
+
+def kupon_al_ve_ode(sayfa, basarisiz_dene=False):
+    """Detay sayfasında 'Kuponu Al'a basar; kupon bedeli varsa sözleşmeyi onaylar ve
+    ödeme ekranını (demo test ödemesi veya taklit PayTR iframe'i) geçer. Kupon sayfasında biter."""
+    soz = sayfa.locator("#yk-sozlesme")
+    if soz.count():
+        sayfa.click("#yk-kupon-al")
+        bekle("kupon bedeli varken sözleşme onayı istenir", "sözleşme" in sayfa.locator("#yk-kupon-hata").inner_text())
+        soz.check()
+    sayfa.click("#yk-kupon-al")
+    sayfa.wait_for_url(re.compile(r"(kupon|odeme)\.html"), timeout=15000)
+    if "odeme.html" in sayfa.url:
+        sayfa.wait_for_selector("#yk-demo-ode, iframe.yk-odeme-iframe", timeout=10000)
+        if sayfa.locator("#yk-demo-ode").count():
+            if basarisiz_dene:
+                sayfa.click("#yk-demo-red")
+                sayfa.wait_for_selector("text=iptal edildi")
+                return "reddedildi"
+            ekran(sayfa, "odeme-demo", tam=False)
+            sayfa.click("#yk-demo-ode")
+        else:
+            cerceve = sayfa.frame_locator("iframe.yk-odeme-iframe")
+            ekran(sayfa, "odeme-iframe", tam=False)
+            if basarisiz_dene:
+                cerceve.locator("#test-red").click()
+                sayfa.wait_for_url(re.compile(r"sonuc=basarisiz"), timeout=15000)
+                sayfa.wait_for_selector("text=iptal edildi", timeout=10000)
+                return "reddedildi"
+            cerceve.locator("#test-ode").click()
+    sayfa.wait_for_url(re.compile(r"kupon\.html\?kod=YK-"), timeout=20000)
+    sayfa.wait_for_selector(".yk-voucher-kod")
+    return "tamam"
+
 with sync_playwright() as p:
     tarayici = p.chromium.launch()
     ctx = tarayici.new_context(viewport={"width": 1366, "height": 900}, locale="tr-TR", timezone_id="Europe/Istanbul")
@@ -104,9 +137,9 @@ with sync_playwright() as p:
     sayfa.wait_for_selector("#yk-kupon-al")
     bekle("üst menüde kullanıcı adı görünür", "Ayşe" in sayfa.locator("#yk-uye-btn").inner_text())
     sayfa.select_option("#yk-adet", "2")
-    bekle("adet değişince toplam güncellenir", "1.180" in sayfa.locator("#yk-toplam").inner_text(), sayfa.locator("#yk-toplam").inner_text())
-    sayfa.click("#yk-kupon-al")
-    sayfa.wait_for_url(re.compile(r"kupon\.html\?kod=YK-"), timeout=10000)
+    toplam_el = sayfa.locator("#yk-toplam, #yk-mekan").first
+    bekle("adet değişince toplam güncellenir", "1.180" in toplam_el.inner_text(), toplam_el.inner_text())
+    kupon_al_ve_ode(sayfa)
     kod = re.search(r"kod=(YK-[A-Z0-9-]+)", sayfa.url).group(1)
     sayfa.wait_for_selector(".yk-voucher-kod")
     bekle("kupon sayfasında kod görünür", sayfa.locator(".yk-voucher-kod").inner_text() == kod, kod)
@@ -128,8 +161,7 @@ with sync_playwright() as p:
     sayfa.select_option("#yk-rez-kisi", "4")
     sayfa.fill("#yk-not", "Bahçede masa lütfen")
     ekran(sayfa, "05-rezervasyon-formu")
-    sayfa.click("#yk-kupon-al")
-    sayfa.wait_for_url(re.compile(r"kupon\.html"), timeout=10000)
+    kupon_al_ve_ode(sayfa)
     sayfa.wait_for_selector(".yk-voucher")
     metin = sayfa.locator(".yk-voucher").inner_text()
     bekle("kuponda rezervasyon saati, kişi ve not görünür", "10:30" in metin and "4 kişi" in metin and "Bahçede" in metin)
@@ -142,7 +174,8 @@ with sync_playwright() as p:
     ekran(sayfa, "06-hesabim")
     iptal = sayfa.locator(".yk-kupon-satir", has_text=rez_kod).locator("[data-iptal]")
     iptal.click()
-    bekle("iptal iki adımlı onay ister", "Emin misin" in iptal.inner_text())
+    bekle("iptal iki adımlı onay ister (ücretli kuponda bedelin iade edilmeyeceği söylenir)",
+          "İptal et" in iptal.inner_text() and ("Emin misin" in iptal.inner_text() or "iade edilmez" in iptal.inner_text()), iptal.inner_text())
     iptal.click()
     sayfa.wait_for_timeout(600)
     sayfa.click("[data-filtre=iptal]")
@@ -250,6 +283,44 @@ with sync_playwright() as p:
     sayfa.click("[data-sekme=kuponlar]")
     sayfa.wait_for_selector(".yk-tablo")
     bekle("yönetici tüm kuponları görür", sayfa.locator(".yk-tablo tbody tr").count() >= 2)
+
+    print("\nKupon bedeli ve online ödeme")
+    sayfa.goto(TABAN + "/yonetim.html?sekme=ayarlar")
+    sayfa.wait_for_selector("#yk-ayar-f")
+    sayfa.check("#yk-ayar-f [name=odeme_aktif]")
+    sayfa.fill("#yk-ayar-f [name=oran]", "1")
+    sayfa.fill("#yk-ayar-f [name=bedel_min]", "5")
+    sayfa.fill("#yk-ayar-f [name=bedel_max]", "50")
+    bekle("ayarlarda örnek bedeller görünür (1.000 TL → 10 TL)", "10 TL" in sayfa.locator("#yk-ornek-bedel").inner_text(), sayfa.locator("#yk-ornek-bedel").inner_text())
+    ekran(sayfa, "12-yonetim-ayarlar", tam=False)
+    sayfa.click("#yk-ayar-f [type=submit]")
+    sayfa.wait_for_selector(".yk-toast-basari")
+    sayfa.goto(TABAN + "/kampanya.html?id=atasehir-spor-salonu")
+    sayfa.wait_for_selector(".yk-bedel-kutu")
+    kutu = sayfa.locator(".yk-bedel-kutu").inner_text()
+    bekle("detayda kupon bedeli (4.490 TL → 45 TL) ve mekanda ödenecek tutar", "45 TL" in kutu and "4.490" in kutu, kutu)
+    bekle("düğme bedeli gösterir", "45 TL Öde" in sayfa.locator("#yk-kupon-al").inner_text(), sayfa.locator("#yk-kupon-al").inner_text())
+    ekran(sayfa, "13-detay-kupon-bedeli")
+    bekle("başarısız ödemede sipariş iptal edilir", kupon_al_ve_ode(sayfa, basarisiz_dene=True) == "reddedildi")
+    sayfa.goto(TABAN + "/kampanya.html?id=atasehir-spor-salonu")
+    sayfa.wait_for_selector(".yk-bedel-kutu")
+    kupon_al_ve_ode(sayfa)
+    bilgi = sayfa.locator(".yk-voucher-tutar").inner_text()
+    bekle("ödeme sonrası kupon aktif; kuponda 'bedel online ödendi' yazar", "45 TL online ödendi" in bilgi, bilgi)
+    odenen_kod = sayfa.locator(".yk-voucher-kod").inner_text()
+    ekran(sayfa, "14-kupon-odendi")
+    sayfa.goto(TABAN + "/yonetim.html?sekme=kuponlar")
+    sayfa.wait_for_selector(f"[data-kod='{odenen_kod}']")
+    sayfa.click(f"[data-kod='{odenen_kod}']")
+    sayfa.fill(".yk-modal [name=not]", "Test iadesi: işletme kapandı")
+    sayfa.click(".yk-modal [type=submit]")
+    sayfa.wait_for_selector(".yk-toast-basari")
+    sayfa.wait_for_timeout(500)
+    satir = sayfa.locator("tr", has_text=odenen_kod).inner_text()
+    bekle("yönetici iadeyi kaydeder; kupon iptal görünür", "iade edildi" in satir.replace("İ", "i").lower() and "iptal" in satir.replace("İ", "i").lower(), satir)
+    sayfa.goto(TABAN + "/yonetim.html")
+    sayfa.wait_for_selector(".yk-ozet-kutu")
+    bekle("özette kupon geliri kutusu var", "Kupon geliri" in sayfa.locator(".yk-ozet-izgara").inner_text())
 
     print("\nFormlar")
     sayfa.goto(TABAN + "/iletisim.html?tip=isletme")
