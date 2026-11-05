@@ -265,7 +265,9 @@ with sync_playwright() as p:
 
     sayfa.goto(TABAN + "/kampanya.html?id=test-kahve-kampanyasi")
     sayfa.wait_for_selector("#yk-detail .yk-empty, #yk-detail .yk-buy-box")
-    bekle("izni beklenen işletmenin kampanyası sitede görünmez", "bulunamadı" in sayfa.locator("#yk-detail").inner_text())
+    detay = sayfa.locator("#yk-detail").inner_text()
+    bekle("izni beklenen işletmenin kampanyası görünmez (önizlemede yalnızca 'Taslak', kupon alınamaz)",
+          ("bulunamadı" in detay or "Taslak kampanya" in detay) and sayfa.locator("#yk-kupon-al").count() == 0)
 
     sayfa.goto(TABAN + "/yonetim.html?sekme=isletmeler")
     sayfa.wait_for_selector("text=Test Kafe Bekleyen")

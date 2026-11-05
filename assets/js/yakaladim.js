@@ -105,6 +105,7 @@
           (k.gorsel ? '<img class="yk-card-img" src="' + esc(k.gorsel) + '" alt="' + esc(k.baslik) + '" loading="lazy" onerror="ykImgFallback(this)">'
                     : '<div class="yk-card-img yk-img-fallback yk-kat-' + esc(k.kategori) + '"><i class="fa-solid ' + esc(kat.ikon || 'fa-tag') + '"></i></div>') +
           '<div class="yk-card-overlay"></div>' +
+          (k.taslak ? '<div class="yk-taslak-serit">Taslak · izin bekleniyor</div>' : '') +
           '<div class="yk-card-top">' +
             '<span class="yk-badge-cat">' + esc(kat.ad) + '</span>' +
             (off ? '<div class="yk-badge-off"><small>indirim</small>%' + off + '</div>' : '<div class="yk-badge-off"><small>fırsat</small><i class="fa-solid fa-tag"></i></div>') +
@@ -360,7 +361,9 @@
     var bugun = YK.bugun();
     var bedel = k.kuponBedeli || 0;
 
-    var form = tukendi
+    var form = k.taslak
+      ? '<div class="yk-uyari"><i class="fa-solid fa-hourglass-half"></i> <strong>Taslak kampanya.</strong> İşletmeden yayın izni bekleniyor; bu fırsat henüz canlıda değil ve kupon alınamaz.</div>'
+      : tukendi
       ? '<div class="yk-empty" style="padding:18px;margin-bottom:12px"><i class="fa-solid fa-box-open"></i>Bu kampanyanın kuponları tükendi.</div>'
       : '<form id="yk-kupon-form" class="yk-kupon-form" novalidate>' +
           (k.rezervasyonGerekli

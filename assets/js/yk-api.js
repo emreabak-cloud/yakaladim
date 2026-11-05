@@ -70,7 +70,8 @@
       rezervasyonGerekli: !!r.rezervasyon_gerekli,
       kuponGecerlilikGun: sayi(r.kupon_gecerlilik_gun) || 30,
       odemeTipi: r.odeme_tipi || 'mekanda', link: r.link || '', oneCikan: !!r.one_cikan,
-      kuponBedeli: sayi(r.kupon_bedeli) || 0
+      kuponBedeli: sayi(r.kupon_bedeli) || 0,
+      taslak: !!r.taslak
     };
   }
 
@@ -723,10 +724,18 @@
       profilYukle: profilYukle,
       kampanyalar: function () {
         var d = yukle(), b = bugun();
-        var liste = d.kampanyalar.filter(function (k) { return k.durum === 'yayinda' && k.bitis >= b && k.baslangic <= b && isletmeYayinda(k); })
+        // Önizleme: izin bekleyen taslaklar yalnızca demo modunda, "taslak" işaretiyle listelenir (kupon alınamaz)
+        var onizleme = window.YK_TASLAK_ONIZLEME === true;
+        var liste = d.kampanyalar.filter(function (k) {
+          if (k.durum !== 'yayinda' || k.bitis < b || k.baslangic > b) return false;
+          if (isletmeYayinda(k)) return true;
+          var i = isletme(k.isletme_id);
+          return onizleme && i && i.aktif !== false && (i.izin_durumu === 'bekliyor' || i.izin_durumu === 'gorusuldu');
+        })
           .map(function (k) {
             var i = isletme(k.isletme_id) || {};
             var r = JSON.parse(JSON.stringify(k));
+            r.taslak = !isletmeYayinda(k);
             r.isletme = i.ad; r.isletme_telefon = i.telefon; r.adres = k.adres || i.adres;
             r.kalan = k.stok === null || k.stok === undefined ? null : Math.max(k.stok - satilan(k.id), 0);
             r.kupon_bedeli = bedelHesapla(k);
