@@ -10,6 +10,9 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 SITE = "https://www.yakaladim.com"
+# assets/data/kampanyalar-ek.js varsa (ör. izin bekleyen Grupanya taslakları) tüm sayfalara eklenir
+EK_VERI = ('\n   <script src="assets/data/kampanyalar-ek.js?v=2"></script>'
+           if (ROOT / "assets/data/kampanyalar-ek.js").exists() else "")
 
 LOGO = """<a href="index.html" class="yk-logo" aria-label="Yakaladım ana sayfa">
    <span class="yk-logo-mark"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg></span>
@@ -24,17 +27,22 @@ MENU = [
     ("iletisim.html", "İletişim"),
 ]
 
+# assets/data/kampanyalar.js içindeki window.KATEGORILER ile aynı sırada tutun
 KATEGORI_MENU = [
     ("restoran", "Restoran", "fa-utensils"),
+    ("kahvalti", "Kahvaltı", "fa-mug-saucer"),
     ("kafe", "Kafe & Kahve", "fa-mug-hot"),
+    ("spa", "Masaj & SPA", "fa-spa"),
+    ("guzellik", "Güzellik", "fa-wand-magic-sparkles"),
+    ("otel", "Otel & Konaklama", "fa-hotel"),
+    ("eglence", "Eğlence & Etkinlik", "fa-ticket"),
+    ("spor", "Spor & Kurs", "fa-dumbbell"),
+    ("hizmet", "Hizmet", "fa-screwdriver-wrench"),
     ("urun", "Ürün", "fa-bag-shopping"),
-    ("guzellik", "Güzellik & SPA", "fa-spa"),
-    ("spor", "Spor", "fa-dumbbell"),
-    ("eglence", "Eğlence", "fa-ticket"),
 ]
 
 
-def head(title, desc, path, extra=""):
+def head(title, desc, path, extra="", indexle=True):
     return f"""<!doctype html>
 <html lang="tr">
 <head>
@@ -43,7 +51,7 @@ def head(title, desc, path, extra=""):
    <meta name="viewport" content="width=device-width, initial-scale=1">
    <title>{title}</title>
    <meta name="description" content="{desc}">
-   <meta name="robots" content="index, follow">
+   <meta name="robots" content="{'index, follow' if indexle else 'noindex, nofollow'}">
    <link rel="canonical" href="{SITE}/{path}">
    <meta property="og:type" content="website">
    <meta property="og:locale" content="tr_TR">
@@ -59,11 +67,15 @@ def head(title, desc, path, extra=""):
    <link rel="stylesheet" href="assets/css/animate.css">
    <link rel="stylesheet" href="assets/css/spacing.css">
    <link rel="stylesheet" href="assets/css/main.css">
-   <link rel="stylesheet" href="assets/css/yakaladim.css?v=1">
+   <link rel="stylesheet" href="assets/css/yakaladim.css?v=2">
    <script>function ykImgFallback(i){{i.onerror=null;i.removeAttribute('src');i.classList.add('yk-img-fallback');}}</script>
 {extra}</head>
 
 <body>
+   <div id="yk-demo-bant" class="yk-demo-bant" hidden>
+      <i class="fa-solid fa-flask"></i> <strong>Demo modu:</strong> üyelik ve kuponlar yalnızca bu tarayıcıda saklanır.
+      <a href="giris.html">Demo hesaplarla dene</a>
+   </div>
 """
 
 
@@ -99,7 +111,7 @@ def header(active):
       <form class="mb-30" data-yk-search>
          <input class="yk-input" type="text" name="q" placeholder="Fırsat, mekan veya ürün ara...">
       </form>
-      <nav class="yk-mobile-nav mb-30"><ul>{mobile}</ul></nav>
+      <nav class="yk-mobile-nav mb-30"><ul>{mobile}<li><a href="hesabim.html" id="yk-uye-mobil"><i class="fa-regular fa-user"></i> Hesabım / Giriş</a></li></ul></nav>
       <h5 class="tp-offcanvas-title">Fırsatı kaçırmayın</h5>
       <p>Şehrinizdeki restoran, kafe ve markaların en güncel indirimlerini tek yerde toplayan fırsat vitrini.</p>
       <a href="iletisim.html?tip=isletme" class="yk-btn mt-10">Kampanya Ekle</a>
@@ -126,8 +138,9 @@ def header(active):
                </div>
                <div class="col-xl-4 col-6">
                   <div class="tp-header-option d-flex align-items-center justify-content-end gap-2">
-                     <a href="kampanyalar.html" class="d-none d-md-inline-flex yk-btn-outline" style="padding:8px 16px;font-size:14px"><i class="fa-solid fa-magnifying-glass"></i> Ara</a>
-                     <a href="iletisim.html?tip=isletme" class="yk-header-cta d-none d-sm-inline-flex"><i class="fa-solid fa-store"></i> Kampanya Ekle</a>
+                     <a href="kampanyalar.html" class="d-none d-lg-inline-flex yk-btn-outline" style="padding:8px 16px;font-size:14px"><i class="fa-solid fa-magnifying-glass"></i> Ara</a>
+                     <a href="iletisim.html?tip=isletme" class="d-none d-xxl-inline-flex yk-btn-outline" style="padding:8px 16px;font-size:14px"><i class="fa-solid fa-store"></i> Kampanya Ekle</a>
+                     <a href="giris.html" id="yk-uye-btn" class="yk-header-cta"><i class="fa-regular fa-user"></i> <span>Giriş Yap</span></a>
                      <div class="tp-header-toogle-wrapper d-xl-none ml-10">
                         <button class="tp-header-toogle" aria-label="Menüyü aç">
                            <span></span>
@@ -145,8 +158,9 @@ def header(active):
 """
 
 
-def footer():
-    kat_links = "".join(f'<li><a href="kampanyalar.html?kategori={k}">{ad}</a></li>' for k, ad, _ in KATEGORI_MENU[:5])
+def footer(js=()):
+    kat_links = "".join(f'<li><a href="kampanyalar.html?kategori={k}">{ad}</a></li>' for k, ad, _ in KATEGORI_MENU[:6])
+    ek_js = "".join(f'\n   <script src="assets/js/{a}?v=2"></script>' for a in js)
     return f"""
    </main>
 
@@ -168,7 +182,7 @@ def footer():
                         <h2 class="tp-footer-subscribe-title fs-32 fw-600 mb-10">Fırsat Bülteni</h2>
                         <p class="mb-25">Haftanın en iyi indirimleri ve sadece abonelere özel kupon kodları e-posta kutunuza gelsin.</p>
                         <div class="tp-footer-subscribe-form p-relative">
-                           <form class="p-relative" data-yk-mail="Fırsat bülteni aboneliği">
+                           <form class="p-relative" data-yk-form="bulten">
                               <input class="tp-input" type="email" name="eposta" data-label="E-posta" placeholder="E-posta adresiniz" required>
                               <button class="tp-footer-subscribe-btn" type="submit" aria-label="Abone ol">
                                  <svg width="13" height="12" viewBox="0 0 13 12" fill="none"><path d="M11.8999 5.65039H0.650071" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/><path d="M7.31703 10.6504C7.31703 10.6504 12.3169 6.9679 12.3169 5.65033C12.3169 4.33275 7.31694 0.650391 7.31694 0.650391" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
@@ -189,6 +203,8 @@ def footer():
                            <li><a href="hakkimizda.html">Hakkımızda</a></li>
                            <li><a href="kampanyalar.html">Tüm Fırsatlar</a></li>
                            <li><a href="iletisim.html">İletişim</a></li>
+                           <li><a href="gizlilik.html">KVKK ve Gizlilik</a></li>
+                           <li><a href="kullanim-kosullari.html">Kullanım Koşulları</a></li>
                         </ul></div>
                      </div>
                   </div>
@@ -204,7 +220,7 @@ def footer():
                         <div class="tp-footer-widget-menu"><ul>
                            <li><a href="iletisim.html?tip=isletme">Kampanya Ekle</a></li>
                            <li><a href="hakkimizda.html#isletmeler">Nasıl Çalışır?</a></li>
-                           <li><a href="iletisim.html?tip=isletme">Öne Çıkarılma</a></li>
+                           <li><a href="isletme-paneli.html">İşletme Paneli</a></li>
                         </ul></div>
                      </div>
                   </div>
@@ -250,8 +266,10 @@ def footer():
    <script src="assets/js/purecounter.js"></script>
    <script src="assets/js/wow.min.js"></script>
    <script src="assets/js/main.js"></script>
-   <script src="assets/data/kampanyalar.js?v=1"></script>
-   <script src="assets/js/yakaladim.js?v=1"></script>
+   <script src="assets/js/yk-config.js?v=2"></script>
+   <script src="assets/data/kampanyalar.js?v=2"></script>{EK_VERI}
+   <script src="assets/js/yk-api.js?v=2"></script>
+   <script src="assets/js/yakaladim.js?v=2"></script>{ek_js}
 </body>
 </html>
 """
@@ -639,7 +657,7 @@ def iletisim_page():
                         <button type="button" class="yk-pill" data-yk-tab="isletme"><i class="fa-solid fa-store"></i> İşletme Başvurusu</button>
                      </div>
 
-                     <form data-yk-panel="genel" data-yk-mail="Yakaladım iletişim formu">
+                     <form data-yk-panel="genel" data-yk-form="genel">
                         <div class="row g-3">
                            <div class="col-md-6"><label for="g-ad">Ad Soyad</label><input id="g-ad" class="yk-input" name="ad" data-label="Ad Soyad" required></div>
                            <div class="col-md-6"><label for="g-mail">E-posta</label><input id="g-mail" class="yk-input" type="email" name="eposta" data-label="E-posta" required></div>
@@ -647,10 +665,10 @@ def iletisim_page():
                            <div class="col-12"><label for="g-mesaj">Mesajınız</label><textarea id="g-mesaj" class="yk-textarea" rows="5" name="mesaj" data-label="Mesaj" required></textarea></div>
                            <div class="col-12"><button type="submit" class="yk-btn">Gönder <i class="fa-solid fa-paper-plane"></i></button></div>
                         </div>
-                        <div class="yk-form-msg">E-posta uygulamanız açıldı. Mesajı gönderdiğinizde en kısa sürede dönüş yapacağız.</div>
+                        <div class="yk-form-msg">Mesajınız bize ulaştı. En kısa sürede dönüş yapacağız.</div>
                      </form>
 
-                     <form data-yk-panel="isletme" data-yk-mail="Yeni işletme kampanya başvurusu" style="display:none">
+                     <form data-yk-panel="isletme" data-yk-form="isletme" style="display:none">
                         <div class="row g-3">
                            <div class="col-md-6"><label for="i-isletme">İşletme adı</label><input id="i-isletme" class="yk-input" name="isletme" data-label="İşletme" required></div>
                            <div class="col-md-6"><label for="i-yetkili">Yetkili ad soyad</label><input id="i-yetkili" class="yk-input" name="yetkili" data-label="Yetkili" required></div>
@@ -664,7 +682,7 @@ def iletisim_page():
                            <div class="col-12"><label for="i-detay">Kampanya detayı ve koşulları</label><textarea id="i-detay" class="yk-textarea" rows="5" name="detay" data-label="Detay" required placeholder="Kampanyada neler var, hangi gün/saatlerde geçerli, kupon kodu var mı?"></textarea></div>
                            <div class="col-12"><button type="submit" class="yk-btn">Başvuruyu Gönder <i class="fa-solid fa-paper-plane"></i></button></div>
                         </div>
-                        <div class="yk-form-msg">E-posta uygulamanız açıldı. Başvurunuzu gönderdiğinizde ekibimiz 1-2 iş günü içinde dönüş yapacak.</div>
+                        <div class="yk-form-msg">Başvurunuz alındı. Ekibimiz 1-2 iş günü içinde sizinle iletişime geçecek.</div>
                      </form>
                   </div>
                </div>
@@ -685,6 +703,12 @@ PAGES = {
     "hakkimizda.html": hakkimizda_page,
     "iletisim.html": iletisim_page,
 }
+
+# Üyelik, kupon, işletme paneli, yönetim ve yasal sayfalar
+import sys as _sys
+_sys.path.insert(0, str(Path(__file__).resolve().parent))
+import sayfalar_uyelik  # noqa: E402
+PAGES.update(sayfalar_uyelik.sayfalar(head, header, footer))
 
 if __name__ == "__main__":
     for name, fn in PAGES.items():

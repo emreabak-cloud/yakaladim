@@ -22,11 +22,15 @@
    <link rel="stylesheet" href="assets/css/animate.css">
    <link rel="stylesheet" href="assets/css/spacing.css">
    <link rel="stylesheet" href="assets/css/main.css">
-   <link rel="stylesheet" href="assets/css/yakaladim.css?v=1">
+   <link rel="stylesheet" href="assets/css/yakaladim.css?v=2">
    <script>function ykImgFallback(i){i.onerror=null;i.removeAttribute('src');i.classList.add('yk-img-fallback');}</script>
 </head>
 
 <body>
+   <div id="yk-demo-bant" class="yk-demo-bant" hidden>
+      <i class="fa-solid fa-flask"></i> <strong>Demo modu:</strong> üyelik ve kuponlar yalnızca bu tarayıcıda saklanır.
+      <a href="giris.html">Demo hesaplarla dene</a>
+   </div>
 
    <!-- back to top -->
    <div class="back-to-top-wrapper">
@@ -47,7 +51,7 @@
       <form class="mb-30" data-yk-search>
          <input class="yk-input" type="text" name="q" placeholder="Fırsat, mekan veya ürün ara...">
       </form>
-      <nav class="yk-mobile-nav mb-30"><ul><li><a href="index.html">Ana Sayfa</a></li><li><a href="kampanyalar.html">Tüm Fırsatlar</a></li><li><a href="kampanyalar.html">Kategoriler</a></li><li><a href="hakkimizda.html">Hakkımızda</a></li><li><a href="iletisim.html">İletişim</a></li></ul></nav>
+      <nav class="yk-mobile-nav mb-30"><ul><li><a href="index.html">Ana Sayfa</a></li><li><a href="kampanyalar.html">Tüm Fırsatlar</a></li><li><a href="kampanyalar.html">Kategoriler</a></li><li><a href="hakkimizda.html">Hakkımızda</a></li><li><a href="iletisim.html">İletişim</a></li><li><a href="hesabim.html" id="yk-uye-mobil"><i class="fa-regular fa-user"></i> Hesabım / Giriş</a></li></ul></nav>
       <h5 class="tp-offcanvas-title">Fırsatı kaçırmayın</h5>
       <p>Şehrinizdeki restoran, kafe ve markaların en güncel indirimlerini tek yerde toplayan fırsat vitrini.</p>
       <a href="iletisim.html?tip=isletme" class="yk-btn mt-10">Kampanya Ekle</a>
@@ -71,7 +75,7 @@
                            <ul>
                               <li><a href="index.html">Ana Sayfa</a></li>
                               <li class="active"><a href="kampanyalar.html">Tüm Fırsatlar</a></li>
-                              <li class="has-dropdown"><a href="kampanyalar.html">Kategoriler</a><ul class="sub-menu"><li><a href="kampanyalar.html?kategori=restoran"><i class="fa-solid fa-utensils" style="color:#ff4a22;width:18px"></i> Restoran</a></li><li><a href="kampanyalar.html?kategori=kafe"><i class="fa-solid fa-mug-hot" style="color:#ff4a22;width:18px"></i> Kafe & Kahve</a></li><li><a href="kampanyalar.html?kategori=urun"><i class="fa-solid fa-bag-shopping" style="color:#ff4a22;width:18px"></i> Ürün</a></li><li><a href="kampanyalar.html?kategori=guzellik"><i class="fa-solid fa-spa" style="color:#ff4a22;width:18px"></i> Güzellik & SPA</a></li><li><a href="kampanyalar.html?kategori=spor"><i class="fa-solid fa-dumbbell" style="color:#ff4a22;width:18px"></i> Spor</a></li><li><a href="kampanyalar.html?kategori=eglence"><i class="fa-solid fa-ticket" style="color:#ff4a22;width:18px"></i> Eğlence</a></li></ul></li>
+                              <li class="has-dropdown"><a href="kampanyalar.html">Kategoriler</a><ul class="sub-menu"><li><a href="kampanyalar.html?kategori=restoran"><i class="fa-solid fa-utensils" style="color:#ff4a22;width:18px"></i> Restoran</a></li><li><a href="kampanyalar.html?kategori=kahvalti"><i class="fa-solid fa-mug-saucer" style="color:#ff4a22;width:18px"></i> Kahvaltı</a></li><li><a href="kampanyalar.html?kategori=kafe"><i class="fa-solid fa-mug-hot" style="color:#ff4a22;width:18px"></i> Kafe & Kahve</a></li><li><a href="kampanyalar.html?kategori=spa"><i class="fa-solid fa-spa" style="color:#ff4a22;width:18px"></i> Masaj & SPA</a></li><li><a href="kampanyalar.html?kategori=guzellik"><i class="fa-solid fa-wand-magic-sparkles" style="color:#ff4a22;width:18px"></i> Güzellik</a></li><li><a href="kampanyalar.html?kategori=otel"><i class="fa-solid fa-hotel" style="color:#ff4a22;width:18px"></i> Otel & Konaklama</a></li><li><a href="kampanyalar.html?kategori=eglence"><i class="fa-solid fa-ticket" style="color:#ff4a22;width:18px"></i> Eğlence & Etkinlik</a></li><li><a href="kampanyalar.html?kategori=spor"><i class="fa-solid fa-dumbbell" style="color:#ff4a22;width:18px"></i> Spor & Kurs</a></li><li><a href="kampanyalar.html?kategori=hizmet"><i class="fa-solid fa-screwdriver-wrench" style="color:#ff4a22;width:18px"></i> Hizmet</a></li><li><a href="kampanyalar.html?kategori=urun"><i class="fa-solid fa-bag-shopping" style="color:#ff4a22;width:18px"></i> Ürün</a></li></ul></li>
                               <li><a href="hakkimizda.html">Hakkımızda</a></li>
                               <li><a href="iletisim.html">İletişim</a></li>
                            </ul>
@@ -81,8 +85,9 @@
                </div>
                <div class="col-xl-4 col-6">
                   <div class="tp-header-option d-flex align-items-center justify-content-end gap-2">
-                     <a href="kampanyalar.html" class="d-none d-md-inline-flex yk-btn-outline" style="padding:8px 16px;font-size:14px"><i class="fa-solid fa-magnifying-glass"></i> Ara</a>
-                     <a href="iletisim.html?tip=isletme" class="yk-header-cta d-none d-sm-inline-flex"><i class="fa-solid fa-store"></i> Kampanya Ekle</a>
+                     <a href="kampanyalar.html" class="d-none d-lg-inline-flex yk-btn-outline" style="padding:8px 16px;font-size:14px"><i class="fa-solid fa-magnifying-glass"></i> Ara</a>
+                     <a href="iletisim.html?tip=isletme" class="d-none d-xxl-inline-flex yk-btn-outline" style="padding:8px 16px;font-size:14px"><i class="fa-solid fa-store"></i> Kampanya Ekle</a>
+                     <a href="giris.html" id="yk-uye-btn" class="yk-header-cta"><i class="fa-regular fa-user"></i> <span>Giriş Yap</span></a>
                      <div class="tp-header-toogle-wrapper d-xl-none ml-10">
                         <button class="tp-header-toogle" aria-label="Menüyü aç">
                            <span></span>
@@ -172,7 +177,7 @@
                         <h2 class="tp-footer-subscribe-title fs-32 fw-600 mb-10">Fırsat Bülteni</h2>
                         <p class="mb-25">Haftanın en iyi indirimleri ve sadece abonelere özel kupon kodları e-posta kutunuza gelsin.</p>
                         <div class="tp-footer-subscribe-form p-relative">
-                           <form class="p-relative" data-yk-mail="Fırsat bülteni aboneliği">
+                           <form class="p-relative" data-yk-form="bulten">
                               <input class="tp-input" type="email" name="eposta" data-label="E-posta" placeholder="E-posta adresiniz" required>
                               <button class="tp-footer-subscribe-btn" type="submit" aria-label="Abone ol">
                                  <svg width="13" height="12" viewBox="0 0 13 12" fill="none"><path d="M11.8999 5.65039H0.650071" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/><path d="M7.31703 10.6504C7.31703 10.6504 12.3169 6.9679 12.3169 5.65033C12.3169 4.33275 7.31694 0.650391 7.31694 0.650391" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
@@ -193,13 +198,15 @@
                            <li><a href="hakkimizda.html">Hakkımızda</a></li>
                            <li><a href="kampanyalar.html">Tüm Fırsatlar</a></li>
                            <li><a href="iletisim.html">İletişim</a></li>
+                           <li><a href="gizlilik.html">KVKK ve Gizlilik</a></li>
+                           <li><a href="kullanim-kosullari.html">Kullanım Koşulları</a></li>
                         </ul></div>
                      </div>
                   </div>
                   <div class="col-lg-3 col-md-6 col-sm-6">
                      <div class="tp-footer-widget mb-30">
                         <h3 class="tp-footer-widget-title fw-600 mb-15">Kategoriler</h3>
-                        <div class="tp-footer-widget-menu"><ul><li><a href="kampanyalar.html?kategori=restoran">Restoran</a></li><li><a href="kampanyalar.html?kategori=kafe">Kafe & Kahve</a></li><li><a href="kampanyalar.html?kategori=urun">Ürün</a></li><li><a href="kampanyalar.html?kategori=guzellik">Güzellik & SPA</a></li><li><a href="kampanyalar.html?kategori=spor">Spor</a></li></ul></div>
+                        <div class="tp-footer-widget-menu"><ul><li><a href="kampanyalar.html?kategori=restoran">Restoran</a></li><li><a href="kampanyalar.html?kategori=kahvalti">Kahvaltı</a></li><li><a href="kampanyalar.html?kategori=kafe">Kafe & Kahve</a></li><li><a href="kampanyalar.html?kategori=spa">Masaj & SPA</a></li><li><a href="kampanyalar.html?kategori=guzellik">Güzellik</a></li><li><a href="kampanyalar.html?kategori=otel">Otel & Konaklama</a></li></ul></div>
                      </div>
                   </div>
                   <div class="col-lg-3 col-md-6 col-sm-6">
@@ -208,7 +215,7 @@
                         <div class="tp-footer-widget-menu"><ul>
                            <li><a href="iletisim.html?tip=isletme">Kampanya Ekle</a></li>
                            <li><a href="hakkimizda.html#isletmeler">Nasıl Çalışır?</a></li>
-                           <li><a href="iletisim.html?tip=isletme">Öne Çıkarılma</a></li>
+                           <li><a href="isletme-paneli.html">İşletme Paneli</a></li>
                         </ul></div>
                      </div>
                   </div>
@@ -254,7 +261,9 @@
    <script src="assets/js/purecounter.js"></script>
    <script src="assets/js/wow.min.js"></script>
    <script src="assets/js/main.js"></script>
-   <script src="assets/data/kampanyalar.js?v=1"></script>
-   <script src="assets/js/yakaladim.js?v=1"></script>
+   <script src="assets/js/yk-config.js?v=2"></script>
+   <script src="assets/data/kampanyalar.js?v=2"></script>
+   <script src="assets/js/yk-api.js?v=2"></script>
+   <script src="assets/js/yakaladim.js?v=2"></script>
 </body>
 </html>

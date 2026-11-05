@@ -328,3 +328,182 @@ a { transition: color .2s ease; }
 /* Görsel yüklenemediğinde alt metni gizle, yüksekliği koru */
 img.yk-img-fallback { color: transparent; font-size: 0; display: block; }
 .yk-detail-img.yk-img-fallback, .yk-about-img.yk-img-fallback { min-height: 300px; }
+
+/* =====================================================================
+   KUPON, ÜYELİK, İŞLETME PANELİ VE YÖNETİM BİLEŞENLERİ
+   ===================================================================== */
+.yk-muted { color: var(--yk-muted); }
+.yk-demo-bant { background: #1e293b; color: #e2e8f0; font-size: 13px; text-align: center; padding: 7px 16px; }
+.yk-demo-bant i { color: var(--yk-orange); }
+.yk-demo-bant a { color: #fed7aa; text-decoration: underline; margin-left: 6px; }
+
+/* Yükleniyor, bildirim, uyarı */
+.yk-loading { display: flex; align-items: center; justify-content: center; gap: 10px; padding: 40px 10px; color: var(--yk-muted); font-weight: 600; grid-column: 1 / -1; }
+.yk-spin { width: 18px; height: 18px; border: 2.5px solid rgba(255,74,34,.25); border-top-color: var(--yk-orange); border-radius: 50%; display: inline-block; animation: yk-don .8s linear infinite; vertical-align: -3px; }
+.yk-btn .yk-spin { border-color: rgba(255,255,255,.35); border-top-color: #fff; }
+@keyframes yk-don { to { transform: rotate(360deg); } }
+#yk-bildirim { position: fixed; right: 16px; bottom: 16px; z-index: 10000; display: flex; flex-direction: column; gap: 8px; max-width: calc(100vw - 32px); }
+.yk-toast { background: #1e293b; color: #fff; padding: 12px 16px; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,.2); font-size: 14px; font-weight: 600; max-width: 380px; transition: opacity .4s, transform .4s; }
+.yk-toast-basari { background: #15803d; } .yk-toast-hata { background: #b91c1c; }
+.yk-toast.cik { opacity: 0; transform: translateY(8px); }
+.yk-uyari { background: var(--yk-bg-soft); border: 1px solid #fed7aa; color: #9a3412; border-radius: 12px; padding: 12px 16px; font-size: 14px; margin-bottom: 16px; }
+.yk-uyari-hata { background: #fef2f2; border-color: #fecaca; color: #b91c1c; }
+.yk-uyari-basari { background: #f0fdf4; border-color: #bbf7d0; color: #15803d; }
+.yk-uyari-bilgi { background: #eff6ff; border-color: #bfdbfe; color: #1d4ed8; }
+.yk-form-hata { color: #b91c1c; font-size: 14px; font-weight: 600; min-height: 0; margin-bottom: 8px; }
+.yk-form-hata:empty { display: none; }
+
+/* Görseli olmayan kampanya kutusu */
+div.yk-img-fallback { display: flex; align-items: center; justify-content: center; color: rgba(255,255,255,.85); font-size: 64px; }
+div.yk-detail-img.yk-img-fallback { font-size: 90px; }
+.yk-kat-spa, .yk-kat-guzellik { background: linear-gradient(135deg, #db2777 0%, #f97316 100%); }
+.yk-kat-otel { background: linear-gradient(135deg, #0369a1 0%, #22d3ee 100%); }
+.yk-kat-kahvalti, .yk-kat-kafe { background: linear-gradient(135deg, #b45309 0%, #fbbf24 100%); }
+.yk-kat-eglence, .yk-kat-spor { background: linear-gradient(135deg, #6d28d9 0%, #ec4899 100%); }
+.yk-kat-hizmet, .yk-kat-urun { background: linear-gradient(135deg, #0f766e 0%, #34d399 100%); }
+
+/* Detay: kupon alma */
+.yk-kupon-form label { font-size: 13px; font-weight: 600; color: var(--yk-ink); margin-bottom: 4px; display: block; }
+.yk-rez-baslik { font-weight: 700; font-size: 14px; margin-bottom: 8px; color: var(--yk-ink); }
+.yk-rez-baslik i { color: var(--yk-orange); }
+.yk-toplam { font-size: 20px; font-weight: 800; color: var(--yk-ink); padding: 8px 0; }
+.yk-stok { background: #fff1f0; color: #b91c1c; border-radius: 10px; padding: 8px 12px; font-size: 14px; margin-bottom: 14px; }
+.yk-adimlar { list-style: none; padding: 0; margin: 18px 0 0; border-top: 1px dashed var(--yk-line); padding-top: 14px; }
+.yk-adimlar li { font-size: 13px; color: #475569; display: flex; gap: 10px; align-items: flex-start; padding: 4px 0; }
+.yk-adimlar i { width: 22px; height: 22px; flex-shrink: 0; border-radius: 50%; background: var(--yk-orange-soft); color: var(--yk-orange); font-size: 11px; display: inline-flex; align-items: center; justify-content: center; }
+.yk-paylas { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 12px; }
+.yk-paylas .yk-btn-outline { flex: 1 1 auto; padding: 10px 14px; font-size: 14px; }
+
+/* Giriş / üyelik */
+.yk-avantaj { padding: 10px 0; }
+.yk-avantaj-satir { display: flex; gap: 16px; margin-bottom: 22px; }
+.yk-avantaj-satir .yk-cat-icon { flex-shrink: 0; width: 48px; height: 48px; font-size: 19px; }
+.yk-avantaj-satir h5 { font-size: 16px; font-weight: 700; margin: 2px 0 4px; }
+.yk-avantaj-satir p { color: var(--yk-muted); font-size: 14px; margin: 0; }
+.yk-demo-kutu { margin-top: 22px; padding: 16px; border-radius: 12px; background: #f8fafc; border: 1px dashed #cbd5e1; font-size: 14px; }
+.yk-demo-kutu .yk-btn-outline { padding: 7px 14px; font-size: 13px; margin: 4px 4px 0 0; }
+.yk-check a { color: var(--yk-orange); font-weight: 600; }
+.yk-check span { line-height: 1.45; }
+
+/* Hesabım */
+.yk-hesap-ust { display: flex; gap: 18px; align-items: center; flex-wrap: wrap; border: 1px solid var(--yk-line); border-radius: 18px; padding: 22px; background: #fff; }
+.yk-avatar { width: 60px; height: 60px; border-radius: 50%; background: var(--yk-orange); color: #fff; font-size: 26px; font-weight: 800; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.yk-rol { background: var(--yk-orange-soft); color: var(--yk-orange); font-weight: 700; padding: 2px 8px; border-radius: 10px; font-size: 12px; }
+.yk-kupon-satir { display: flex; justify-content: space-between; gap: 18px; border: 1px solid var(--yk-line); border-left: 5px solid var(--yk-orange); border-radius: 14px; padding: 18px 20px; margin-bottom: 14px; background: #fff; flex-wrap: wrap; }
+.yk-kupon-satir[data-durum="kullanildi"], .yk-kupon-satir[data-durum="iptal"], .yk-kupon-satir[data-durum="suresi_doldu"] { border-left-color: #cbd5e1; opacity: .85; }
+.yk-kupon-satir h5 { font-size: 17px; font-weight: 700; margin: 4px 0; }
+.yk-kupon-satir-sag { display: flex; flex-direction: column; align-items: flex-end; gap: 8px; justify-content: center; }
+.yk-kod-kucuk { font-size: 17px; font-weight: 800; letter-spacing: 1.5px; color: var(--yk-ink); background: #f8fafc; border: 1px dashed #cbd5e1; padding: 4px 10px; border-radius: 8px; }
+.yk-durum { display: inline-block; font-size: 11.5px; font-weight: 700; padding: 3px 9px; border-radius: 20px; text-transform: uppercase; letter-spacing: .3px; white-space: nowrap; }
+.yk-durum-aktif, .yk-durum-yayinda, .yk-durum-izin-onaylandi { background: #dcfce7; color: #15803d; }
+.yk-durum-kullanildi, .yk-durum-izin-gorusuldu { background: #e0f2fe; color: #0369a1; }
+.yk-durum-iptal, .yk-durum-durduruldu, .yk-durum-izin-reddedildi { background: #fee2e2; color: #b91c1c; }
+.yk-durum-suresi_doldu, .yk-durum-taslak { background: #f1f5f9; color: #475569; }
+.yk-durum-izin-bekliyor { background: #fef3c7; color: #a16207; }
+.yk-onay { background: #b91c1c !important; color: #fff !important; border-color: #b91c1c !important; }
+
+/* Kupon (voucher) */
+.yk-voucher { max-width: 760px; margin: 0 auto; border-radius: 22px; overflow: hidden; border: 2px solid var(--yk-orange); background: #fff; box-shadow: 0 18px 40px rgba(255,74,34,.12); }
+.yk-voucher.pasif { border-color: #cbd5e1; box-shadow: none; }
+.yk-voucher-ust { background: var(--yk-orange); color: #fff; padding: 22px 26px; display: flex; justify-content: space-between; gap: 16px; align-items: flex-start; }
+.yk-voucher.pasif .yk-voucher-ust { background: #64748b; }
+.yk-voucher-isletme { font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; opacity: .9; }
+.yk-voucher-baslik { color: #fff; font-size: 24px; font-weight: 800; margin: 4px 0; line-height: 1.25; }
+.yk-voucher-logo { font-weight: 800; font-size: 18px; white-space: nowrap; background: #fff; color: var(--yk-ink); padding: 4px 10px; border-radius: 8px; }
+.yk-voucher-logo span { color: var(--yk-orange); }
+.yk-voucher-govde { display: grid; grid-template-columns: 260px 1fr; border-bottom: 2px dashed var(--yk-line); position: relative; }
+.yk-voucher-qr { padding: 22px; text-align: center; border-right: 2px dashed var(--yk-line); }
+.yk-voucher-qr svg { width: 100%; max-width: 220px; height: auto; }
+.yk-voucher-kod { font-size: 24px; font-weight: 800; letter-spacing: 2.5px; color: var(--yk-ink); margin-top: 8px; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; }
+.yk-voucher-damga { border: 3px solid #94a3b8; color: #64748b; font-weight: 800; font-size: 22px; text-transform: uppercase; padding: 50px 10px; border-radius: 14px; transform: rotate(-6deg); margin: 10px; }
+.yk-voucher-bilgi { padding: 22px 24px; }
+.yk-voucher-tutar { background: var(--yk-bg-soft); border-radius: 14px; padding: 14px 16px; margin-bottom: 14px; }
+.yk-voucher-tutar span { display: block; font-size: 12px; text-transform: uppercase; color: var(--yk-muted); font-weight: 700; }
+.yk-voucher-tutar strong { display: block; font-size: 30px; font-weight: 800; color: var(--yk-ink); line-height: 1.2; }
+.yk-voucher-tutar small { color: var(--yk-muted); }
+.yk-voucher-satir { display: flex; gap: 12px; padding: 8px 0; font-size: 14px; color: #334155; }
+.yk-voucher-satir i { color: var(--yk-orange); width: 18px; margin-top: 3px; }
+.yk-voucher-satir a { color: var(--yk-orange); font-weight: 600; }
+.yk-voucher-alt { padding: 20px 26px 24px; font-size: 14px; color: #475569; }
+.yk-voucher-alt h5 { font-size: 15px; font-weight: 700; color: var(--yk-ink); }
+.yk-voucher-alt ol, .yk-voucher-alt ul { padding-left: 20px; margin: 6px 0 0; }
+
+/* İşletme paneli */
+.yk-panel-ust { display: flex; justify-content: space-between; align-items: flex-end; gap: 18px; flex-wrap: wrap; }
+.yk-stat-row { display: flex; gap: 10px; flex-wrap: wrap; }
+.yk-mini-stat { background: #fff; border: 1px solid var(--yk-line); border-radius: 12px; padding: 10px 16px; min-width: 120px; }
+.yk-mini-stat strong { display: block; font-size: 20px; font-weight: 800; color: var(--yk-orange); }
+.yk-mini-stat span { font-size: 12px; color: var(--yk-muted); }
+.yk-kod-input { font-size: 26px; font-weight: 800; letter-spacing: 3px; text-align: center; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; padding: 14px; }
+#yk-kamera-alan video { width: 100%; border-radius: 12px; margin-top: 14px; background: #000; }
+.yk-sonuc-kart { display: flex; gap: 16px; border-radius: 16px; padding: 20px; border: 2px solid; background: #fff; }
+.yk-sonuc-kart > i { font-size: 34px; }
+.yk-sonuc-ok { border-color: #22c55e; } .yk-sonuc-ok > i { color: #16a34a; }
+.yk-sonuc-hata { border-color: #fca5a5; } .yk-sonuc-hata > i { color: #dc2626; }
+.yk-sonuc-kart h5 { font-size: 18px; font-weight: 800; margin-bottom: 6px; }
+.yk-sonuc-izgara { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 10px; }
+.yk-sonuc-izgara div { background: #f8fafc; border-radius: 10px; padding: 8px 10px; }
+.yk-sonuc-izgara .yk-tam { grid-column: 1 / -1; }
+.yk-sonuc-izgara span { display: block; font-size: 11px; text-transform: uppercase; color: var(--yk-muted); font-weight: 700; }
+.yk-sonuc-izgara strong { font-size: 15px; }
+
+/* Tablolar */
+.yk-tablo-sar { overflow-x: auto; border: 1px solid var(--yk-line); border-radius: 12px; }
+.yk-tablo { width: 100%; border-collapse: collapse; font-size: 14px; background: #fff; }
+.yk-tablo th { background: #f8fafc; text-align: left; font-size: 12px; text-transform: uppercase; letter-spacing: .4px; color: var(--yk-muted); padding: 10px 12px; white-space: nowrap; }
+.yk-tablo td { padding: 10px 12px; border-top: 1px solid var(--yk-line); vertical-align: top; }
+.yk-tablo tr[data-kod] { cursor: pointer; }
+.yk-tablo tr[data-kod]:hover, .yk-tablo tr[data-kod]:focus { background: #fffaf7; outline: none; }
+.yk-mini-btn { border: 1px solid var(--yk-line); background: #fff; border-radius: 8px; padding: 5px 10px; font-size: 13px; font-weight: 600; color: var(--yk-ink); cursor: pointer; white-space: nowrap; }
+.yk-mini-btn:hover { border-color: var(--yk-orange); color: var(--yk-orange); }
+.yk-select.yk-kucuk { width: auto; padding: 6px 10px; font-size: 13px; }
+
+/* Yönetim */
+.yk-arac-cubugu { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 16px; }
+.yk-arac-cubugu .yk-input { flex: 1 1 240px; width: auto; }
+.yk-arac-cubugu .yk-select { width: auto; }
+.yk-ozet-izgara { display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: 14px; }
+.yk-ozet-kutu { border: 1px solid var(--yk-line); border-radius: 16px; padding: 18px; background: #fff; text-align: left; cursor: pointer; transition: all .2s; }
+.yk-ozet-kutu:hover { border-color: var(--yk-orange); box-shadow: 0 8px 20px rgba(255,74,34,.12); }
+.yk-ozet-kutu i { color: var(--yk-orange); font-size: 18px; }
+.yk-ozet-kutu strong { display: block; font-size: 28px; font-weight: 800; margin: 6px 0 2px; color: var(--yk-ink); }
+.yk-ozet-kutu span { color: var(--yk-muted); font-size: 13px; }
+.yk-modal { position: fixed; inset: 0; background: rgba(15,23,42,.55); z-index: 9999; display: flex; align-items: flex-start; justify-content: center; padding: 30px 16px; overflow-y: auto; }
+.yk-modal-kutu { background: #fff; border-radius: 18px; width: 100%; max-width: 860px; box-shadow: 0 30px 60px rgba(0,0,0,.3); }
+.yk-modal-ust { display: flex; justify-content: space-between; align-items: center; padding: 16px 22px; border-bottom: 1px solid var(--yk-line); }
+.yk-modal-ust h4 { margin: 0; font-size: 19px; font-weight: 800; }
+.yk-modal-kapat { border: none; background: none; font-size: 28px; line-height: 1; color: var(--yk-muted); }
+.yk-modal-govde { padding: 20px 22px 24px; }
+.yk-modal-govde label { font-size: 13px; font-weight: 600; margin-bottom: 4px; display: block; }
+.yk-basvuru { border: 1px solid var(--yk-line); border-radius: 14px; padding: 16px 18px; margin-bottom: 12px; background: #fff; }
+.yk-basvuru.yeni { border-left: 5px solid var(--yk-orange); }
+.yk-dl { display: grid; grid-template-columns: 140px 1fr; gap: 4px 12px; margin: 0; font-size: 14px; }
+.yk-dl dt { color: var(--yk-muted); font-weight: 600; }
+.yk-dl dd { margin: 0; white-space: pre-wrap; word-break: break-word; }
+
+/* Yasal metinler */
+.yk-yasal h2 { font-size: 20px; font-weight: 800; margin: 28px 0 10px; }
+.yk-yasal p, .yk-yasal li { color: #475569; line-height: 1.75; }
+.yk-yasal a { color: var(--yk-orange); font-weight: 600; }
+
+@media (max-width: 767px) {
+  .yk-voucher-govde { grid-template-columns: 1fr; }
+  .yk-voucher-qr { border-right: none; border-bottom: 2px dashed var(--yk-line); }
+  .yk-voucher-ust { flex-direction: column; }
+  .yk-kupon-satir-sag { align-items: flex-start; }
+  .yk-sonuc-izgara { grid-template-columns: 1fr 1fr; }
+  .yk-dl { grid-template-columns: 1fr; }
+  .yk-header-cta span { display: none; }
+  .yk-header-cta { padding: 9px 12px; }
+}
+
+/* Yazdırma: yalnızca kupon */
+@media print {
+  header, footer, .yk-demo-bant, .yazdirma, .back-to-top-wrapper, .tp-offcanvas, #yk-bildirim { display: none !important; }
+  .yk-kupon-sayfa { padding: 0 !important; }
+  .yk-voucher { box-shadow: none; }
+  .yk-voucher-ust { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+}
+.yk-voucher-ust p { color: #fff !important; }
+code, .yk-kod-etiket { color: var(--yk-ink); }
+.yk-kod-etiket { background: #f1f5f9; padding: 2px 8px; border-radius: 6px; font-size: 15px; letter-spacing: 1px; }
