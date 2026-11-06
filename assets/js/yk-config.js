@@ -12,9 +12,10 @@
    yalnızca ziyaretçinin kendi tarayıcısında saklanır.
    ===================================================================== */
 window.YK_CONFIG = {
-  supabaseUrl: '',
-  supabaseAnonKey: '',
+  supabaseUrl: 'https://bkyrpbzzyhecyqtsokeh.supabase.co',
+  supabaseAnonKey: 'sb_publishable_D1btKmMNK5qd4jNJ-MYp4A_psRu7OjG',
 
-  // E-posta doğrulama / şifre sıfırlama bağlantılarının döneceği adres
-  siteUrl: 'https://www.yakaladim.com'
+  // E-posta doğrulama / şifre sıfırlama bağlantılarının ve QR kodların adresi.
+  // Boş bırakılırsa sitenin açıldığı adres kullanılır (önizleme ve canlı için doğru olan budur).
+  siteUrl: ''
 };
