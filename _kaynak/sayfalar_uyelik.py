@@ -167,13 +167,14 @@ def satis_sozlesmesi(head, header, footer):
       <section class="pt-50 pb-80">
          <div class="container yk-yasal" style="max-width:860px">{YASAL_UYARI}
             <h2>1. Taraflar</h2>
-            <p><strong>Satıcı:</strong> [Şirket unvanı], [adres], [vergi dairesi / no], [MERSİS no], info@yakaladim.com, [telefon].<br>
+            <p><strong>Satıcı:</strong> Tourquaz Elite Lojistik ve Dış Ticaret Ltd. Şti. (yakaladim.com), [adres], [vergi dairesi / no], [MERSİS no], info@yakaladim.com, [telefon].<br>
                <strong>Alıcı:</strong> Yakaladım üyelik bilgilerinde adı, e-posta adresi ve telefonu yer alan üye.</p>
             <h2>2. Konu</h2>
             <p>Bu sözleşmenin konusu, Alıcı'nın yakaladim.com üzerinden satın aldığı <strong>kupon</strong>dur. Kupon, kampanya sayfasında
                belirtilen işletmede, belirtilen indirimli fiyattan yararlanma hakkı veren, kişiye özel ve tek kullanımlık bir koddur.
                Satıcı'nın sattığı yalnızca kupondur; kampanyadaki ürün veya hizmet, ilgili <strong>işletme</strong> tarafından sunulur,
-               fiyatı işletmeye ödenir ve faturası işletme tarafından düzenlenir.</p>
+               fiyatı işletmeye ödenir ve faturası işletme tarafından düzenlenir. Satıcı, işletmeden komisyon almaz;
+               Alıcı'dan tahsil ettiği tek bedel kupon bedelidir.</p>
             <h2>3. Kupon bedeli ve ödeme</h2>
             <ul>
                <li>Kupon bedeli, kampanya sayfasında ve ödeme ekranında KDV dahil olarak gösterilir.</li>
@@ -206,7 +207,7 @@ def satis_sozlesmesi(head, header, footer):
 
 YASAL_UYARI = """
             <div class="yk-uyari mb-30"><i class="fa-solid fa-scale-balanced"></i>
-               Bu metin bir şablondur. Yayına almadan önce köşeli parantez içindeki alanları doldurup
+               Bu metin bir şablondur. Yayına almadan önce köşeli parantez içindeki alanları (adres, vergi ve MERSİS bilgileri vb.) doldurup
                bir hukuk danışmanına kontrol ettirin.</div>"""
 
 
@@ -216,7 +217,7 @@ def gizlilik(head, header, footer):
          <div class="container yk-yasal" style="max-width:860px">{YASAL_UYARI}
             <h2>1. Veri sorumlusu</h2>
             <p>6698 sayılı Kişisel Verilerin Korunması Kanunu ("KVKK") kapsamında veri sorumlusu
-               <strong>[Şirket unvanı]</strong> ("Yakaladım"), [adres], [MERSİS no] olarak sizi bilgilendiririz.</p>
+               <strong>Tourquaz Elite Lojistik ve Dış Ticaret Ltd. Şti.</strong> ("Yakaladım"), [adres], [MERSİS no] olarak sizi bilgilendiririz.</p>
             <h2>2. İşlenen kişisel veriler</h2>
             <ul>
                <li><strong>Kimlik ve iletişim:</strong> ad soyad, e-posta adresi, cep telefonu.</li>
@@ -263,6 +264,8 @@ def kosullar(head, header, footer):
             <p>Yakaladım; işletmelerin indirimli kampanyalarını sergileyen ve üyelere bu kampanyalarda kullanılmak üzere
                kişiye özel kupon kodu üreten bir aracı platformdur. Kampanyadaki ürün ve hizmeti sunan, fiyatlandıran
                ve faturalandıran taraf ilgili <strong>işletmedir</strong>.</p>
+            <p>Yakaladım, işletmelerden komisyon veya yayın ücreti almaz; platformun tek geliri üyelerin ödediği
+               <strong>kupon bedelidir</strong>. İşletmeye ödenen ürün veya hizmet bedelinden Yakaladım'a pay aktarılmaz.</p>
             <h2>2. Üyelik</h2>
             <ul>
                <li>Üye olmak için 18 yaşını doldurmuş olmak ve doğru bilgi vermek gerekir.</li>
@@ -285,7 +288,7 @@ def kosullar(head, header, footer):
             <h2>5. Değişiklikler</h2>
             <p>Bu koşullar güncellenebilir; önemli değişiklikler üyelere e-posta ile bildirilir.</p>
             <h2>6. İletişim</h2>
-            <p>[Şirket unvanı] — [adres] — <a href="mailto:info@yakaladim.com">info@yakaladim.com</a></p>
+            <p>Tourquaz Elite Lojistik ve Dış Ticaret Ltd. Şti. — [adres] — <a href="mailto:info@yakaladim.com">info@yakaladim.com</a></p>
          </div>
       </section>
 """

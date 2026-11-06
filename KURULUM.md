@@ -138,4 +138,5 @@ python3 supabase/test/taklit_sunucu.py 8790 ykmock &  python3 _kaynak/test/e2e.p
 - **Kupon e-postası:** Kupon alındığında müşteriye e-posta gönderilmiyor; kupon hesapta duruyor. Brevo ile Supabase Edge Function eklenebilir.
 - **Spam koruması:** Formlarda captcha yok, saatlik kaba bir sınır var. Gerekirse Cloudflare Turnstile eklenebilir.
 - **Görsel yükleme:** Görseller şimdilik URL ile ekleniyor; Supabase Storage ile yükleme eklenebilir.
-- **Yasal metinler:** KVKK, kullanım koşulları ve mesafeli satış sözleşmesi birer şablon. Kupon bedeli için cayma hakkı konusu özellikle netleştirilmeli. Köşeli parantezli alanlar (şirket unvanı, adres, MERSİS) doldurulmalı ve bir hukukçuya kontrol ettirilmeli.
+- **Yasal metinler:** KVKK, kullanım koşulları ve mesafeli satış sözleşmesi birer şablon. Kupon bedeli için cayma hakkı konusu özellikle netleştirilmeli. Satıcı / veri sorumlusu unvanı **Tourquaz Elite Lojistik ve Dış Ticaret Ltd. Şti.** olarak işlendi. Kalan köşeli parantezli alanlar (adres, vergi dairesi/no, MERSİS, telefon) doldurulmalı ve bir hukukçuya kontrol ettirilmeli.
+- **Gelir modeli:** İşletmelerden komisyon veya yayın ücreti alınmaz; tek gelir üyelerin ödediği kupon bedelidir (Yönetim > Ayarlar).
