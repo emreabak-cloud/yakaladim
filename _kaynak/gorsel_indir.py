@@ -26,6 +26,21 @@ HEDEF = ROOT / "assets/img/kampanya"
 UA = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0 Safari/537.36"
 
 
+def kucult(yol, en=1200, kalite=80):
+    """Pillow kuruluysa fotoğrafı web için küçültür (en uzun kenar 1200 px, JPEG %80)."""
+    try:
+        from PIL import Image
+    except ImportError:
+        return
+    try:
+        with Image.open(yol) as im:
+            im = im.convert("RGB")
+            im.thumbnail((en, en))
+            im.save(yol, "JPEG", quality=kalite, optimize=True, progressive=True)
+    except Exception as e:  # noqa: BLE001
+        print("   ! küçültülemedi:", yol.name, "-", e)
+
+
 def indir(url, yol):
     if yol.exists() and yol.stat().st_size > 1000:
         return True
@@ -38,6 +53,7 @@ def indir(url, yol):
             return False
         yol.parent.mkdir(parents=True, exist_ok=True)
         yol.write_bytes(veri)
+        kucult(yol)
         return True
     except Exception as e:  # noqa: BLE001
         print("   ! indirilemedi:", url, "-", e)
@@ -58,8 +74,7 @@ def main():
             if not url.startswith("http"):
                 yeni.append(url)
                 continue
-            uzanti = ".png" if url.lower().endswith(".png") else ".webp" if url.lower().endswith(".webp") else ".jpg"
-            yol = HEDEF / k["id"] / f"{i}{uzanti}"
+            yol = HEDEF / k["id"] / f"{i}.jpg"
             if indir(url, yol):
                 yeni.append(yol.relative_to(ROOT).as_posix())
                 tamam += 1

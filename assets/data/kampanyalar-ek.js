@@ -47,10 +47,10 @@ window.KAMPANYALAR_EK = [
     "kaynakUrl": "https://www.grupanya.com/saafi-doner/saafi-doner-indirim-ceki",
     "izinDurumu": "bekliyor",
     "not": "Grupanya satış: 43644 | puan 4.5 | telefon kaynağı: grupanya sayfası | Grupanya geçerlilik: 30.12.2026'ya kadar (Ramazan hariç) | Grupanya'da kupon 30 TL'ye satılıyor, 850 TL işletmede ödeniyor. Liste sayfasında bir yerde 1.135 TL -> 800 TL olarak da görünüyor; güncel fiyatı işletmeyle teyit et. Tek telefon iki şube için verilmiş.",
-    "gorsel": "https://grpstat.com/DealImages/G-jkzrfnez/anagrslll8092.jpg",
+    "gorsel": "assets/img/kampanya/saafi-doner/1.jpg",
     "galeri": [
-      "https://grpstat.com/DealImages/G-jkzrfnez/anagrslll8092__1.jpg",
-      "https://grpstat.com/DealImages/G-jkzrfnez/anagrslll8092__2.jpg"
+      "assets/img/kampanya/saafi-doner/2.jpg",
+      "assets/img/kampanya/saafi-doner/3.jpg"
     ]
   },
   {
@@ -80,11 +80,11 @@ window.KAMPANYALAR_EK = [
     "kaynakUrl": "https://www.grupanya.com/red-dragon-cin-restorani/alsancak-red-dragon-chinese-restaurant-sushi-menusu",
     "izinDurumu": "bekliyor",
     "not": "Grupanya satış: 1300 | puan 4.7 | telefon kaynağı: grupanya sayfası | Grupanya geçerlilik: 15.11.2026'ya kadar | Fırsatın süresi 15.11.2026'da bitiyor, yakında yenilenmesi gerekebilir. Aynı işletmenin 2 kişilik Pekin ördeği menüsü de var (1.204 satış, 4.000 -> 1.750 TL); izin alırken ikisini birlikte konuşmak mantıklı. Satış adedi sayfada 'bu hafta' ifadesiyle geçiyor.",
-    "gorsel": "https://grpstat.com/DealImages/G-fx0slryb/alsancak-red-dragon-chinese-restaurant-sushi-menusu-47c62c.jpg",
+    "gorsel": "assets/img/kampanya/red-dragon-chinese-restaurant/1.jpg",
     "galeri": [
-      "https://grpstat.com/DealImages/G-fx0slryb/alsancak-red-dragon-chinese-restaurant-sushi-menusu-47c62c__1.jpg",
-      "https://grpstat.com/DealImages/G-fx0slryb/alsancak-red-dragon-chinese-restaurant-sushi-menusu-47c62c__2.jpg",
-      "https://grpstat.com/DealImages/G-fx0slryb/alsancak-red-dragon-chinese-restaurant-sushi-menusu-47c62c__3.jpg"
+      "assets/img/kampanya/red-dragon-chinese-restaurant/2.jpg",
+      "assets/img/kampanya/red-dragon-chinese-restaurant/3.jpg",
+      "assets/img/kampanya/red-dragon-chinese-restaurant/4.jpg"
     ]
   },
   {
@@ -114,11 +114,11 @@ window.KAMPANYALAR_EK = [
     "kaynakUrl": "https://www.grupanya.com/goze-sariyer/goze-sariyer-bogaz-manzarali-aksam-yemegi",
     "izinDurumu": "bekliyor",
     "not": "Grupanya satış: 384 | puan 4.2 | telefon kaynağı: grupanya sayfası | Grupanya geçerlilik: 31.12.2026'ya kadar | Rezervasyon için ikinci hat: 0534 012 33 91. Sayfada eski fiyat yok. Aynı işletmenin kahvaltı fırsatı da var (kahvaltı ajanının listesiyle çakışabilir).",
-    "gorsel": "https://grpstat.com/DealImages/G-gvlzva34/goze-sariyer-bogaz-manzarali-aksam-yemegi-a1d517.jpg",
+    "gorsel": "assets/img/kampanya/goze-sariyer/1.jpg",
     "galeri": [
-      "https://grpstat.com/DealImages/G-gvlzva34/goze-sariyer-bogaz-manzarali-aksam-yemegi-a1d517__1.jpg",
-      "https://grpstat.com/DealImages/G-gvlzva34/goze-sariyer-bogaz-manzarali-aksam-yemegi-a1d517__2.jpg",
-      "https://grpstat.com/DealImages/G-gvlzva34/goze-sariyer-bogaz-manzarali-aksam-yemegi-a1d517__3.jpg"
+      "assets/img/kampanya/goze-sariyer/2.jpg",
+      "assets/img/kampanya/goze-sariyer/3.jpg",
+      "assets/img/kampanya/goze-sariyer/4.jpg"
     ]
   },
   {
@@ -147,11 +147,11 @@ window.KAMPANYALAR_EK = [
     "kaynakUrl": "https://www.grupanya.com/maltis-et-lokantasi/maltiz-et-lokantasi-yemek-menusu",
     "izinDurumu": "bekliyor",
     "not": "Grupanya satış: 369 | puan 4.8 | telefon kaynağı: grupanya sayfası | Grupanya geçerlilik: 15.11.2026'ya kadar | İkinci rezervasyon hattı: 0533 048 45 99. Fırsat 15.11.2026'da bitiyor. 1.150 TL meşrubatlı menünün kişi başı fiyatı; sayfada eski fiyat verilmemiş.",
-    "gorsel": "https://grpstat.com/DealImages/G-j513x4pk/maltis34313.jpg",
+    "gorsel": "assets/img/kampanya/maltis-et-lokantasi/1.jpg",
     "galeri": [
-      "https://grpstat.com/DealImages/G-j513x4pk/maltis34313__1.jpg",
-      "https://grpstat.com/DealImages/G-j513x4pk/maltis34313__2.jpg",
-      "https://grpstat.com/DealImages/G-j513x4pk/maltis34313__3.jpg"
+      "assets/img/kampanya/maltis-et-lokantasi/2.jpg",
+      "assets/img/kampanya/maltis-et-lokantasi/3.jpg",
+      "assets/img/kampanya/maltis-et-lokantasi/4.jpg"
     ]
   },
   {
@@ -181,11 +181,11 @@ window.KAMPANYALAR_EK = [
     "kaynakUrl": "https://www.grupanya.com/ada-palas-buyukada-butik-otel/ada-palas-buyukada-secret-garden-restaurant-aksam-yemegi",
     "izinDurumu": "bekliyor",
     "not": "Grupanya satış: 53 | puan 5.0 | telefon kaynağı: grupanya sayfası | Grupanya geçerlilik: 28.12.2026'ya kadar | İşletme bir butik otel; görüşülecek kişi otelin restoran/satış tarafı olabilir. Puan yalnızca 2 yoruma dayanıyor. Satış adedi sayfada 'bu hafta' olarak geçiyor.",
-    "gorsel": "https://grpstat.com/DealImages/G-42vq5f3m/15279.jpg",
+    "gorsel": "assets/img/kampanya/ada-palas-buyukada-butik-otel-secret-garden-rest/1.jpg",
     "galeri": [
-      "https://grpstat.com/DealImages/G-42vq5f3m/15279__1.jpg",
-      "https://grpstat.com/DealImages/G-42vq5f3m/15279__2.jpg",
-      "https://grpstat.com/DealImages/G-42vq5f3m/15279__3.jpg"
+      "assets/img/kampanya/ada-palas-buyukada-butik-otel-secret-garden-rest/2.jpg",
+      "assets/img/kampanya/ada-palas-buyukada-butik-otel-secret-garden-rest/3.jpg",
+      "assets/img/kampanya/ada-palas-buyukada-butik-otel-secret-garden-rest/4.jpg"
     ]
   },
   {
@@ -213,11 +213,11 @@ window.KAMPANYALAR_EK = [
     "kaynakUrl": "https://www.grupanya.com/san-iskender---ankamall/san-iskender-ankamall-menu-islama-kofte",
     "izinDurumu": "bekliyor",
     "not": "Grupanya satış: 11 | puan 4.0 | telefon kaynağı: grupanya sayfası | Grupanya geçerlilik: 05.01.2027'ye kadar | Ankara çeşitliliği için seçildi; satış düşük (11) ve puan 2 yoruma dayanıyor. Şan İskender bir zincir olabilir, izin için şube mi merkez mi yetkili netleştirilmeli.",
-    "gorsel": "https://grpstat.com/DealImages/G-aec4b844/san-iskender-ankamall-menu-islama-kofte-a7cfea.jpg",
+    "gorsel": "assets/img/kampanya/san-iskender-ankamall/1.jpg",
     "galeri": [
-      "https://grpstat.com/DealImages/G-aec4b844/san-iskender-ankamall-menu-islama-kofte-a7cfea__1.jpg",
-      "https://grpstat.com/DealImages/G-aec4b844/san-iskender-ankamall-menu-islama-kofte-a7cfea__2.jpg",
-      "https://grpstat.com/DealImages/G-aec4b844/san-iskender-ankamall-menu-islama-kofte-a7cfea__3.jpg"
+      "assets/img/kampanya/san-iskender-ankamall/2.jpg",
+      "assets/img/kampanya/san-iskender-ankamall/3.jpg",
+      "assets/img/kampanya/san-iskender-ankamall/4.jpg"
     ]
   },
   {
@@ -246,11 +246,11 @@ window.KAMPANYALAR_EK = [
     "kaynakUrl": "https://www.grupanya.com/afrodit-restaurant---kumkapi/kumkapi-afrodit-restaurant-yemek",
     "izinDurumu": "bekliyor",
     "not": "Grupanya satış: 20 | puan 4.0 | telefon kaynağı: grupanya sayfası | Grupanya geçerlilik: 30.11.2026'ya kadar | Puan tek yoruma dayanıyor. Satış adedi sayfada 'bu hafta' olarak geçiyor.",
-    "gorsel": "https://grpstat.com/DealImages/G-qavthtvb/a04161.jpg",
+    "gorsel": "assets/img/kampanya/afrodit-restaurant-kumkapi/1.jpg",
     "galeri": [
-      "https://grpstat.com/DealImages/G-qavthtvb/a04161__1.jpg",
-      "https://grpstat.com/DealImages/G-qavthtvb/a04161__2.jpg",
-      "https://grpstat.com/DealImages/G-qavthtvb/a04161__3.jpg"
+      "assets/img/kampanya/afrodit-restaurant-kumkapi/2.jpg",
+      "assets/img/kampanya/afrodit-restaurant-kumkapi/3.jpg",
+      "assets/img/kampanya/afrodit-restaurant-kumkapi/4.jpg"
     ]
   },
   {
@@ -280,11 +280,11 @@ window.KAMPANYALAR_EK = [
     "kaynakUrl": "https://www.grupanya.com/silivri-selimpasa-konagi/silivri-hotel-selimpasa-konagi-aksam-yemegi-menusu",
     "izinDurumu": "bekliyor",
     "not": "Grupanya satış: 20 | telefon kaynağı: bulunamadı | Grupanya geçerlilik: 28.12.2026'ya kadar | Grupanya sayfasında işletme telefonu yok (rezervasyon bilgisi satın alımdan sonra gönderiliyor); resmi site veya Google kaydı da bulunamadı. Otelin numarasına otel rezervasyon platformları üzerinden ya da yerinde ulaşmak gerekebilir. Puan yok.",
-    "gorsel": "https://grpstat.com/DealImages/G-jmxiw22w/silivri-hotel-selimpasa-konagi-aksam-yemegi-menusu-9530a5.jpg",
+    "gorsel": "assets/img/kampanya/hotel-selimpasa-konagi/1.jpg",
     "galeri": [
-      "https://grpstat.com/DealImages/G-jmxiw22w/silivri-hotel-selimpasa-konagi-aksam-yemegi-menusu-9530a5__1.jpg",
-      "https://grpstat.com/DealImages/G-jmxiw22w/silivri-hotel-selimpasa-konagi-aksam-yemegi-menusu-9530a5__2.jpg",
-      "https://grpstat.com/DealImages/G-jmxiw22w/silivri-hotel-selimpasa-konagi-aksam-yemegi-menusu-9530a5__3.jpg"
+      "assets/img/kampanya/hotel-selimpasa-konagi/2.jpg",
+      "assets/img/kampanya/hotel-selimpasa-konagi/3.jpg",
+      "assets/img/kampanya/hotel-selimpasa-konagi/4.jpg"
     ]
   },
   {
@@ -315,11 +315,11 @@ window.KAMPANYALAR_EK = [
     "kaynakUrl": "https://www.grupanya.com/woki-point-sariyer/woki-point-sariyer-aksam-yemegi",
     "izinDurumu": "bekliyor",
     "not": "Grupanya satış: 16 | puan 5.0 | telefon kaynağı: grupanya sayfası | Grupanya geçerlilik: 25.11.2026'ya kadar | Yeni fiyat en düşük menünün fiyatı (başlangıç fiyatı); menü-fiyat eşleşmesi sayfada net değil. Göze Sarıyer ile aynı cadde, rakip işletmeler. Telefon cep hattı.",
-    "gorsel": "https://grpstat.com/DealImages/G-h4yegdz1/woki-point-sariyer-aksam-yemegi-871a34.jpg",
+    "gorsel": "assets/img/kampanya/woki-point-sariyer/1.jpg",
     "galeri": [
-      "https://grpstat.com/DealImages/G-h4yegdz1/woki-point-sariyer-aksam-yemegi-871a34__1.jpg",
-      "https://grpstat.com/DealImages/G-h4yegdz1/woki-point-sariyer-aksam-yemegi-871a34__2.jpg",
-      "https://grpstat.com/DealImages/G-h4yegdz1/woki-point-sariyer-aksam-yemegi-871a34__3.jpg"
+      "assets/img/kampanya/woki-point-sariyer/2.jpg",
+      "assets/img/kampanya/woki-point-sariyer/3.jpg",
+      "assets/img/kampanya/woki-point-sariyer/4.jpg"
     ]
   },
   {
@@ -349,11 +349,11 @@ window.KAMPANYALAR_EK = [
     "kaynakUrl": "https://www.grupanya.com/gaziantep-kale-alti/gaziantep-kale-alti-kuzu-lahmacun-beyran-menu",
     "izinDurumu": "bekliyor",
     "not": "Grupanya satış: 32 | puan 5.0 | telefon kaynağı: grupanya sayfası | Grupanya geçerlilik: 31.12.2026'ya kadar | Fiyatlar kebap menüsüne ait (%47 indirim). Telefon cep hattı. Benzer isimli Bakırköy'deki 'Gaziantep Kalealtı Kebap' farklı bir işletme olabilir, karıştırma.",
-    "gorsel": "https://grpstat.com/DealImages/G-k4vqbyfk/gaziantep-kale-alti-kuzu-lahmacun-beyran-menu-2042a3.jpg",
+    "gorsel": "assets/img/kampanya/gaziantep-kale-alti-kuzu-lahmacun-beyran/1.jpg",
     "galeri": [
-      "https://grpstat.com/DealImages/G-k4vqbyfk/gaziantep-kale-alti-kuzu-lahmacun-beyran-menu-2042a3__1.jpg",
-      "https://grpstat.com/DealImages/G-k4vqbyfk/gaziantep-kale-alti-kuzu-lahmacun-beyran-menu-2042a3__2.jpg",
-      "https://grpstat.com/DealImages/G-k4vqbyfk/gaziantep-kale-alti-kuzu-lahmacun-beyran-menu-2042a3__3.jpg"
+      "assets/img/kampanya/gaziantep-kale-alti-kuzu-lahmacun-beyran/2.jpg",
+      "assets/img/kampanya/gaziantep-kale-alti-kuzu-lahmacun-beyran/3.jpg",
+      "assets/img/kampanya/gaziantep-kale-alti-kuzu-lahmacun-beyran/4.jpg"
     ]
   },
   {
@@ -383,11 +383,11 @@ window.KAMPANYALAR_EK = [
     "kaynakUrl": "https://www.grupanya.com/istanbul-vilayetler-evi/tarabya-vilayetler-evi-kahvalti",
     "izinDurumu": "bekliyor",
     "not": "Grupanya satış: 13494 | puan 4.6 | telefon kaynağı: grupanya sayfası | Grupanya geçerlilik: 15.11.2026'ya kadar | Kategorinin en çok satanı. Ek hatlar: 0212 262 69 91 ve 0544 845 29 38. Sayfadaki WhatsApp (0530 497 65 20) Grupanya'nın hattı, otelin değil. Geçerlilik 15.11.2026'da bitiyor, Grupanya muhtemelen yeniler.",
-    "gorsel": "https://grpstat.com/DealImages/G-m5hyecbv/yeni11409.jpg",
+    "gorsel": "assets/img/kampanya/ve-hotels-bogazici-vilayetler-evi/1.jpg",
     "galeri": [
-      "https://grpstat.com/DealImages/G-m5hyecbv/yeni11409__1.jpg",
-      "https://grpstat.com/DealImages/G-m5hyecbv/yeni11409__2.jpg",
-      "https://grpstat.com/DealImages/G-m5hyecbv/yeni11409__3.jpg"
+      "assets/img/kampanya/ve-hotels-bogazici-vilayetler-evi/2.jpg",
+      "assets/img/kampanya/ve-hotels-bogazici-vilayetler-evi/3.jpg",
+      "assets/img/kampanya/ve-hotels-bogazici-vilayetler-evi/4.jpg"
     ]
   },
   {
@@ -417,11 +417,11 @@ window.KAMPANYALAR_EK = [
     "kaynakUrl": "https://www.grupanya.com/karagozler-et-izgara-cag-kebabi/karagozler-et-izgara-sarkuteri-serpme-kahvalti",
     "izinDurumu": "bekliyor",
     "not": "Grupanya satış: 5866 | puan 4.5 | telefon kaynağı: bulunamadı | Grupanya geçerlilik: 15.12.2026'ya kadar | Grupanya sayfasında restoranın kendi telefonu yok (sadece Grupanya destek/WhatsApp). Resmi site veya Google kaydından doğrulanmış numara bulunamadı; işletme rehberlerinde (mekanlar.com vb.) kayıt var, aramadan önce Google Haritalar'dan kontrol edilmeli. Grupanya'daki işletme adı 'Karagözler Et Izgara & Cağ Kebabı'.",
-    "gorsel": "https://grpstat.com/DealImages/G-fibpv1nm/karagozler-et-izgara-sarkuteri-serpme-kahvalti-6f057c.jpg",
+    "gorsel": "assets/img/kampanya/karagozler-et-izgara-sarkuteri/1.jpg",
     "galeri": [
-      "https://grpstat.com/DealImages/G-fibpv1nm/karagozler-et-izgara-sarkuteri-serpme-kahvalti-6f057c__1.jpg",
-      "https://grpstat.com/DealImages/G-fibpv1nm/karagozler-et-izgara-sarkuteri-serpme-kahvalti-6f057c__2.jpg",
-      "https://grpstat.com/DealImages/G-fibpv1nm/karagozler-et-izgara-sarkuteri-serpme-kahvalti-6f057c__3.jpg"
+      "assets/img/kampanya/karagozler-et-izgara-sarkuteri/2.jpg",
+      "assets/img/kampanya/karagozler-et-izgara-sarkuteri/3.jpg",
+      "assets/img/kampanya/karagozler-et-izgara-sarkuteri/4.jpg"
     ]
   },
   {
@@ -451,11 +451,11 @@ window.KAMPANYALAR_EK = [
     "kaynakUrl": "https://www.grupanya.com/hollywoodcity-lounge/hollywood-city-lounge-balik-menusu-kahvalti",
     "izinDurumu": "bekliyor",
     "not": "Grupanya satış: 2745 | puan 4.0 | telefon kaynağı: grupanya sayfası | Grupanya geçerlilik: 30.11.2026'ya kadar | Ek hatlar: 0216 310 54 45 ve 0533 196 72 99. Rezervasyon sayfada zorunlu değil, 'yapılabilir' olarak geçiyor. Geçerlilik 30.11.2026'da bitiyor.",
-    "gorsel": "https://grpstat.com/DealImages/G-sjeaam4o/09784.jpg",
+    "gorsel": "assets/img/kampanya/hollywood-city-lounge/1.jpg",
     "galeri": [
-      "https://grpstat.com/DealImages/G-sjeaam4o/09784__1.jpg",
-      "https://grpstat.com/DealImages/G-sjeaam4o/09784__2.jpg",
-      "https://grpstat.com/DealImages/G-sjeaam4o/09784__3.jpg"
+      "assets/img/kampanya/hollywood-city-lounge/2.jpg",
+      "assets/img/kampanya/hollywood-city-lounge/3.jpg",
+      "assets/img/kampanya/hollywood-city-lounge/4.jpg"
     ]
   },
   {
@@ -484,11 +484,11 @@ window.KAMPANYALAR_EK = [
     "kaynakUrl": "https://www.grupanya.com/kezzban-cafe/kezzban-cafe-serpme-kahvalti",
     "izinDurumu": "bekliyor",
     "not": "Grupanya satış: 3496 | puan 4.0 | telefon kaynağı: grupanya sayfası | Grupanya geçerlilik: 31.12.2026'ya kadar | İkinci hat: 0312 223 23 97. Başlıkta '30 çeşit' yazıyor ama sayfadaki liste yaklaşık 24 kalem; sitede '30 çeşit' iddiasını kullanmamak daha güvenli.",
-    "gorsel": "https://grpstat.com/DealImages/G-mhrqkbkg/06668.jpg",
+    "gorsel": "assets/img/kampanya/kezzban-cafe-emek/1.jpg",
     "galeri": [
-      "https://grpstat.com/DealImages/G-mhrqkbkg/06668__1.jpg",
-      "https://grpstat.com/DealImages/G-mhrqkbkg/06668__2.jpg",
-      "https://grpstat.com/DealImages/G-mhrqkbkg/06668__3.jpg"
+      "assets/img/kampanya/kezzban-cafe-emek/2.jpg",
+      "assets/img/kampanya/kezzban-cafe-emek/3.jpg",
+      "assets/img/kampanya/kezzban-cafe-emek/4.jpg"
     ]
   },
   {
@@ -518,11 +518,11 @@ window.KAMPANYALAR_EK = [
     "kaynakUrl": "https://www.grupanya.com/sellale-restaurant-ve-cafe/sellale-cafe-restaurant-kahvalti",
     "izinDurumu": "bekliyor",
     "not": "Grupanya satış: 728 | puan 4.4 | telefon kaynağı: grupanya sayfası | Grupanya geçerlilik: 31.12.2026'ya kadar | Telefon rezervasyon hattı olarak verilmiş. Pazar günleri ayrıca açık büfe var ama bu kampanyaya dahil olup olmadığı belirsiz.",
-    "gorsel": "https://grpstat.com/DealImages/G-cwdedbri/sellale-cafe-restaurant-kahvalti-766057.jpg",
+    "gorsel": "assets/img/kampanya/sellale-cafe-restaurant/1.jpg",
     "galeri": [
-      "https://grpstat.com/DealImages/G-cwdedbri/sellale-cafe-restaurant-kahvalti-766057__1.jpg",
-      "https://grpstat.com/DealImages/G-cwdedbri/sellale-cafe-restaurant-kahvalti-766057__2.jpg",
-      "https://grpstat.com/DealImages/G-cwdedbri/sellale-cafe-restaurant-kahvalti-766057__3.jpg"
+      "assets/img/kampanya/sellale-cafe-restaurant/2.jpg",
+      "assets/img/kampanya/sellale-cafe-restaurant/3.jpg",
+      "assets/img/kampanya/sellale-cafe-restaurant/4.jpg"
     ]
   },
   {
@@ -551,11 +551,11 @@ window.KAMPANYALAR_EK = [
     "kaynakUrl": "https://www.grupanya.com/blue-marmaray-hotel/blue-marmaray-hotel-kahvalti",
     "izinDurumu": "bekliyor",
     "not": "Grupanya satış: 488 | puan 4.3 | telefon kaynağı: grupanya sayfası | Grupanya geçerlilik: 11.11.2026'ya kadar | Geçerlilik çok yakında (11.11.2026) bitiyor; aramada güncel durumu sorun. Saat aralığı dar (hafta sonu 07:00-10:00). Çocuk politikası sayfada net değil, otelden teyit edilmeli.",
-    "gorsel": "https://grpstat.com/DealImages/G-xax1a51v/b15459.jpg",
+    "gorsel": "assets/img/kampanya/blue-marmaray-hotel/1.jpg",
     "galeri": [
-      "https://grpstat.com/DealImages/G-xax1a51v/b15459__1.jpg",
-      "https://grpstat.com/DealImages/G-xax1a51v/b15459__2.jpg",
-      "https://grpstat.com/DealImages/G-xax1a51v/b15459__3.jpg"
+      "assets/img/kampanya/blue-marmaray-hotel/2.jpg",
+      "assets/img/kampanya/blue-marmaray-hotel/3.jpg",
+      "assets/img/kampanya/blue-marmaray-hotel/4.jpg"
     ]
   },
   {
@@ -583,7 +583,7 @@ window.KAMPANYALAR_EK = [
     "kaynakUrl": "https://www.grupanya.com/husnu-ala-cafe/husnu-ala-cafe-restaurant-serpme-kahvalti",
     "izinDurumu": "bekliyor",
     "not": "Grupanya satış: 322 | puan 4.8 | telefon kaynağı: grupanya sayfası | Grupanya geçerlilik: 20.11.2026'ya kadar | İkinci hat: 0212 511 66 89. Rezervasyon sayfada açıkça 'zorunlu' yazmıyor ama iptal kuralı olduğundan telefonla rezervasyon bekleniyor. Puan yalnızca 5 yoruma dayanıyor.",
-    "gorsel": "https://grpstat.com/DealImages/G-5muyd4rk/husnu-ala-cafe-restaurant-serpme-kahvalti-5298c7.jpg",
+    "gorsel": "assets/img/kampanya/husnu-ala-cafe-restaurant/1.jpg",
     "galeri": []
   },
   {
@@ -613,11 +613,11 @@ window.KAMPANYALAR_EK = [
     "kaynakUrl": "https://www.grupanya.com/radisson-blu-hotel-istanbul-pera/radisson-blu-pera-acik-bufe-kahvalti",
     "izinDurumu": "bekliyor",
     "not": "Grupanya satış: 235 | puan 5.0 | telefon kaynağı: grupanya sayfası | Grupanya geçerlilik: 31.12.2026'ya kadar | Telefon bir cep numarası ve rezervasyon hattı olarak verilmiş; otelin genel santrali değil. Zincir otel olduğu için izin büyük olasılıkla otel yönetimi/pazarlama biriminden alınmalı. Puan tek yoruma dayanıyor.",
-    "gorsel": "https://grpstat.com/DealImages/G-jctfeckm/anagrsl7008.jpg",
+    "gorsel": "assets/img/kampanya/radisson-blu-hotel-istanbul-pera/1.jpg",
     "galeri": [
-      "https://grpstat.com/DealImages/G-jctfeckm/anagrsl7008__1.jpg",
-      "https://grpstat.com/DealImages/G-jctfeckm/anagrsl7008__2.jpg",
-      "https://grpstat.com/DealImages/G-jctfeckm/anagrsl7008__3.jpg"
+      "assets/img/kampanya/radisson-blu-hotel-istanbul-pera/2.jpg",
+      "assets/img/kampanya/radisson-blu-hotel-istanbul-pera/3.jpg",
+      "assets/img/kampanya/radisson-blu-hotel-istanbul-pera/4.jpg"
     ]
   },
   {
@@ -648,11 +648,11 @@ window.KAMPANYALAR_EK = [
     "kaynakUrl": "https://www.grupanya.com/four-points-by-sheraton-istanbul-kagithane/four-points-by-sheraton-zen-spa-masaj",
     "izinDurumu": "bekliyor",
     "not": "Grupanya satış: 5678 | puan 4.3 | telefon kaynağı: grupanya sayfası | Grupanya geçerlilik: 30.12.2026'ya kadar, her gün 11:00-22:00 | Telefon cep numarası, spa rezervasyon hattı olarak verilmiş. Satış adedi sayfada 'bu hafta' ibaresiyle gösteriliyor.",
-    "gorsel": "https://grpstat.com/DealImages/G-ymiecpey/anagrsl8955.jpg",
+    "gorsel": "assets/img/kampanya/four-points-by-sheraton-istanbul-kagithane-zen-s/1.jpg",
     "galeri": [
-      "https://grpstat.com/DealImages/G-ymiecpey/anagrsl8955__1.jpg",
-      "https://grpstat.com/DealImages/G-ymiecpey/anagrsl8955__2.jpg",
-      "https://grpstat.com/DealImages/G-ymiecpey/anagrsl8955__3.jpg"
+      "assets/img/kampanya/four-points-by-sheraton-istanbul-kagithane-zen-s/2.jpg",
+      "assets/img/kampanya/four-points-by-sheraton-istanbul-kagithane-zen-s/3.jpg",
+      "assets/img/kampanya/four-points-by-sheraton-istanbul-kagithane-zen-s/4.jpg"
     ]
   },
   {
@@ -683,11 +683,11 @@ window.KAMPANYALAR_EK = [
     "kaynakUrl": "https://www.grupanya.com/ramada-by-wyndham-zen-spa/ramada-by-wyndham-zen-spa-masaj",
     "izinDurumu": "bekliyor",
     "not": "Grupanya satış: 5007 | puan 4.4 | telefon kaynağı: grupanya sayfası | Grupanya geçerlilik: 15.10.2027'ye kadar, her gün 10:00-22:00 | Sabit hat numarası; otel santrali olabilir, spa'yı sormak gerekebilir.",
-    "gorsel": "https://grpstat.com/DealImages/G-ygxfl3nk/anagorseell6830.jpg",
+    "gorsel": "assets/img/kampanya/ramada-by-wyndham-istanbul-taksim-zen-spa/1.jpg",
     "galeri": [
-      "https://grpstat.com/DealImages/G-ygxfl3nk/anagorseell6830__1.jpg",
-      "https://grpstat.com/DealImages/G-ygxfl3nk/anagorseell6830__2.jpg",
-      "https://grpstat.com/DealImages/G-ygxfl3nk/anagorseell6830__3.jpg"
+      "assets/img/kampanya/ramada-by-wyndham-istanbul-taksim-zen-spa/2.jpg",
+      "assets/img/kampanya/ramada-by-wyndham-istanbul-taksim-zen-spa/3.jpg",
+      "assets/img/kampanya/ramada-by-wyndham-istanbul-taksim-zen-spa/4.jpg"
     ]
   },
   {
@@ -717,10 +717,10 @@ window.KAMPANYALAR_EK = [
     "kaynakUrl": "https://www.grupanya.com/spa-ceylon/nada-spa-ayurveda-masaj",
     "izinDurumu": "bekliyor",
     "not": "Grupanya satış: 4696 | puan 4.6 | telefon kaynağı: grupanya sayfası | Grupanya geçerlilik: 15.12.2026'ya kadar | Sayfada iki farklı adres görünüyor (Bağdat Cad. No:520 Bostancı ve Bağdat Cad. No:478 Çatalçeşme Mah.); aramada teyit edin. Grupanya'daki satıcı adı 'Spa Ceylon'. Fiyat örneği hafta içi 50 dk İsveç masajı.",
-    "gorsel": "https://grpstat.com/DealImages/G-ajge3dhl/01169.jpg",
+    "gorsel": "assets/img/kampanya/nada-spa-ayurveda-spa-ceylon/1.jpg",
     "galeri": [
-      "https://grpstat.com/DealImages/G-ajge3dhl/01169__1.jpg",
-      "https://grpstat.com/DealImages/G-ajge3dhl/01169__2.jpg"
+      "assets/img/kampanya/nada-spa-ayurveda-spa-ceylon/2.jpg",
+      "assets/img/kampanya/nada-spa-ayurveda-spa-ceylon/3.jpg"
     ]
   },
   {
@@ -751,10 +751,10 @@ window.KAMPANYALAR_EK = [
     "kaynakUrl": "https://www.grupanya.com/nape-spa/ramada-wyndham-florya-napea-spa-masaj-bakim",
     "izinDurumu": "bekliyor",
     "not": "Grupanya satış: 4565 | puan 4.1 | telefon kaynağı: grupanya sayfası | Grupanya geçerlilik: 30.12.2026'ya kadar, her gün 10:00-23:00 | İkinci numara: 0542 258 41 34 (rezervasyon, 10:00-23:00). İptal süresi diğerlerinden uzun (3 gün).",
-    "gorsel": "https://grpstat.com/DealImages/G-yafqrkqo/ramada21476.jpg",
+    "gorsel": "assets/img/kampanya/ramada-by-wyndham-florya-nape-a-health-club-spa/1.jpg",
     "galeri": [
-      "https://grpstat.com/DealImages/G-yafqrkqo/ramada21476__1.jpg",
-      "https://grpstat.com/DealImages/G-yafqrkqo/ramada21476__2.jpg"
+      "assets/img/kampanya/ramada-by-wyndham-florya-nape-a-health-club-spa/2.jpg",
+      "assets/img/kampanya/ramada-by-wyndham-florya-nape-a-health-club-spa/3.jpg"
     ]
   },
   {
@@ -786,11 +786,11 @@ window.KAMPANYALAR_EK = [
     "kaynakUrl": "https://www.grupanya.com/ramada-plaza-atakoy-mask-spa/ramada-plaza-by-wyndham-istanbul-atakoy-mask-spa-masaj-keyfi",
     "izinDurumu": "bekliyor",
     "not": "Grupanya satış: 3222 | puan 4.2 | telefon kaynağı: grupanya sayfası | Grupanya geçerlilik: 31.12.2026'ya kadar, her gün 10:00-22:00 | İkinci numara: 0540 461 00 01. 899 TL'lik seçenek sadece ıslak alan (masajsız), bu yüzden fiyat örneği 45 dk masaj paketinden alındı.",
-    "gorsel": "https://grpstat.com/DealImages/G-vr0ihzfp/a14148.jpg",
+    "gorsel": "assets/img/kampanya/ramada-plaza-by-wyndham-istanbul-atakoy-mask-spa/1.jpg",
     "galeri": [
-      "https://grpstat.com/DealImages/G-vr0ihzfp/a14148__1.jpg",
-      "https://grpstat.com/DealImages/G-vr0ihzfp/a14148__2.jpg",
-      "https://grpstat.com/DealImages/G-vr0ihzfp/a14148__3.jpg"
+      "assets/img/kampanya/ramada-plaza-by-wyndham-istanbul-atakoy-mask-spa/2.jpg",
+      "assets/img/kampanya/ramada-plaza-by-wyndham-istanbul-atakoy-mask-spa/3.jpg",
+      "assets/img/kampanya/ramada-plaza-by-wyndham-istanbul-atakoy-mask-spa/4.jpg"
     ]
   },
   {
@@ -820,11 +820,11 @@ window.KAMPANYALAR_EK = [
     "kaynakUrl": "https://www.grupanya.com/miracle-istanbul-asia-hotel-spa/miracle-istanbul-asia-hotel-spa-masaj",
     "izinDurumu": "bekliyor",
     "not": "Grupanya satış: 3148 | puan 4.6 | telefon kaynağı: grupanya sayfası | Grupanya geçerlilik: 30.11.2026'ya kadar, her gün 10:00-17:00 | Geçerlilik bu ay sonunda (30.11.2026) bitiyor; yeniden yayın planı varsa işletmeye sorun. Numara otel santrali olabilir.",
-    "gorsel": "https://grpstat.com/DealImages/G-qjqmalv1/anagrsllllll4034.jpg",
+    "gorsel": "assets/img/kampanya/miracle-istanbul-asia-hotel-spa/1.jpg",
     "galeri": [
-      "https://grpstat.com/DealImages/G-qjqmalv1/anagrsllllll4034__1.jpg",
-      "https://grpstat.com/DealImages/G-qjqmalv1/anagrsllllll4034__2.jpg",
-      "https://grpstat.com/DealImages/G-qjqmalv1/anagrsllllll4034__3.jpg"
+      "assets/img/kampanya/miracle-istanbul-asia-hotel-spa/2.jpg",
+      "assets/img/kampanya/miracle-istanbul-asia-hotel-spa/3.jpg",
+      "assets/img/kampanya/miracle-istanbul-asia-hotel-spa/4.jpg"
     ]
   },
   {
@@ -855,11 +855,11 @@ window.KAMPANYALAR_EK = [
     "kaynakUrl": "https://www.grupanya.com/aspera-hotel-altunizade-lilyum-spa/aspera-hotel-altunizade-lilyum-spa-masaj-secenekleri",
     "izinDurumu": "bekliyor",
     "not": "Grupanya satış: 2748 | puan 4.7 | telefon kaynağı: grupanya sayfası | Grupanya geçerlilik: 30.12.2026'ya kadar, her gün 10:00-23:00 (kod 90 gün geçerli) | Aynı adlı 'As Pera Hotel Lilyum Spa' (Şişhane, Beyoğlu, tel. 0530 882 31 65) ayrı bir fırsat; karıştırmayın. Sayfa görselinde '1200 TL'den başlayan' yazıyor ama listelenen en düşük fiyat 2.000 TL.",
-    "gorsel": "https://grpstat.com/DealImages/G-li4ma4mz/as14150.jpg",
+    "gorsel": "assets/img/kampanya/aspera-hotel-altunizade-lilyum-spa/1.jpg",
     "galeri": [
-      "https://grpstat.com/DealImages/G-li4ma4mz/as14150__1.jpg",
-      "https://grpstat.com/DealImages/G-li4ma4mz/as14150__2.jpg",
-      "https://grpstat.com/DealImages/G-li4ma4mz/as14150__3.jpg"
+      "assets/img/kampanya/aspera-hotel-altunizade-lilyum-spa/2.jpg",
+      "assets/img/kampanya/aspera-hotel-altunizade-lilyum-spa/3.jpg",
+      "assets/img/kampanya/aspera-hotel-altunizade-lilyum-spa/4.jpg"
     ]
   },
   {
@@ -888,11 +888,11 @@ window.KAMPANYALAR_EK = [
     "kaynakUrl": "https://www.grupanya.com/milagro-spa/milagro-spa-masaj-spa",
     "izinDurumu": "bekliyor",
     "not": "Grupanya satış: 2987 | puan 4.4 | telefon kaynağı: grupanya sayfası | Grupanya geçerlilik: 15.10.2027'ye kadar, her gün 10:00-20:00 | Otel spa'sı değil, bağımsız işletme; karar verici doğrudan ulaşılabilir olabilir. Telefon cep numarası.",
-    "gorsel": "https://grpstat.com/DealImages/G-d2drgo34/milagro-spa-masaj-spa-d0feea.jpg",
+    "gorsel": "assets/img/kampanya/milagro-spa/1.jpg",
     "galeri": [
-      "https://grpstat.com/DealImages/G-d2drgo34/milagro-spa-masaj-spa-d0feea__1.jpg",
-      "https://grpstat.com/DealImages/G-d2drgo34/milagro-spa-masaj-spa-d0feea__2.jpg",
-      "https://grpstat.com/DealImages/G-d2drgo34/milagro-spa-masaj-spa-d0feea__3.jpg"
+      "assets/img/kampanya/milagro-spa/2.jpg",
+      "assets/img/kampanya/milagro-spa/3.jpg",
+      "assets/img/kampanya/milagro-spa/4.jpg"
     ]
   },
   {
@@ -921,11 +921,11 @@ window.KAMPANYALAR_EK = [
     "kaynakUrl": "https://www.grupanya.com/ozkaymak-falez-otel-prenses-spa/ozkaymak-falez-hotel-masaj-secenekleri",
     "izinDurumu": "bekliyor",
     "not": "Grupanya satış: 2168 | puan 4.4 | telefon kaynağı: grupanya sayfası | Grupanya geçerlilik: 21.01.2027'ye kadar, her gün 09:00-23:00 | İstanbul dışı fırsat. 880 TL'lik fiyat yalnızca hafta içi 09:00-12:00 arası 30 dk klasik masaj için; her saat geçerli aynı paket 1.100 TL. Telefon cep numarası.",
-    "gorsel": "https://grpstat.com/DealImages/G-dkcctcod/01305.jpg",
+    "gorsel": "assets/img/kampanya/ozkaymak-falez-hotel-prenses-spa/1.jpg",
     "galeri": [
-      "https://grpstat.com/DealImages/G-dkcctcod/01305__1.jpg",
-      "https://grpstat.com/DealImages/G-dkcctcod/01305__2.jpg",
-      "https://grpstat.com/DealImages/G-dkcctcod/01305__3.jpg"
+      "assets/img/kampanya/ozkaymak-falez-hotel-prenses-spa/2.jpg",
+      "assets/img/kampanya/ozkaymak-falez-hotel-prenses-spa/3.jpg",
+      "assets/img/kampanya/ozkaymak-falez-hotel-prenses-spa/4.jpg"
     ]
   },
   {
@@ -957,7 +957,7 @@ window.KAMPANYALAR_EK = [
     "kaynakUrl": "https://www.grupanya.com/dr-well-estetik/dr-well-epilasyon-agda",
     "izinDurumu": "bekliyor",
     "not": "Grupanya satış: 34249 | puan 4.4 | telefon kaynağı: grupanya sayfası | Grupanya geçerlilik: 30.12.2026 tarihine kadar | Fiyat koltuk altı seçeneği; özel bölge 7000->350 TL, yarım kol 7000->650 TL. Telefon zincirin 0850 merkezi rezervasyon hattı, 6 şube var - izin için merkezle görüşmek gerekir. Satış adedi sayfada 'bu hafta' etiketiyle görünüyor. Şikayetvar'da bu markayla ilgili şikayet kayıtları mevcut.",
-    "gorsel": "https://grpstat.com/DealImages/G-pw4oop51/002865.jpg",
+    "gorsel": "assets/img/kampanya/dr-well-estetik/1.jpg",
     "galeri": []
   },
   {
@@ -986,11 +986,11 @@ window.KAMPANYALAR_EK = [
     "kaynakUrl": "https://www.grupanya.com/lily-s/lilys-studio-nisantasi-cilt-bakimi",
     "izinDurumu": "bekliyor",
     "not": "Grupanya satış: 1946 | puan 4.2 | telefon kaynağı: grupanya sayfası | Grupanya geçerlilik: 23.01.2027 tarihine kadar | Fiyat en ucuz seçenek (klasik bakım); diğerleri 999-3399 TL arası. İki şube, iki ayrı telefon: Nişantaşı 0537 407 44 14, Bostancı 0545 101 44 13. Sayfada 'Hollywood' ve 'Sindirella' gibi isimler var; bunlar salonun paket adları.",
-    "gorsel": "https://grpstat.com/DealImages/G-xs41qytg/lilys-studio-nisantasi-cilt-bakimi-060861.jpg",
+    "gorsel": "assets/img/kampanya/lily-s-guzellik-salonu/1.jpg",
     "galeri": [
-      "https://grpstat.com/DealImages/G-xs41qytg/lilys-studio-nisantasi-cilt-bakimi-060861__1.jpg",
-      "https://grpstat.com/DealImages/G-xs41qytg/lilys-studio-nisantasi-cilt-bakimi-060861__2.jpg",
-      "https://grpstat.com/DealImages/G-xs41qytg/lilys-studio-nisantasi-cilt-bakimi-060861__3.jpg"
+      "assets/img/kampanya/lily-s-guzellik-salonu/2.jpg",
+      "assets/img/kampanya/lily-s-guzellik-salonu/3.jpg",
+      "assets/img/kampanya/lily-s-guzellik-salonu/4.jpg"
     ]
   },
   {
@@ -1019,7 +1019,7 @@ window.KAMPANYALAR_EK = [
     "kaynakUrl": "https://www.grupanya.com/shilibao-guzellik-salonu/kucukyali-shilibao-guzellik-salonu-cilt-bakimi",
     "izinDurumu": "bekliyor",
     "not": "Grupanya satış: 77 | puan 4.9 | telefon kaynağı: grupanya sayfası | Grupanya geçerlilik: 17.11.2026 tarihine kadar | İkinci telefon (cep): 0546 240 65 01. Fırsat 17.11.2026'da bitiyor, yakında aranmalı. Puan 7 yoruma dayanıyor.",
-    "gorsel": "https://grpstat.com/DealImages/G-pb2cslsw/kucukyali-shilibao-guzellik-salonu-cilt-bakimi-c8c1c5.jpg",
+    "gorsel": "assets/img/kampanya/shilibao-guzellik-salonu/1.jpg",
     "galeri": []
   },
   {
@@ -1048,11 +1048,11 @@ window.KAMPANYALAR_EK = [
     "kaynakUrl": "https://www.grupanya.com/cinik-beauty/bakirkoy-cinik-cilt-bakim-uygulamalari",
     "izinDurumu": "bekliyor",
     "not": "Grupanya satış: 73 | puan 4.3 | telefon kaynağı: grupanya sayfası | Grupanya geçerlilik: 10.12.2026 tarihine kadar | Amerikan cilt bakımı seçeneği 5000->1999 TL. İkinci telefon: 0541 234 00 44. URL'de 'bakirkoy' geçiyor ama adres Nişantaşı/Teşvikiye. Puan sadece 3 yoruma dayanıyor.",
-    "gorsel": "https://grpstat.com/DealImages/G-vryhfu4e/cilt-yeni2828.jpg",
+    "gorsel": "assets/img/kampanya/cinik-beauty/1.jpg",
     "galeri": [
-      "https://grpstat.com/DealImages/G-vryhfu4e/cilt-yeni2828__1.jpg",
-      "https://grpstat.com/DealImages/G-vryhfu4e/cilt-yeni2828__2.jpg",
-      "https://grpstat.com/DealImages/G-vryhfu4e/cilt-yeni2828__3.jpg"
+      "assets/img/kampanya/cinik-beauty/2.jpg",
+      "assets/img/kampanya/cinik-beauty/3.jpg",
+      "assets/img/kampanya/cinik-beauty/4.jpg"
     ]
   },
   {
@@ -1081,10 +1081,10 @@ window.KAMPANYALAR_EK = [
     "kaynakUrl": "https://www.grupanya.com/mehry-estetik-guzellik/mehry-guzellik-cilt-bakimi",
     "izinDurumu": "bekliyor",
     "not": "Grupanya satış: 54 | puan 5.0 | telefon kaynağı: grupanya sayfası | Grupanya geçerlilik: 20.11.2026 tarihine kadar | Fiyat en ucuz seçenek (klasik bakım); diğerleri 599,90-1299 TL. Baby Skin Pen hafta içi fiyatı sayfada tutarsız görünüyor (1104,15 / 1299), teyit edilmeli. Puan sadece 2 yoruma dayanıyor. Fırsat 20.11.2026'da bitiyor.",
-    "gorsel": "https://grpstat.com/DealImages/G-12suvaub/mehry-guzellik-cilt-bakimi-cf5032.jpg",
+    "gorsel": "assets/img/kampanya/mehry-estetik-guzellik/1.jpg",
     "galeri": [
-      "https://grpstat.com/DealImages/G-12suvaub/mehry-guzellik-cilt-bakimi-cf5032__1.jpg",
-      "https://grpstat.com/DealImages/G-12suvaub/mehry-guzellik-cilt-bakimi-cf5032__2.jpg"
+      "assets/img/kampanya/mehry-estetik-guzellik/2.jpg",
+      "assets/img/kampanya/mehry-estetik-guzellik/3.jpg"
     ]
   },
   {
@@ -1112,9 +1112,9 @@ window.KAMPANYALAR_EK = [
     "kaynakUrl": "https://www.grupanya.com/eclat-beauty-studio-nisantasi/eclat-beauty-studio-nisantasi-tirnak-uygulamalari",
     "izinDurumu": "bekliyor",
     "not": "Grupanya satış: 9 | telefon kaynağı: grupanya sayfası | Grupanya geçerlilik: 30.11.2026 tarihine kadar | Fiyat en ucuz seçenek (manikür); en kapsamlısı manikür+pedikür+kalıcı oje 2140->1499 TL. İkinci telefon: 0542 291 23 00. Satış düşük (haftalık 9) ama kategori listesinde 4,3 puan / 114 yorum görünüyor, detay sayfasında puan çıkmadı. Tırnak kategorisi için seçildi.",
-    "gorsel": "https://grpstat.com/DealImages/G-sjtnb0dx/anagrsll6190.jpg",
+    "gorsel": "assets/img/kampanya/eclat-beauty-studio-nisantasi/1.jpg",
     "galeri": [
-      "https://grpstat.com/DealImages/G-sjtnb0dx/ic13573.jpg"
+      "assets/img/kampanya/eclat-beauty-studio-nisantasi/2.jpg"
     ]
   },
   {
@@ -1143,11 +1143,11 @@ window.KAMPANYALAR_EK = [
     "kaynakUrl": "https://www.grupanya.com/firsat/ven-kuafor-sac-uygulamalari",
     "izinDurumu": "bekliyor",
     "not": "Grupanya satış: 6 | telefon kaynağı: grupanya sayfası | Grupanya geçerlilik: 10.11.2026 tarihine kadar | Kategori sayfasında saç fırsatı yoktu; Grupanya aramasından bulundu. Fiyat keratin seçeneği; dolgunlaştırıcı 4000->1750, Brezilya fönü 8000->4000 TL. İkinci telefon: 0532 524 46 76. Fırsat 10.11.2026'da bitiyor - hemen aranmalı ya da süresi uzatılmış mı sorulmalı. Satış düşük (haftalık 6).",
-    "gorsel": "https://grpstat.com/DealImages/G-dn2btb1l/grsell1531.jpg",
+    "gorsel": "assets/img/kampanya/ven-kuafor/1.jpg",
     "galeri": [
-      "https://grpstat.com/DealImages/G-dn2btb1l/grsell1531__1.jpg",
-      "https://grpstat.com/DealImages/G-dn2btb1l/grsell1531__2.jpg",
-      "https://grpstat.com/DealImages/G-dn2btb1l/grsell1531__3.jpg"
+      "assets/img/kampanya/ven-kuafor/2.jpg",
+      "assets/img/kampanya/ven-kuafor/3.jpg",
+      "assets/img/kampanya/ven-kuafor/4.jpg"
     ]
   },
   {
@@ -1177,11 +1177,11 @@ window.KAMPANYALAR_EK = [
     "kaynakUrl": "https://www.grupanya.com/tuzla-garden-hotel-2/tuzla-garden-hotel-konaklama",
     "izinDurumu": "bekliyor",
     "not": "puan 4.7 | telefon kaynağı: resmi site: tuzlagarden.com | Grupanya geçerlilik: 31.03.2027 tarihine kadar, hafta sonları | Satış adedi sayfada yok; listede 356 değerlendirme ile 4.7 puan. Grupanya sayfasındaki 0850 532 52 90 Grupanya'nın ortak rezervasyon hattı, otelin kendi numarası resmi siteden alındı. Otelin ayrıca 0216 446 00 14 hattı da var.",
-    "gorsel": "https://grpstat.com/DealImages/G-73cdf9c4/tuzla-garden-hotel-konaklama-dc0a94.jpg",
+    "gorsel": "assets/img/kampanya/tuzla-garden-hotel-spa/1.jpg",
     "galeri": [
-      "https://grpstat.com/DealImages/K-4bl23k4b/t13949.jpg",
-      "https://grpstat.com/DealImages/K-4bl23k4b/anagrsel3949__2.jpg",
-      "https://grpstat.com/DealImages/K-4bl23k4b/anagrsel3949__3.jpg"
+      "assets/img/kampanya/tuzla-garden-hotel-spa/2.jpg",
+      "assets/img/kampanya/tuzla-garden-hotel-spa/3.jpg",
+      "assets/img/kampanya/tuzla-garden-hotel-spa/4.jpg"
     ]
   },
   {
@@ -1212,11 +1212,11 @@ window.KAMPANYALAR_EK = [
     "kaynakUrl": "https://www.grupanya.com/world-dreams-sapanca/world-dreams-sapanca-bungalov-villa-konaklama",
     "izinDurumu": "bekliyor",
     "not": "puan 4.4 | telefon kaynağı: resmi site: worlddreamssapanca.com | Grupanya geçerlilik: 26.12.2026 (sayfada ayrıca 13 Kasım 2026 yazıyor, çelişkili) | Fiyat en ucuz seçenek: 2 kişilik tiny house, kahvaltısız, Pazar-Cuma. 24 seçenek var (en pahalısı 6 kişilik villa kahvaltılı 15.000 TL). Listede 698 değerlendirme. Geçerlilik tarihi sayfada çelişkili, işletmeye sorulmalı. WhatsApp: 0531 307 62 07 (resmi site).",
-    "gorsel": "https://grpstat.com/DealImages/G-quqszlz5/world-dreams-sapanca-bungalov-villa-konaklama-0369bc.jpg",
+    "gorsel": "assets/img/kampanya/world-dreams-sapanca/1.jpg",
     "galeri": [
-      "https://grpstat.com/DealImages/G-quqszlz5/world-dreams-sapanca-bungalov-villa-konaklama-0369bc__1.jpg",
-      "https://grpstat.com/DealImages/G-quqszlz5/world-dreams-sapanca-bungalov-villa-konaklama-0369bc__2.jpg",
-      "https://grpstat.com/DealImages/G-quqszlz5/world-dreams-sapanca-bungalov-villa-konaklama-0369bc__3.jpg"
+      "assets/img/kampanya/world-dreams-sapanca/2.jpg",
+      "assets/img/kampanya/world-dreams-sapanca/3.jpg",
+      "assets/img/kampanya/world-dreams-sapanca/4.jpg"
     ]
   },
   {
@@ -1247,11 +1247,11 @@ window.KAMPANYALAR_EK = [
     "kaynakUrl": "https://www.grupanya.com/park-inn-by-radisson-istanbul/park-inn-radisson-istanbul-airport-konaklama",
     "izinDurumu": "bekliyor",
     "not": "puan 4.0 | telefon kaynağı: resmi site: radissonhotels.com (Park Inn İstanbul Atatürk Airport iletişim sayfası) | Grupanya geçerlilik: 28.12.2026 | Listede 3.064 değerlendirme ile en çok yorumlanan otellerden. 3 kişilik oda seçeneği 6.000 → 4.500 TL. Zincir otel: izin için genel müdürlük/satış birimine yönlendirilebilirsin. Resmi sitede ayrıca 0212 999 67 77 ve reservations.istanbul@parkinn.com var.",
-    "gorsel": "https://grpstat.com/DealImages/G-oddgurcv/01820.jpg",
+    "gorsel": "assets/img/kampanya/park-inn-by-radisson-istanbul-airport/1.jpg",
     "galeri": [
-      "https://grpstat.com/DealImages/G-oddgurcv/01820__1.jpg",
-      "https://grpstat.com/DealImages/G-oddgurcv/01820__2.jpg",
-      "https://grpstat.com/DealImages/G-oddgurcv/01820__3.jpg"
+      "assets/img/kampanya/park-inn-by-radisson-istanbul-airport/2.jpg",
+      "assets/img/kampanya/park-inn-by-radisson-istanbul-airport/3.jpg",
+      "assets/img/kampanya/park-inn-by-radisson-istanbul-airport/4.jpg"
     ]
   },
   {
@@ -1281,11 +1281,11 @@ window.KAMPANYALAR_EK = [
     "kaynakUrl": "https://www.grupanya.com/taksim-yazici-residence/taksim-yazici-residence-konaklama",
     "izinDurumu": "bekliyor",
     "not": "puan 4.4 | telefon kaynağı: bulunamadı | Grupanya geçerlilik: 30.11.2026 | Kampanya 30.11.2026'da bitiyor, öncelikli aranmalı. Suit seçeneği 5.700 → 4.250 TL. Listede 265 değerlendirme. Resmi telefon bulunamadı, sadece Facebook sayfası var. taksimyazicihotel.com adında bir site çıktı ama açılmadı, aynı işletme olup olmadığı doğrulanamadı.",
-    "gorsel": "https://grpstat.com/DealImages/G-jijs2snt/taksim-yazici-residence-konaklama-bc3623.jpg",
+    "gorsel": "assets/img/kampanya/taksim-yazici-residence/1.jpg",
     "galeri": [
-      "https://grpstat.com/DealImages/G-jijs2snt/taksim-yazici-residence-konaklama-bc3623__1.jpg",
-      "https://grpstat.com/DealImages/G-jijs2snt/taksim-yazici-residence-konaklama-bc3623__2.jpg",
-      "https://grpstat.com/DealImages/G-jijs2snt/taksim-yazici-residence-konaklama-bc3623__3.jpg"
+      "assets/img/kampanya/taksim-yazici-residence/2.jpg",
+      "assets/img/kampanya/taksim-yazici-residence/3.jpg",
+      "assets/img/kampanya/taksim-yazici-residence/4.jpg"
     ]
   },
   {
@@ -1315,11 +1315,11 @@ window.KAMPANYALAR_EK = [
     "kaynakUrl": "https://www.grupanya.com/the-sign-degirmen-otel/sile-the-sign-degirmen-hotel-spa-konaklama-paketleri",
     "izinDurumu": "bekliyor",
     "not": "puan 4.0 | telefon kaynağı: bulunamadı | Grupanya geçerlilik: 28.12.2026 (özel günler hariç) | İndirim düşük (%8) ama listede 847 değerlendirme var. En pahalı seçenek deniz manzaralı deluxe oda: 9.000 → 8.300 TL. Spa kullanımının dahil olup olmadığını işletmeye sor. Resmi sitenin iletişim sayfası içerik göstermedi. thesignsile.com farklı bir otel (The Sign Şile), karıştırma. Otel The Sign Hotels grubuna bağlı.",
-    "gorsel": "https://grpstat.com/DealImages/G-u52fl2n3/anagrsel2263.jpg",
+    "gorsel": "assets/img/kampanya/the-sign-degirmen-hotel-spa/1.jpg",
     "galeri": [
-      "https://grpstat.com/DealImages/G-u52fl2n3/anagrsel2263__1.jpg",
-      "https://grpstat.com/DealImages/G-u52fl2n3/anagrsel2263__2.jpg",
-      "https://grpstat.com/DealImages/G-u52fl2n3/anagrsel2263__3.jpg"
+      "assets/img/kampanya/the-sign-degirmen-hotel-spa/2.jpg",
+      "assets/img/kampanya/the-sign-degirmen-hotel-spa/3.jpg",
+      "assets/img/kampanya/the-sign-degirmen-hotel-spa/4.jpg"
     ]
   },
   {
@@ -1350,11 +1350,11 @@ window.KAMPANYALAR_EK = [
     "kaynakUrl": "https://www.grupanya.com/ramada-encore-by-wyndham-izmir/ramada-encore-by-wyndham-izmir-konaklama-secenekleri",
     "izinDurumu": "bekliyor",
     "not": "puan 3.8 | telefon kaynağı: harita işletme kaydı: Yandex Haritalar | Grupanya geçerlilik: 30.11.2026'ya kadar hafta içi | Listede 4.193 değerlendirme ile en çok yorumlanan otel ama indirim düşük (%5). Deniz manzaralı oda 5.700 → 5.500 TL. Kampanya 30.11.2026'da bitiyor. Telefon resmi siteden değil, Yandex harita kaydından alındı; aramadan önce doğrula.",
-    "gorsel": "https://grpstat.com/DealImages/G-l3ugsurs/38161.jpg",
+    "gorsel": "assets/img/kampanya/ramada-encore-by-wyndham-izmir/1.jpg",
     "galeri": [
-      "https://grpstat.com/DealImages/G-l3ugsurs/38161__1.jpg",
-      "https://grpstat.com/DealImages/G-l3ugsurs/38161__2.jpg",
-      "https://grpstat.com/DealImages/G-l3ugsurs/38161__3.jpg"
+      "assets/img/kampanya/ramada-encore-by-wyndham-izmir/2.jpg",
+      "assets/img/kampanya/ramada-encore-by-wyndham-izmir/3.jpg",
+      "assets/img/kampanya/ramada-encore-by-wyndham-izmir/4.jpg"
     ]
   },
   {
@@ -1384,11 +1384,11 @@ window.KAMPANYALAR_EK = [
     "kaynakUrl": "https://www.grupanya.com/nios-sapanca-bungalov/nios-sapanca-bungalovkahvalti-dahil-konaklama",
     "izinDurumu": "bekliyor",
     "not": "puan 4.4 | telefon kaynağı: rehber sitesi: sapancaguide.com (resmi kaynak değil, doğrulanmalı) | Grupanya geçerlilik: 25.12.2026 | Fiyat hafta içi seçeneği; hafta sonu 10.000 → 9.000 TL. Listede 86 değerlendirme. Grupanya sayfasında WhatsApp bağlantısı olarak 0530 497 65 20 görünüyor ama işletmeye mi Grupanya'ya mı ait belli değil. Telefon resmi kaynaktan doğrulanamadı.",
-    "gorsel": "https://grpstat.com/DealImages/G-gq0sso0x/anagrsel1919.jpg",
+    "gorsel": "assets/img/kampanya/nios-sapanca-bungalov/1.jpg",
     "galeri": [
-      "https://grpstat.com/DealImages/G-gq0sso0x/anagrsel1919__1.jpg",
-      "https://grpstat.com/DealImages/G-gq0sso0x/anagrsel1919__2.jpg",
-      "https://grpstat.com/DealImages/G-gq0sso0x/anagrsel1919__3.jpg"
+      "assets/img/kampanya/nios-sapanca-bungalov/2.jpg",
+      "assets/img/kampanya/nios-sapanca-bungalov/3.jpg",
+      "assets/img/kampanya/nios-sapanca-bungalov/4.jpg"
     ]
   },
   {
@@ -1417,11 +1417,11 @@ window.KAMPANYALAR_EK = [
     "kaynakUrl": "https://www.grupanya.com/poligon-safari/poligon-safari-atis",
     "izinDurumu": "bekliyor",
     "not": "Grupanya satış: 1216 | puan 4.7 | telefon kaynağı: resmi site: poligonsafari.com/iletisim | Grupanya geçerlilik: 30.06.2027'ye kadar | Grupanya sayfasında işletme telefonu yok; numara poligonsafari.com iletişim sayfasından. Sayfada eski fiyat/indirim oranı gösterilmiyor.",
-    "gorsel": "https://grpstat.com/DealImages/G-rui122s4/118975.jpg",
+    "gorsel": "assets/img/kampanya/poligon-safari/1.jpg",
     "galeri": [
-      "https://grpstat.com/DealImages/G-rui122s4/118975__1.jpg",
-      "https://grpstat.com/DealImages/G-rui122s4/118975__2.jpg",
-      "https://grpstat.com/DealImages/G-rui122s4/118975__3.jpg"
+      "assets/img/kampanya/poligon-safari/2.jpg",
+      "assets/img/kampanya/poligon-safari/3.jpg",
+      "assets/img/kampanya/poligon-safari/4.jpg"
     ]
   },
   {
@@ -1450,11 +1450,11 @@ window.KAMPANYALAR_EK = [
     "kaynakUrl": "https://www.grupanya.com/dino-park/dino-park-giris-bileti",
     "izinDurumu": "bekliyor",
     "not": "Grupanya satış: 5292 | puan 4.3 | telefon kaynağı: google işletme kaydı (wanderlog üzerinden) | Grupanya geçerlilik: 31.12.2026'ya kadar | Grupanya sayfasında işletme telefonu ve açık adres yok; adres/telefon Google işletme verisinden (wanderlog). Aynı işletmenin kahvaltılı ve menülü başka Grupanya fırsatları da var.",
-    "gorsel": "https://grpstat.com/DealImages/G-cfrlgvk2/anagrsllson4285.jpg",
+    "gorsel": "assets/img/kampanya/dinopark-goynuk/1.jpg",
     "galeri": [
-      "https://grpstat.com/DealImages/G-cfrlgvk2/anagrsllson4285__1.jpg",
-      "https://grpstat.com/DealImages/G-cfrlgvk2/anagrsllson4285__2.jpg",
-      "https://grpstat.com/DealImages/G-cfrlgvk2/anagrsllson4285__3.jpg"
+      "assets/img/kampanya/dinopark-goynuk/2.jpg",
+      "assets/img/kampanya/dinopark-goynuk/3.jpg",
+      "assets/img/kampanya/dinopark-goynuk/4.jpg"
     ]
   },
   {
@@ -1484,11 +1484,11 @@ window.KAMPANYALAR_EK = [
     "kaynakUrl": "https://www.grupanya.com/funtastic-aquariums-izmir/funtastic-aquariums-izmir-giris-bileti",
     "izinDurumu": "bekliyor",
     "not": "Grupanya satış: 1051 | puan 4.6 | telefon kaynağı: MEB EBA Okul Dışı Öğrenme mekan kaydı | Grupanya geçerlilik: 30.12.2026'ya kadar | Fiyat çocuk biletine ait; yetişkin bileti 839 yerine 797 TL. Grupanya'da işletme telefonu yok; numara ve adres EBA mekan kaydından, resmi site robots nedeniyle okunamadı. Instagram: instagram.com/izmiraquarium.",
-    "gorsel": "https://grpstat.com/DealImages/G-eeth3fae/funtastic-aquariums-izmir-giris-bileti-547ada.jpg",
+    "gorsel": "assets/img/kampanya/funtastic-aquariums-izmir/1.jpg",
     "galeri": [
-      "https://grpstat.com/DealImages/G-eeth3fae/funtastic-aquariums-izmir-giris-bileti-547ada__1.jpg",
-      "https://grpstat.com/DealImages/G-eeth3fae/funtastic-aquariums-izmir-giris-bileti-547ada__2.jpg",
-      "https://grpstat.com/DealImages/G-eeth3fae/funtastic-aquariums-izmir-giris-bileti-547ada__3.jpg"
+      "assets/img/kampanya/funtastic-aquariums-izmir/2.jpg",
+      "assets/img/kampanya/funtastic-aquariums-izmir/3.jpg",
+      "assets/img/kampanya/funtastic-aquariums-izmir/4.jpg"
     ]
   },
   {
@@ -1517,11 +1517,11 @@ window.KAMPANYALAR_EK = [
     "kaynakUrl": "https://www.grupanya.com/sandland-antalya/antalya-kum-heykel-muzesi-giris",
     "izinDurumu": "bekliyor",
     "not": "Grupanya satış: 257 | puan 4.0 | telefon kaynağı: grupanya sayfası | Grupanya geçerlilik: 31.12.2026'ya kadar | İkinci numara 0549 445 07 77 (sayfada '0549 445 0 777' yazıyor). Açık adres sayfada yok. Puan yalnızca 2 yoruma dayanıyor. Sahil müzesi olduğu için kış aylarında açık olup olmadığını teyit et. Yetişkin bileti 450 TL.",
-    "gorsel": "https://grpstat.com/DealImages/G-erlprley/0anagrsl9680.jpg",
+    "gorsel": "assets/img/kampanya/sandland-antalya-kum-heykel-muzesi/1.jpg",
     "galeri": [
-      "https://grpstat.com/DealImages/G-erlprley/0anagrsl9680__1.jpg",
-      "https://grpstat.com/DealImages/G-erlprley/0anagrsl9680__2.jpg",
-      "https://grpstat.com/DealImages/G-erlprley/0anagrsl9680__3.jpg"
+      "assets/img/kampanya/sandland-antalya-kum-heykel-muzesi/2.jpg",
+      "assets/img/kampanya/sandland-antalya-kum-heykel-muzesi/3.jpg",
+      "assets/img/kampanya/sandland-antalya-kum-heykel-muzesi/4.jpg"
     ]
   },
   {
@@ -1550,11 +1550,11 @@ window.KAMPANYALAR_EK = [
     "kaynakUrl": "https://www.grupanya.com/workshops-of-istanbul/workshops-of-istanbul-cam-mozaik-lamba-atolyesi",
     "izinDurumu": "bekliyor",
     "not": "Grupanya satış: 23 | puan 5.0 | telefon kaynağı: grupanya sayfası | Grupanya geçerlilik: 30.12.2026'ya kadar | İkinci WhatsApp hattı 0544 729 24 06. Puan tek yoruma dayanıyor. Detay sayfasında satış 21, listede 23 görünüyor.",
-    "gorsel": "https://grpstat.com/DealImages/G-312351f0/01484.jpg",
+    "gorsel": "assets/img/kampanya/workshops-of-istanbul/1.jpg",
     "galeri": [
-      "https://grpstat.com/DealImages/G-312351f0/01484__1.jpg",
-      "https://grpstat.com/DealImages/G-312351f0/01484__2.jpg",
-      "https://grpstat.com/DealImages/G-312351f0/01484__3.jpg"
+      "assets/img/kampanya/workshops-of-istanbul/2.jpg",
+      "assets/img/kampanya/workshops-of-istanbul/3.jpg",
+      "assets/img/kampanya/workshops-of-istanbul/4.jpg"
     ]
   },
   {
@@ -1584,7 +1584,7 @@ window.KAMPANYALAR_EK = [
     "kaynakUrl": "https://www.grupanya.com/anka-workshop/anka-workshop-comlek-atolyesi",
     "izinDurumu": "bekliyor",
     "not": "puan 4.3 | telefon kaynağı: grupanya sayfası | Grupanya geçerlilik: Kasım 2026 hafta sonları (son seans 29.11.2026) | Rezervasyon hattı 0850 532 52 90. Kampanya kısa süreli (Kasım sonu bitiyor). İşletmenin Grupanya'da mozaik, mum, vitray, heykel gibi başka atölyeleri de var; puan (145 yorum) işletme geneline ait, bu fırsatın satış adedi sayfada yok.",
-    "gorsel": "https://grpstat.com/DealImages/G-80a1d248/14216.jpg",
+    "gorsel": "assets/img/kampanya/anka-workshop/1.jpg",
     "galeri": []
   },
   {
@@ -1612,7 +1612,7 @@ window.KAMPANYALAR_EK = [
     "kaynakUrl": "https://www.grupanya.com/istanbul-dance-life/istanbul-dance-life-zumba-kursu",
     "izinDurumu": "bekliyor",
     "not": "Grupanya satış: 4 | puan 4.5 | telefon kaynağı: grupanya sayfası | Grupanya geçerlilik: 30.12.2026'ya kadar | Satış adedi düşük (4). Puan liste sayfasından (35 yorum); detay sayfasında puan görünmüyor. Aynı işletmenin çocuk dansı kursu da var.",
-    "gorsel": "https://grpstat.com/DealImages/G-7bff9cec/istanbul-dance-life-zumba-kursu-6cdf26.jpg",
+    "gorsel": "assets/img/kampanya/istanbul-dance-life/1.jpg",
     "galeri": []
   },
   {
@@ -1641,11 +1641,11 @@ window.KAMPANYALAR_EK = [
     "kaynakUrl": "https://www.grupanya.com/towers-oto-bakim/towers-mecidiyekoy-oto-bakim-paketleri",
     "izinDurumu": "bekliyor",
     "not": "Grupanya satış: 1418 | puan 4.2 | telefon kaynağı: grupanya sayfası | Grupanya geçerlilik: 30.12.2026'ya kadar | Telefon randevu hattı olarak verilmiş. Bazı yorumlarda aceleci iş ve fiyat farkı şikayeti var. Sayfada eski fiyat yok; açıklamada 7/24 açık deniyor.",
-    "gorsel": "https://grpstat.com/DealImages/G-31fmbxuj/towers-mecidiyekoy-oto-bakim-paketleri-45f073.jpg",
+    "gorsel": "assets/img/kampanya/towers-oto-bakim/1.jpg",
     "galeri": [
-      "https://grpstat.com/DealImages/G-31fmbxuj/towers-mecidiyekoy-oto-bakim-paketleri-45f073__1.jpg",
-      "https://grpstat.com/DealImages/G-31fmbxuj/towers-mecidiyekoy-oto-bakim-paketleri-45f073__2.jpg",
-      "https://grpstat.com/DealImages/G-31fmbxuj/towers-mecidiyekoy-oto-bakim-paketleri-45f073__3.jpg"
+      "assets/img/kampanya/towers-oto-bakim/2.jpg",
+      "assets/img/kampanya/towers-oto-bakim/3.jpg",
+      "assets/img/kampanya/towers-oto-bakim/4.jpg"
     ]
   },
   {
@@ -1674,11 +1674,11 @@ window.KAMPANYALAR_EK = [
     "kaynakUrl": "https://www.grupanya.com/pinarim-temizlik/pinar-temizlik-koltuk-yikama",
     "izinDurumu": "bekliyor",
     "not": "Grupanya satış: 951 | puan 4.4 | telefon kaynağı: grupanya sayfası | Grupanya geçerlilik: 30.12.2026'ya kadar | Diğer hatlar: 0212 210 64 26 ve 0541 210 64 27. Sayfada eski fiyat yok.",
-    "gorsel": "https://grpstat.com/DealImages/G-cf0dgnrf/pinar-temizlik-koltuk-yikama-10d351.jpg",
+    "gorsel": "assets/img/kampanya/pinarim-temizlik/1.jpg",
     "galeri": [
-      "https://grpstat.com/DealImages/G-cf0dgnrf/pinar-temizlik-koltuk-yikama-10d351__1.jpg",
-      "https://grpstat.com/DealImages/G-cf0dgnrf/pinar-temizlik-koltuk-yikama-10d351__2.jpg",
-      "https://grpstat.com/DealImages/G-cf0dgnrf/pinar-temizlik-koltuk-yikama-10d351__3.jpg"
+      "assets/img/kampanya/pinarim-temizlik/2.jpg",
+      "assets/img/kampanya/pinarim-temizlik/3.jpg",
+      "assets/img/kampanya/pinarim-temizlik/4.jpg"
     ]
   }
 ];
