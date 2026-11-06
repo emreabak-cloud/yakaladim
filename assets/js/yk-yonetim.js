@@ -179,6 +179,7 @@
           '<div class="col-12"><label>Koşullar (her satıra bir madde)</label><textarea class="yk-textarea" rows="3" name="kosullar">' + esc((k.kosullar || []).join('\n')) + '</textarea></div>' +
           '<div class="col-md-8"><label>Görsel adresi (URL)</label><input class="yk-input" name="gorsel" value="' + g('gorsel') + '" placeholder="https://..."></div>' +
           '<div class="col-md-4"><label>İşletme web linki</label><input class="yk-input" name="link" value="' + g('link') + '"></div>' +
+          '<div class="col-12"><label>Ek fotoğraflar (her satıra bir adres)</label><textarea class="yk-textarea" rows="2" name="galeri">' + esc((k.galeri || []).join('\n')) + '</textarea></div>' +
           '<div class="col-12"><div class="yk-form-hata" id="yk-kf-hata"></div>' +
             '<button type="submit" class="yk-btn">Kaydet</button> <span class="yk-muted" style="font-size:13px">Kampanya, işletmenin izin durumu "Onaylandı" ve kendi durumu "Yayında" ise sitede görünür.</span></div>' +
         '</div></form>');
@@ -196,6 +197,7 @@
         var v = formVeri(f), hata = f.querySelector('#yk-kf-hata');
         v.odeme_tipi = 'mekanda';
         v.kosullar = String(v.kosullar || '').split('\n').map(function (s) { return s.trim(); }).filter(Boolean);
+        v.galeri = String(v.galeri || '').split('\n').map(function (s) { return s.trim(); }).filter(Boolean);
         if (!v.isletme_id) { hata.textContent = 'Lütfen bir işletme seçin.'; return; }
         if (!v.baslik || !v.id || !v.yeni_fiyat || !v.bitis) { hata.textContent = 'Yıldızlı alanlar zorunludur.'; return; }
         var b = f.querySelector('[type=submit]'); b.disabled = true;

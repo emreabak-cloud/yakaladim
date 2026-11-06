@@ -148,6 +148,8 @@ alter table public.kuponlar add constraint kullanilabilir_kuponun_kodu_var
 -- Kampanya bazında kupon bedeli: boş = genel kural, 0 = ücretsiz, sayı = sabit bedel (TL / adet)
 alter table public.kampanyalar add column if not exists kupon_bedeli numeric(10,2)
   check (kupon_bedeli is null or kupon_bedeli >= 0);
+-- Ek fotoğraflar (ana fotoğraf: gorsel)
+alter table public.kampanyalar add column if not exists galeri text[] not null default '{}';
 
 -- Genel ayarlar (tek satır). Yönetim panelinden değiştirilir.
 create table if not exists public.ayarlar (
@@ -332,7 +334,8 @@ select
   -- Adet başına kupon bedeli (fonksiyon yerine satır içi: görünüm ziyaretçi yetkisiyle fonksiyon çağıramaz)
   case when not a.odeme_aktif then 0
        when k.kupon_bedeli is not null then k.kupon_bedeli
-       else least(a.bedel_max, greatest(a.bedel_min, round(k.yeni_fiyat * a.bedel_oran))) end as kupon_bedeli
+       else least(a.bedel_max, greatest(a.bedel_min, round(k.yeni_fiyat * a.bedel_oran))) end as kupon_bedeli,
+  k.galeri
 from public.kampanyalar k
 cross join public.ayarlar a
 join public.isletmeler i on i.id = k.isletme_id
@@ -768,7 +771,7 @@ begin
   insert into public.kampanyalar as k (
     id, isletme_id, baslik, kategori, sehir, semt, adres, kisa, aciklama, kosullar, gorsel,
     eski_fiyat, yeni_fiyat, baslangic, bitis, stok, kisi_basi_limit, rezervasyon_gerekli,
-    kupon_gecerlilik_gun, odeme_tipi, link, one_cikan, durum, kaynak, kaynak_url, kupon_bedeli)
+    kupon_gecerlilik_gun, odeme_tipi, link, one_cikan, durum, kaynak, kaynak_url, kupon_bedeli, galeri)
   values (
     v_id,
     nullif(p ->> 'isletme_id', '')::uuid,
@@ -788,7 +791,9 @@ begin
     coalesce((p ->> 'one_cikan')::boolean, false),
     coalesce(nullif(p ->> 'durum', ''), 'taslak'),
     nullif(p ->> 'kaynak', ''), nullif(p ->> 'kaynak_url', ''),
-    nullif(p ->> 'kupon_bedeli', '')::numeric)
+    nullif(p ->> 'kupon_bedeli', '')::numeric,
+    coalesce((select array_agg(x) from jsonb_array_elements_text(coalesce(p -> 'galeri', '[]'::jsonb)) x
+              where trim(x) <> ''), '{}'))
   on conflict (id) do update set
     isletme_id = excluded.isletme_id, baslik = excluded.baslik, kategori = excluded.kategori,
     sehir = excluded.sehir, semt = excluded.semt, adres = excluded.adres, kisa = excluded.kisa,
@@ -798,7 +803,7 @@ begin
     kisi_basi_limit = excluded.kisi_basi_limit, rezervasyon_gerekli = excluded.rezervasyon_gerekli,
     kupon_gecerlilik_gun = excluded.kupon_gecerlilik_gun, odeme_tipi = excluded.odeme_tipi,
     link = excluded.link, one_cikan = excluded.one_cikan, durum = excluded.durum,
-    kupon_bedeli = excluded.kupon_bedeli,
+    kupon_bedeli = excluded.kupon_bedeli, galeri = excluded.galeri,
     kaynak = coalesce(excluded.kaynak, k.kaynak), kaynak_url = coalesce(excluded.kaynak_url, k.kaynak_url);
   return (select to_jsonb(k) from public.kampanyalar k where id = v_id);
 end $$;

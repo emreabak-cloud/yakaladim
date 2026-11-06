@@ -66,6 +66,7 @@ def uret(kampanyalar, baslik, varsayilan_izin):
             "id": k["id"], "isletme_id": isletme_id(k["isletme"]), "baslik": k["baslik"], "kategori": k["kategori"],
             "sehir": k["sehir"], "semt": k.get("semt"), "adres": k.get("adres") or None, "kisa": k.get("kisa"),
             "aciklama": k.get("aciklama"), "kosullar": k.get("kosullar") or [], "gorsel": k.get("gorsel") or None,
+            "galeri": k.get("galeri") or [],
             "eski_fiyat": k.get("eskiFiyat"), "yeni_fiyat": k["yeniFiyat"], "bitis": k["bitis"],
             "stok": k.get("stok"), "kisi_basi_limit": k.get("kisiBasiLimit", 5),
             "rezervasyon_gerekli": bool(k.get("rezervasyonGerekli")), "link": k.get("link") or None,

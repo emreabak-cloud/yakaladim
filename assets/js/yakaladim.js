@@ -480,8 +480,12 @@
     kok.innerHTML = '' +
       '<div class="row">' +
         '<div class="col-lg-7 col-xl-8">' +
-          (k.gorsel ? '<img class="yk-detail-img" src="' + esc(k.gorsel) + '" alt="' + esc(k.baslik) + '" onerror="ykImgFallback(this)">'
+          (k.gorsel ? '<img class="yk-detail-img" id="yk-ana-gorsel" src="' + esc(k.gorsel) + '" alt="' + esc(k.baslik) + '" onerror="ykImgFallback(this)">'
                     : '<div class="yk-detail-img yk-img-fallback yk-kat-' + esc(k.kategori) + '"><i class="fa-solid ' + esc(kat.ikon) + '"></i></div>') +
+          ((k.gorsel && (k.galeri || []).length) ? '<div class="yk-galeri">' + [k.gorsel].concat(k.galeri).map(function (g, i) {
+            return '<button type="button" class="yk-galeri-btn' + (i ? '' : ' secili') + '" data-gorsel="' + esc(g) + '" aria-label="Fotoğraf ' + (i + 1) + '">' +
+              '<img src="' + esc(g) + '" alt="" loading="lazy" onerror="this.closest(\'button\').remove()"></button>';
+          }).join('') + '</div>' : '') +
           '<div class="yk-detail-badges">' +
             '<span class="yk-tag"><i class="fa-solid ' + kat.ikon + '"></i> ' + esc(kat.ad) + '</span>' +
             '<span class="yk-tag yk-tag-blue"><i class="fa-solid fa-location-dot"></i> ' + esc(konum(k)) + '</span>' +
@@ -513,6 +517,13 @@
       '</div>';
 
     kuponAlmaAkisi(k);
+    kok.querySelectorAll('.yk-galeri-btn').forEach(function (b) {
+      b.addEventListener('click', function () {
+        var ana = document.getElementById('yk-ana-gorsel');
+        if (ana) ana.src = b.getAttribute('data-gorsel');
+        kok.querySelectorAll('.yk-galeri-btn').forEach(function (x) { x.classList.toggle('secili', x === b); });
+      });
+    });
 
     var cd = document.getElementById('yk-countdown');
     if (cd) {
