@@ -35,6 +35,8 @@ KATEGORI_MENU = [
 
 
 def head(title, desc, path, extra=""):
+    # Vercel cleanUrls: .html adresleri 308 ile uzantisiz adrese yonlenir; canonical/og:url uzantisiz olmali.
+    path = path[:-5] if path.endswith(".html") else path
     return f"""<!doctype html>
 <html lang="tr">
 <head>
